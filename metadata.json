@@ -1,0 +1,6 @@
+{
+  "name": "Shuvayan Wedding & Event Management",
+  "description": "Bengali wedding and event management website with luxury packages, services, gallery, and interactive quote booking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

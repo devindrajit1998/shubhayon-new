@@ -1,0 +1,214 @@
+import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Phone, Mail } from 'lucide-react';
+import { useAppModals } from '@/context/AppModalContext';
+
+export default function Footer() {
+  const { openQuoteModal } = useAppModals();
+
+  const quickLinks = [
+    { label: 'Home', href: '/' },
+    { label: 'About Us', href: '/about' },
+    { label: 'Services', href: '/services' },
+    { label: 'Gallery', href: '/gallery' },
+    { label: 'Policy', href: '/policy' },
+  ];
+
+  const serviceLinks = [
+    { label: 'Digital Invitation Card', service: 'Digital Invitation Card' },
+    { label: 'Priests', service: 'Priests' },
+    { label: 'Trey Decoration', service: 'Trey Decoration' },
+    { label: 'Mahendi Artists', service: 'Mehendi' },
+    { label: 'Bridal Makeover', service: 'Bridal Makeover' },
+    { label: 'Photography & Videography', service: 'Photography & Videography' },
+    { label: 'Venue Decoration', service: 'Decorations' },
+    { label: 'Food & Beverages', service: 'Food & Beverages' },
+    { label: 'Car & Bus', service: 'Car Service' },
+  ];
+
+  return (
+    <footer id="main-footer" className="bg-[#0e0a0a] text-white pt-14 pb-10 border-t border-[#221818]">
+      <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12 border-b border-white/10">
+          {/* Column 1: Brand & Tagline (4 cols on lg) */}
+          <div className="lg:col-span-4 space-y-4">
+            <Link href="/" className="inline-block relative w-48 sm:w-52 h-12 sm:h-14 group">
+              <Image
+                src="/images/logo.png"
+                alt="Shuvayan - Wedding & Event Management"
+                fill
+                className="object-contain object-left transition-transform duration-300 group-hover:scale-105"
+                referrerPolicy="no-referrer"
+              />
+            </Link>
+
+            <p className="text-xs sm:text-sm text-gray-300 leading-relaxed max-w-sm">
+              We turn your dream into reality with creativity, eligance &amp; flawless execution.
+            </p>
+
+            <div className="pt-3">
+              <p className="text-[11px] sm:text-xs text-gray-500">
+                Copyright reserved &copy; shuvayan
+              </p>
+            </div>
+          </div>
+
+          {/* Column 2: Quick Links (2.5 cols on lg) */}
+          <div className="lg:col-span-2">
+            <h3 className="font-serif-display text-base sm:text-lg font-bold text-white mb-4 tracking-wide">
+              Quick Links
+            </h3>
+            <ul className="space-y-2.5">
+              {quickLinks.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className="group inline-flex items-center gap-2 text-xs sm:text-sm text-gray-300 hover:text-white transition-colors"
+                  >
+                    <span className="relative w-2 h-2 flex-shrink-0 inline-block">
+                      <Image
+                        src="/images/bullet.svg"
+                        alt="bullet"
+                        fill
+                        className="object-contain"
+                        referrerPolicy="no-referrer"
+                      />
+                    </span>
+                    <span className="group-hover:translate-x-1 transition-transform">
+                      {link.label}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 3: Our Services (3.5 cols on lg) */}
+          <div className="lg:col-span-3">
+            <h3 className="font-serif-display text-base sm:text-lg font-bold text-white mb-4 tracking-wide">
+              Our Services
+            </h3>
+            <ul className="space-y-2.5">
+              {serviceLinks.map((item) => (
+                <li key={item.label}>
+                  <button
+                    onClick={() => openQuoteModal(item.service)}
+                    className="group inline-flex items-center gap-2 text-xs sm:text-sm text-gray-300 hover:text-white transition-colors text-left"
+                  >
+                    <span className="relative w-2 h-2 flex-shrink-0 inline-block">
+                      <Image
+                        src="/images/bullet.svg"
+                        alt="bullet"
+                        fill
+                        className="object-contain"
+                        referrerPolicy="no-referrer"
+                      />
+                    </span>
+                    <span className="group-hover:translate-x-1 transition-transform">
+                      {item.label}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Contact Us (2.5 cols on lg) */}
+          <div className="lg:col-span-3 space-y-4">
+            <h3 className="font-serif-display text-base sm:text-lg font-bold text-white mb-4 tracking-wide">
+              Contact Us
+            </h3>
+
+            <div className="space-y-3 text-xs sm:text-sm text-gray-300">
+              <div>
+                <a
+                  href="tel:7439442349"
+                  id="footer-phone-link"
+                  className="hover:text-[#f59e0b] transition-colors flex items-center gap-2 font-medium"
+                >
+                  <Phone className="w-3.5 h-3.5 text-[#c8102e]" />
+                  <span>7439442349</span>
+                </a>
+              </div>
+
+              <div>
+                <a
+                  href="mailto:enquiry.shuvayan@gmail.com"
+                  id="footer-email-link"
+                  className="hover:text-[#f59e0b] transition-colors flex items-center gap-2 break-all"
+                >
+                  <Mail className="w-3.5 h-3.5 text-[#c8102e] flex-shrink-0" />
+                  <span>enquiry.shuvayan@gmail.com</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Social Icons */}
+            <div className="pt-2">
+              <div className="flex items-center space-x-3.5">
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  id="footer-fb-icon"
+                  className="group inline-block transition-transform duration-200 hover:scale-110 p-0.5"
+                  aria-label="Facebook"
+                >
+                  <span
+                    className="block w-6 h-6 bg-white group-hover:bg-[#b81414] transition-colors duration-200"
+                    style={{
+                      maskImage: "url('/images/Social-FB.png')",
+                      WebkitMaskImage: "url('/images/Social-FB.png')",
+                      maskSize: 'contain',
+                      WebkitMaskSize: 'contain',
+                      maskRepeat: 'no-repeat',
+                      WebkitMaskRepeat: 'no-repeat',
+                      maskPosition: 'center',
+                      WebkitMaskPosition: 'center',
+                    }}
+                  />
+                </a>
+
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  id="footer-insta-icon"
+                  className="group inline-block transition-transform duration-200 hover:scale-110 p-0.5"
+                  aria-label="Instagram"
+                >
+                  <span
+                    className="block w-6 h-6 bg-white group-hover:bg-[#b81414] transition-colors duration-200"
+                    style={{
+                      maskImage: "url('/images/Social-INSTA.png')",
+                      WebkitMaskImage: "url('/images/Social-INSTA.png')",
+                      maskSize: 'contain',
+                      WebkitMaskSize: 'contain',
+                      maskRepeat: 'no-repeat',
+                      WebkitMaskRepeat: 'no-repeat',
+                      maskPosition: 'center',
+                      WebkitMaskPosition: 'center',
+                    }}
+                  />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom subtle note */}
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 gap-2">
+          <p>Handcrafted with elegance for authentic Bengali weddings &amp; grand celebrations.</p>
+          <div className="flex gap-4 items-center">
+            <Link href="/policy" className="hover:text-gray-400">Terms &amp; Policy</Link>
+            <span>&bull;</span>
+            <Link href="/#about" className="hover:text-gray-400">About Shuvayan</Link>
+            <span>&bull;</span>
+            <Link href="/admin/login" className="hover:text-[#d99824] text-gray-400 transition-colors">Admin Portal</Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
