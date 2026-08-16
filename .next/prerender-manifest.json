@@ -1,1 +1,11 @@
-{"version":4,"routes":{"/packages/basic":{},"/packages/mid":{},"/packages/standard":{},"/packages/premium":{}},"dynamicRoutes":{"/packages/[id]":{"dataRoute":null,"dataRouteRegex":null,"fallback":false,"fallbackRevalidate":false,"fallbackSourceRoute":"/packages/[id]","routeRegex":"^\\/packages\\/([^/]+?)(?:\\/)?$","allowHeader":[]}},"notFoundRoutes":[],"preview":{"previewModeId":"907fef447c02102dfdd50d910a526cd3","previewModeSigningKey":"e300919aa836f98a058fd4f9705b4ce80ff09f1e103394b322c3d4a3606dca2e","previewModeEncryptionKey":"e98109d68b51590a2094dad9733d54906b85f4429b05b0f4b3f4a9b063aab0d0"}}
+{
+  "version": 4,
+  "routes": {},
+  "dynamicRoutes": {},
+  "notFoundRoutes": [],
+  "preview": {
+    "previewModeId": "c250b5320c43667c5807e30c521440fc",
+    "previewModeSigningKey": "2ac7c24586227b9c701c7fdbaa9c97b8facb038b530a5033005f2beb9da5c2e4",
+    "previewModeEncryptionKey": "6703f6989cff9c9cfe0404851e9573b3f4b59b3f139b9aef6800633e48ce3478"
+  }
+}
