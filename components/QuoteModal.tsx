@@ -22,22 +22,7 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const defaultServiceOptions = [
-    'Priest / Vedic Priests',
-    'Trey Decor (Tatta Trays)',
-    'Bridal Mehendi & Henna',
-    'Bridal Makeover & Styling',
-    'Photography & Cinematic Films',
-    'Theme & Mandap Decorations',
-    'Authentic Bengali Catering',
-    'Luxury Bridal Car Service',
-    'Grand Bride & Groom Entry',
-    'Digital Animated Invitation',
-  ];
-
-  const availableServices = services && services.length > 0
-    ? Array.from(new Set(services.map((s) => s.title)))
-    : defaultServiceOptions;
+  const availableServices = services.map((s) => s.title);
 
   const selectedServices = initialService
     ? Array.from(new Set([initialService, ...customServices]))
@@ -269,36 +254,42 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
                 <label className="block text-xs font-semibold text-[#374151] mb-2">
                   Select Required Services
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {availableServices.map((srv) => {
-                    const isChecked = selectedServices.some(
-                      (s) => s.toLowerCase().includes(srv.toLowerCase().slice(0, 5))
-                    );
-                    return (
-                      <button
-                        type="button"
-                        key={srv}
-                        onClick={() => toggleService(srv)}
-                        className={`flex items-center gap-2 p-2.5 rounded-lg border text-left text-xs transition-colors ${
-                          isChecked
-                            ? 'border-[#c8102e] bg-[#fff5f5] text-[#c8102e] font-semibold'
-                            : 'border-gray-200 hover:border-gray-300 text-gray-700 bg-gray-50/50'
-                        }`}
-                      >
-                        <span
-                          className={`w-4 h-4 rounded flex items-center justify-center border ${
+                {availableServices.length === 0 ? (
+                  <p className="text-xs text-gray-500 bg-gray-50 p-3 rounded-lg border border-gray-200">
+                    Full Wedding Planning &amp; Custom Consultation
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {availableServices.map((srv) => {
+                      const isChecked = selectedServices.some(
+                        (s) => s.toLowerCase().includes(srv.toLowerCase().slice(0, 5))
+                      );
+                      return (
+                        <button
+                          type="button"
+                          key={srv}
+                          onClick={() => toggleService(srv)}
+                          className={`flex items-center gap-2 p-2.5 rounded-lg border text-left text-xs transition-colors ${
                             isChecked
-                              ? 'bg-[#c8102e] border-[#c8102e] text-white'
-                              : 'border-gray-400'
+                              ? 'border-[#c8102e] bg-[#fff5f5] text-[#c8102e] font-semibold'
+                              : 'border-gray-200 hover:border-gray-300 text-gray-700 bg-gray-50/50'
                           }`}
                         >
-                          {isChecked && <CheckCircle className="w-3.5 h-3.5" />}
-                        </span>
-                        <span>{srv}</span>
-                      </button>
-                    );
-                  })}
-                </div>
+                          <span
+                            className={`w-4 h-4 rounded flex items-center justify-center border ${
+                              isChecked
+                                ? 'bg-[#c8102e] border-[#c8102e] text-white'
+                                : 'border-gray-400'
+                            }`}
+                          >
+                            {isChecked && <CheckCircle className="w-3.5 h-3.5" />}
+                          </span>
+                          <span>{srv}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
               {/* Additional message / notes */}

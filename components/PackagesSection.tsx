@@ -4,105 +4,11 @@ import Link from 'next/link';
 import { useAppModals } from '@/context/AppModalContext';
 import { useAdminData } from '@/context/AdminDataContext';
 import { PackageData } from '@/components/PackageDetailModal';
-
-export const packagesList: PackageData[] = [
-  {
-    id: 'basic',
-    title: 'Basic Package',
-    tagline: 'Perfect for: Budget-friendly intimate weddings includes:',
-    features: [
-      'Bridal mehendi',
-      'Bridal makeover',
-      'Traditional photography',
-      'Standard Bengali catering...',
-    ],
-    fullFeatures: [
-      'Bridal mehendi by skilled artist (Front & Back hands)',
-      'Bridal makeover with HD makeup & hair styling',
-      'Traditional photography coverage for wedding day',
-      'Standard Bengali catering with 12 authentic dishes',
-      'Basic venue stage floral backdrop',
-      'Shubho Bibaho entrance welcome board',
-    ],
-    priceRange: '₹85,000 - ₹1,50,000',
-    idealFor: 'Intimate gatherings (50 - 150 guests)',
-    badge: 'Popular for Intimate Events',
-  },
-  {
-    id: 'mid',
-    title: 'Mid Package',
-    tagline: 'Perfect for: Small to medium family weddings',
-    features: [
-      'Trey Decoration',
-      'Bridal Mehendi',
-      'Bridal makeover',
-      'Digital invitation card...',
-    ],
-    fullFeatures: [
-      'Trey / Tatta decoration (10 designer trays with custom wrapping)',
-      'Bridal Mehendi + 2 close family members',
-      'Bridal makeover with Airbrush / HD styling & jewelry setting',
-      'Custom animated digital invitation card & WhatsApp save-the-date',
-      'Candid & traditional photography with cinematic highlights teaser',
-      'Theme stage decoration with floral arc & warm fairy lights',
-      'Curated 5-course Bengali wedding banquet buffet',
-    ],
-    priceRange: '₹1,75,000 - ₹3,20,000',
-    idealFor: 'Medium family weddings (150 - 300 guests)',
-    badge: 'Best Value',
-  },
-  {
-    id: 'standard',
-    title: 'Standard Package',
-    tagline: 'Perfect for: Elegant weddings with premium experience',
-    features: [
-      'Wedding planning assistance',
-      'Premium bridal makeover',
-      'Bride + 4 member mehendi',
-      'Theme decoration...',
-    ],
-    fullFeatures: [
-      'End-to-end wedding planning assistance & day-of coordination',
-      'Premium bridal makeover by celebrity stylist with pre-bridal trial',
-      'Bridal mehendi + 4 bridesmaid/family member mehendi sessions',
-      'Opulent theme decoration (Mandap, Stage, Entrance Arch & Photobooth)',
-      'Multi-camera cinematic film, drone shoot & high-res wedding album',
-      'Luxury catering menu with live chaat, fish/mutton counters & desserts',
-      'Decorated bridal car service for groom & bride commute',
-    ],
-    priceRange: '₹3,50,000 - ₹6,00,000',
-    idealFor: 'Grand celebrations (300 - 600 guests)',
-    badge: 'Most Chosen',
-  },
-  {
-    id: 'premium',
-    title: 'Premium Package',
-    tagline: 'Perfect for: Luxury, stress-free dream weddings',
-    features: [
-      'Priest / Baidik (Lady)',
-      'Grand bride & groom entry',
-      'LED screen',
-      'Premium buffet...',
-    ],
-    fullFeatures: [
-      'Experienced Senior Vedic Priest / Baidik (Lady or Gentleman options)',
-      'Grand bride & groom entry concept with cold pyros, smoke & doli/chhatra',
-      'High-definition LED display screens with live multicam broadcast',
-      'Royal Bengali & Continental luxury buffet with live gourmet stations',
-      'Complete VIP hospitality team, guest assistance & luggage management',
-      'Complete wedding film, teaser, teaser reels, and 2 luxury leather albums',
-      'Full venue ambient architectural lighting & floral installation',
-    ],
-    priceRange: '₹6,50,000 - ₹12,00,000+',
-    idealFor: 'Luxury royal weddings (500+ guests)',
-    badge: 'Royal Experience',
-  },
-];
+import { Package, Sparkles } from 'lucide-react';
 
 export default function PackagesSection() {
   const { openPackageModal } = useAppModals();
-  const { packages } = useAdminData();
-  const displayPackages = packages && packages.length > 0 ? packages : packagesList;
+  const { packages, isLoading, error } = useAdminData();
 
   // Alternating top border colors: Basic (Red), Mid (Gold), Standard (Red), Premium (Gold)
   const topBorderColors: Record<string, string> = {
@@ -113,26 +19,26 @@ export default function PackagesSection() {
   };
 
   return (
-    <section id="packages" className="py-16 sm:py-20 lg:py-24 bg-[#faf7f2]">
+    <section id="packages" className="py-16 sm:py-20 lg:py-24 bg-[#fffdfa]">
       <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
           <p
             id="packages-subheading"
-            className="text-[#b81414] font-semibold text-sm sm:text-base tracking-normal mb-1.5"
+            className="text-[#c8102e] font-semibold text-sm sm:text-base tracking-normal mb-1.5"
           >
-            We Offer
+            Affordable &amp; Luxury
           </p>
           <h2
             id="packages-heading"
-            className="font-serif-display text-3xl sm:text-4xl lg:text-5xl font-normal text-[#5c5959] tracking-tight"
+            className="font-serif-display text-3xl sm:text-4xl lg:text-5xl font-normal text-[#5a5858] tracking-tight"
           >
             Best Packages
           </h2>
 
           {/* Red line with Heart Divider */}
           <div className="flex items-center justify-center gap-3 my-3">
-            <span className="w-14 sm:w-16 h-[1.5px] bg-[#b81414]" />
+            <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
             <span className="relative w-3.5 h-3.5 inline-block">
               <Image
                 src="/images/heart.svg"
@@ -142,64 +48,125 @@ export default function PackagesSection() {
                 referrerPolicy="no-referrer"
               />
             </span>
-            <span className="w-14 sm:w-16 h-[1.5px] bg-[#b81414]" />
+            <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
           </div>
         </div>
 
-        {/* Dynamic Package Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7">
-          {displayPackages.map((pkg, idx) => {
-            const topBorderClass = topBorderColors[pkg.id] || (idx % 2 === 0 ? 'border-t-[#b81414]' : 'border-t-[#e5a83b]');
-            return (
+        {/* 1. Loading State */}
+        {isLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map((n) => (
               <div
-                key={pkg.id}
-                id={`package-card-${pkg.id}`}
-                className={`bg-white rounded-lg border-x border-b border-[#e5a83b] p-6 sm:p-7 flex flex-col justify-between shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-t-[5px] ${topBorderClass}`}
+                key={n}
+                className="bg-[#fcfaf7] rounded-lg border border-[#e8d7c3] p-6 animate-pulse space-y-4"
               >
-                <div>
-                  {/* Title */}
-                  <h3 className="font-serif-display text-xl sm:text-2xl font-bold text-[#74161f] mb-2">
-                    {pkg.title}
-                  </h3>
-
-                  {/* Subtitle */}
-                  <p className="text-xs sm:text-sm text-[#737373] leading-relaxed mb-6 min-h-[44px]">
-                    {pkg.tagline}
-                  </p>
-
-                  {/* Bullet List with floral star bullet */}
-                  <ul className="space-y-3.5 mb-8">
-                    {pkg.features.map((feature, fIdx) => (
-                      <li key={fIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#333333]">
-                        <span className="relative w-3.5 h-3.5 flex-shrink-0 mt-0.5 inline-block">
-                          <Image
-                            src="/images/bullet.svg"
-                            alt="Bullet"
-                            fill
-                            className="object-contain"
-                            referrerPolicy="no-referrer"
-                          />
-                        </span>
-                        <span className="leading-tight">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Action Button: Check details (Centered) */}
-                <div className="pt-2 flex justify-center">
-                  <Link
-                    id={`btn-check-details-${pkg.id}`}
-                    href={`/packages/${pkg.id}`}
-                    className="bg-[#b81414] hover:bg-[#991111] text-white font-medium text-xs sm:text-sm py-2 px-6 rounded-md shadow-sm hover:shadow-md transition-all duration-200 text-center inline-block"
-                  >
-                    Check details
-                  </Link>
+                <div className="h-6 bg-gray-200 rounded w-2/3 mx-auto" />
+                <div className="h-4 bg-gray-200 rounded w-4/5 mx-auto" />
+                <div className="space-y-2 pt-4">
+                  <div className="h-3 bg-gray-200 rounded w-full" />
+                  <div className="h-3 bg-gray-200 rounded w-5/6" />
+                  <div className="h-3 bg-gray-200 rounded w-4/6" />
                 </div>
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        )}
+
+        {/* 2. Error State */}
+        {!isLoading && error && (
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-8 text-center max-w-lg mx-auto">
+            <p className="text-sm font-semibold text-red-700">{error}</p>
+          </div>
+        )}
+
+        {/* 3. Empty State */}
+        {!isLoading && !error && packages.length === 0 && (
+          <div className="bg-white border border-dashed border-[#e8d7c3] rounded-2xl p-12 text-center max-w-lg mx-auto">
+            <Package className="w-10 h-10 text-[#d99824] mx-auto mb-3" />
+            <h3 className="font-serif-display text-lg font-bold text-gray-800 mb-1">
+              Custom Wedding Packages
+            </h3>
+            <p className="text-xs text-gray-500 mb-4">
+              All our wedding packages are tailored to your unique event scope and guest count.
+            </p>
+            <Link
+              href="/packages"
+              className="inline-block bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow transition-colors"
+            >
+              Explore Packages
+            </Link>
+          </div>
+        )}
+
+        {/* 4. Real Firebase Packages Grid */}
+        {!isLoading && !error && packages.length > 0 && (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+              {packages.map((pkg) => {
+                const borderClass = topBorderColors[pkg.id] || 'border-t-[#b81414]';
+
+                return (
+                  <div
+                    key={pkg.id}
+                    id={`package-card-${pkg.id}`}
+                    className={`relative bg-[#fcfaf7] rounded-lg shadow-xs hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col justify-between border border-[#e8d7c3] border-t-4 ${borderClass} p-6 sm:p-7 text-center`}
+                  >
+                    {/* Badge */}
+                    {pkg.badge && (
+                      <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#b81414] text-white text-[10px] sm:text-xs font-semibold px-3.5 py-1 rounded-full uppercase tracking-wider shadow-xs whitespace-nowrap">
+                        {pkg.badge}
+                      </span>
+                    )}
+
+                    {/* Card Content Top */}
+                    <div>
+                      {/* Package Title */}
+                      <h3 className="font-serif-display text-xl sm:text-2xl font-bold text-[#74161f] tracking-tight mb-2">
+                        {pkg.title}
+                      </h3>
+
+                      {/* Tagline */}
+                      <p className="text-xs text-[#523e3e] leading-relaxed mb-6 border-b border-[#ebdcc8] pb-4">
+                        {pkg.tagline}
+                      </p>
+
+                      {/* Features List */}
+                      <ul className="space-y-3 text-xs text-[#3a2e2e] text-left mb-6">
+                        {pkg.features.map((feature, idx) => (
+                          <li key={idx} className="flex items-start">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#b81414] mt-1.5 mr-2.5 flex-shrink-0" />
+                            <span className="leading-snug">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Action Button Bottom */}
+                    <div className="pt-2">
+                      <button
+                        onClick={() => openPackageModal(pkg)}
+                        className="w-full bg-[#b81414] hover:bg-[#991111] text-white font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-md shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer"
+                      >
+                        View More Details
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Explore All Packages Link */}
+            <div className="text-center mt-12">
+              <Link
+                href="/packages"
+                id="explore-all-packages-btn"
+                className="inline-flex items-center justify-center bg-[#b81414] hover:bg-[#991111] text-white font-semibold text-xs sm:text-sm px-7 py-2.5 rounded-md shadow-sm hover:shadow-md transition-all duration-200"
+              >
+                Explore All Packages
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

@@ -1,9 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { doc, getDoc } from 'firebase/firestore';
 import { db, isFirebaseConfigured } from '@/lib/firebase';
-import { servicesList } from '@/components/ServicesSection';
-import { packagesList } from '@/components/PackagesSection';
-import { artistList, galleryCategories } from '@/pages/gallery';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -19,24 +16,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const data = docSnap.data();
         return res.status(200).json({
           source: 'firebase',
-          services: data.services || servicesList,
-          packages: data.packages || packagesList,
-          categories: data.categories || galleryCategories,
-          artists: data.artists || artistList,
+          services: Array.isArray(data.services) ? data.services : [],
+          packages: Array.isArray(data.packages) ? data.packages : [],
+          categories: Array.isArray(data.categories) ? data.categories : [],
+          artists: Array.isArray(data.artists) ? data.artists : [],
           banners: data.banners || null,
-          testimonials: data.testimonials || null,
+          testimonials: Array.isArray(data.testimonials) ? data.testimonials : [],
           settings: data.settings || null,
         });
       }
     }
 
-    // Default Fallback
+    // Default Empty State (Firebase not populated yet or offline)
     return res.status(200).json({
-      source: 'default',
-      services: servicesList,
-      packages: packagesList,
-      categories: galleryCategories,
-      artists: artistList,
+      source: 'empty',
+      services: [],
+      packages: [],
+      categories: [],
+      artists: [],
+      banners: null,
+      testimonials: [],
+      settings: null,
     });
   } catch (error: any) {
     return res.status(500).json({ error: error.message || 'Content fetch error' });

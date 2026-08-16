@@ -8,56 +8,50 @@ import Footer from '@/components/Footer';
 import CtaBanner from '@/components/CtaBanner';
 import { useAppModals } from '@/context/AppModalContext';
 import { useAdminData } from '@/context/AdminDataContext';
-import { artistList, ArtistProfile } from '@/pages/gallery';
 import {
   ArrowLeft,
   Sparkles,
   Award,
-  Calendar,
   Maximize2,
   ChevronRight,
   Phone,
-  MessageCircle,
   Camera,
-  Heart,
 } from 'lucide-react';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = artistList.map((a) => ({
-    params: { id: a.id },
-  }));
-  return { paths, fallback: 'blocking' };
+  return { paths: [], fallback: 'blocking' };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const artist = artistList.find((a) => a.id === params?.id) || null;
+export const getStaticProps: GetStaticProps = async () => {
   return {
-    props: {
-      initialArtist: artist,
-    },
+    props: {},
   };
 };
 
-interface ArtistDetailPageProps {
-  initialArtist: ArtistProfile | null;
-}
-
-export default function ArtistDetailPage({ initialArtist }: ArtistDetailPageProps) {
+export default function ArtistDetailPage() {
   const router = useRouter();
   const { openQuoteModal, openLightbox } = useAppModals();
-  const { artists, banners, settings } = useAdminData();
+  const { artists, banners, settings, isLoading } = useAdminData();
 
-  const currentId = (router.query.id as string) || initialArtist?.id;
-  const liveArtist = artists?.find((a) => a.id === currentId);
-  const artist = liveArtist || initialArtist;
+  const currentId = router.query.id as string;
+  const artist = artists?.find((a) => a.id === currentId);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col justify-center items-center bg-[#fcfaf7]">
+        <div className="w-10 h-10 border-3 border-[#c8102e] border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-xs text-gray-500">Loading artist portfolio...</p>
+      </div>
+    );
+  }
 
   if (!artist) {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center bg-[#fffdfa] px-4 text-center">
         <h1 className="text-2xl font-bold mb-3 text-[#74161f]">Artist Profile Not Found</h1>
         <p className="text-xs sm:text-sm text-gray-500 mb-6">
-          The specialist artist profile you are looking for might have been moved or updated.
+          The specialist artist profile you are looking for is currently unavailable or has been updated.
         </p>
         <Link
           href="/gallery"
@@ -76,7 +70,7 @@ export default function ArtistDetailPage({ initialArtist }: ArtistDetailPageProp
     category: artist.category.toUpperCase(),
   }));
 
-  const otherArtists = (artists && artists.length > 0 ? artists : artistList)
+  const otherArtists = artists
     .filter((a) => a.id !== artist.id && a.category === artist.category)
     .slice(0, 3);
 
@@ -92,7 +86,7 @@ export default function ArtistDetailPage({ initialArtist }: ArtistDetailPageProp
   return (
     <div className="min-h-screen flex flex-col bg-[#fcfaf7] selection:bg-[#c8102e] selection:text-white">
       <Head>
-        <title>{artist.name} &bull; {artist.role} | Shuvayan Gallery</title>
+        <title>{`${artist.name} • ${artist.role} | Shuvayan Gallery`}</title>
         <meta
           name="description"
           content={`Explore the work gallery, portfolio, and wedding experience of ${artist.name} - ${artist.role} (${artist.category}) at Shuvayan.`}

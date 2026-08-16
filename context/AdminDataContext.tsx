@@ -1,10 +1,9 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
-import { doc, setDoc, getDoc, onSnapshot } from 'firebase/firestore';
-import { db, isFirebaseConfigured } from '@/lib/firebase';
-import { ServiceItem, servicesList as defaultServices } from '@/components/ServicesSection';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { doc, setDoc, onSnapshot } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import { PackageData } from '@/components/PackageDetailModal';
-import { packagesList as defaultPackages } from '@/components/PackagesSection';
-import { ArtistProfile, artistList as defaultArtists, galleryCategories as defaultCategories } from '@/pages/gallery';
+import { ServiceItem } from '@/components/ServicesSection';
+import { ArtistProfile } from '@/pages/gallery';
 
 export interface LeadItem {
   id: string;
@@ -133,71 +132,61 @@ interface AdminDataContextType {
   login: (email: string, password: string) => boolean;
   logout: () => void;
   isLoading: boolean;
+  error: string | null;
 
   // Leads
   leads: LeadItem[];
-  addLead: (lead: Omit<LeadItem, 'id' | 'createdAt' | 'status'>) => void;
-  updateLeadStatus: (id: string, status: LeadItem['status']) => void;
-  deleteLead: (id: string) => void;
+  addLead: (lead: Omit<LeadItem, 'id' | 'createdAt' | 'status'>) => Promise<void>;
+  updateLeadStatus: (id: string, status: LeadItem['status']) => Promise<void>;
+  deleteLead: (id: string) => Promise<void>;
 
   // Services
   services: ServiceItem[];
-  addService: (service: Omit<ServiceItem, 'id'>) => void;
-  updateService: (id: string, updated: Partial<ServiceItem>) => void;
-  deleteService: (id: string) => void;
+  addService: (service: Omit<ServiceItem, 'id'>) => Promise<void>;
+  updateService: (id: string, updated: Partial<ServiceItem>) => Promise<void>;
+  deleteService: (id: string) => Promise<void>;
 
   // Packages
   packages: PackageData[];
-  addPackage: (pkg: Omit<PackageData, 'id'>) => void;
-  updatePackage: (id: string, updated: Partial<PackageData>) => void;
-  deletePackage: (id: string) => void;
+  addPackage: (pkg: Omit<PackageData, 'id'>) => Promise<void>;
+  updatePackage: (id: string, updated: Partial<PackageData>) => Promise<void>;
+  deletePackage: (id: string) => Promise<void>;
 
   // Gallery & Artists
   categories: string[];
   artists: ArtistProfile[];
-  addCategory: (category: string) => void;
-  deleteCategory: (category: string) => void;
-  addArtist: (artist: Omit<ArtistProfile, 'id'>) => void;
-  updateArtist: (id: string, updated: Partial<ArtistProfile>) => void;
-  deleteArtist: (id: string) => void;
-  addPhotoToArtist: (artistId: string, photo: { title: string; image: string }) => void;
-  removePhotoFromArtist: (artistId: string, photoIndex: number) => void;
+  addCategory: (category: string) => Promise<void>;
+  deleteCategory: (category: string) => Promise<void>;
+  addArtist: (artist: Omit<ArtistProfile, 'id'>) => Promise<void>;
+  updateArtist: (id: string, updated: Partial<ArtistProfile>) => Promise<void>;
+  deleteArtist: (id: string) => Promise<void>;
+  addPhotoToArtist: (artistId: string, photo: { title: string; image: string }) => Promise<void>;
+  removePhotoFromArtist: (artistId: string, photoIndex: number) => Promise<void>;
 
   // Banners
   banners: BannerSettings;
-  updateBanners: (updated: Partial<BannerSettings>) => void;
+  updateBanners: (updated: Partial<BannerSettings>) => Promise<void>;
 
   // Testimonials
   testimonials: TestimonialItem[];
-  addTestimonial: (item: Omit<TestimonialItem, 'id'>) => void;
-  deleteTestimonial: (id: string) => void;
+  addTestimonial: (item: Omit<TestimonialItem, 'id'>) => Promise<void>;
+  deleteTestimonial: (id: string) => Promise<void>;
 
   // Settings
   settings: SiteSettings;
-  updateSettings: (updated: Partial<SiteSettings>) => void;
-
-  // Reset to defaults
-  resetAllToDefault: () => void;
+  updateSettings: (updated: Partial<SiteSettings>) => Promise<void>;
 }
 
 const AdminDataContext = createContext<AdminDataContextType | undefined>(undefined);
-
-export const normalizeImageUrl = (url?: string): string => {
-  if (!url) return '';
-  if (url.startsWith('/images/')) {
-    const filename = url.replace('/images/', '');
-    return `https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/${filename}`;
-  }
-  return url;
-};
 
 export function AdminDataProvider({ children }: { children: React.ReactNode }) {
   // Auth state
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [adminUser, setAdminUser] = useState<{ name: string; email: string; role: string } | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Pure dynamic Firebase state (starts empty)
+  // Pure dynamic Firestore state (strictly initialized empty)
   const [leads, setLeads] = useState<LeadItem[]>([]);
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [packages, setPackages] = useState<PackageData[]>([]);
@@ -207,19 +196,25 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
   const [testimonials, setTestimonials] = useState<TestimonialItem[]>([]);
   const [settings, setSettings] = useState<SiteSettings>(emptySettings);
 
-  // Helper to sync changes to Firebase Firestore Cloud Database
+  // Write mutation directly to Firebase Firestore
   const syncToCloud = async (partialData: Record<string, any>) => {
-    if (!db) return;
+    if (!db) {
+      console.warn('Firebase Firestore is not initialized.');
+      return;
+    }
     try {
       const docRef = doc(db, 'content', 'site_data');
       await setDoc(docRef, partialData, { merge: true });
-    } catch (err) {
-      console.warn('Firebase cloud sync note:', err);
+    } catch (err: any) {
+      console.error('Failed to sync to Firebase Firestore:', err);
+      setError(err?.message || 'Failed to save changes to Firestore');
+      throw err;
     }
   };
 
-  // Load from localStorage & subscribe to Firestore on mount
+  // Subscribe to real-time Firestore cloud database on mount
   useEffect(() => {
+    // Check admin session token
     try {
       const authSession = localStorage.getItem('shuvayan_admin_session');
       if (authSession) {
@@ -227,163 +222,69 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
         setIsAuthenticated(true);
         setAdminUser(user);
       }
-
-      const storedLeads = localStorage.getItem('shuvayan_leads');
-      if (storedLeads) setLeads(JSON.parse(storedLeads));
-
-      const storedServices = localStorage.getItem('shuvayan_services');
-      if (storedServices) {
-        const parsed = JSON.parse(storedServices);
-        setServices(parsed.map((s: ServiceItem) => ({ ...s, image: normalizeImageUrl(s.image) })));
-      }
-
-      const storedPackages = localStorage.getItem('shuvayan_packages');
-      if (storedPackages) setPackages(JSON.parse(storedPackages));
-
-      const storedCategories = localStorage.getItem('shuvayan_categories');
-      if (storedCategories) setCategories(JSON.parse(storedCategories));
-
-      const storedArtists = localStorage.getItem('shuvayan_artists');
-      if (storedArtists) {
-        const parsed = JSON.parse(storedArtists);
-        setArtists(
-          parsed.map((a: ArtistProfile) => ({
-            ...a,
-            photos: a.photos.map((p) => ({ ...p, image: normalizeImageUrl(p.image) })),
-          }))
-        );
-      }
-
-      const storedBanners = localStorage.getItem('shuvayan_banners');
-      if (storedBanners) setBanners(JSON.parse(storedBanners));
-
-      const storedTestimonials = localStorage.getItem('shuvayan_testimonials');
-      if (storedTestimonials) setTestimonials(JSON.parse(storedTestimonials));
-
-      const storedSettings = localStorage.getItem('shuvayan_settings');
-      if (storedSettings) setSettings(JSON.parse(storedSettings));
     } catch (e) {
-      console.warn('Error loading admin state from localStorage', e);
+      console.warn('Error reading admin session from localStorage', e);
     }
 
-    // Safety timeout to ensure spinner never hangs indefinitely
-    const safetyTimer = setTimeout(() => {
+    if (!db) {
       setIsLoading(false);
-    }, 1500);
+      setError('Firebase Firestore is not available.');
+      return;
+    }
 
-    // Subscribe to real-time Firestore cloud database
-    if (db) {
-      try {
-        const docRef = doc(db, 'content', 'site_data');
-        const unsubscribe = onSnapshot(
-          docRef,
-          (docSnap) => {
-            clearTimeout(safetyTimer);
-            setIsLoading(false);
-            if (docSnap.exists()) {
-              const data = docSnap.data();
-              if (data.services) {
-                setServices(
-                  data.services.map((s: ServiceItem) => ({ ...s, image: normalizeImageUrl(s.image) }))
-                );
-              }
-              if (data.packages) setPackages(data.packages);
-              if (data.categories) setCategories(data.categories);
-              if (data.artists) {
-                setArtists(
-                  data.artists.map((a: ArtistProfile) => ({
-                    ...a,
-                    photos: a.photos.map((p: any) => ({ ...p, image: normalizeImageUrl(p.image) })),
-                  }))
-                );
-              }
-              if (data.banners) setBanners(data.banners);
-              if (data.testimonials) setTestimonials(data.testimonials || []);
-              if (data.settings) setSettings(data.settings);
-              if (data.leads) setLeads(data.leads);
-            }
-          },
-          (err) => {
-            clearTimeout(safetyTimer);
-            setIsLoading(false);
-            console.warn('Firestore subscription note / offline fallback:', err);
+    try {
+      const docRef = doc(db, 'content', 'site_data');
+      const unsubscribe = onSnapshot(
+        docRef,
+        (docSnap) => {
+          setIsLoading(false);
+          setError(null);
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            setServices(Array.isArray(data.services) ? data.services : []);
+            setPackages(Array.isArray(data.packages) ? data.packages : []);
+            setCategories(Array.isArray(data.categories) ? data.categories : []);
+            setArtists(Array.isArray(data.artists) ? data.artists : []);
+            setBanners(data.banners && typeof data.banners === 'object' ? data.banners : emptyBanners);
+            setTestimonials(Array.isArray(data.testimonials) ? data.testimonials : []);
+            setSettings(data.settings && typeof data.settings === 'object' ? data.settings : emptySettings);
+            setLeads(Array.isArray(data.leads) ? data.leads : []);
+          } else {
+            // Firestore doc does not exist yet; maintain clean empty state
+            setServices([]);
+            setPackages([]);
+            setCategories([]);
+            setArtists([]);
+            setBanners(emptyBanners);
+            setTestimonials([]);
+            setSettings(emptySettings);
+            setLeads([]);
           }
-        );
+        },
+        (err) => {
+          setIsLoading(false);
+          setError(err.message || 'Failed to connect to Firebase database');
+          console.error('Firestore subscription error:', err);
+        }
+      );
 
-        return () => {
-          clearTimeout(safetyTimer);
-          unsubscribe();
-        };
-      } catch (err) {
-        clearTimeout(safetyTimer);
-        setIsLoading(false);
-        console.warn('Firestore subscription failed:', err);
-      }
-    } else {
-      clearTimeout(safetyTimer);
+      return () => unsubscribe();
+    } catch (err: any) {
       setIsLoading(false);
+      setError(err.message || 'Firestore connection initialization error');
+      console.error('Firestore connection initialization failed:', err);
     }
   }, []);
 
-  // Sync to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem('shuvayan_leads', JSON.stringify(leads));
-    } catch (e) {}
-  }, [leads]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('shuvayan_services', JSON.stringify(services));
-    } catch (e) {}
-  }, [services]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('shuvayan_packages', JSON.stringify(packages));
-    } catch (e) {}
-  }, [packages]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('shuvayan_categories', JSON.stringify(categories));
-    } catch (e) {}
-  }, [categories]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('shuvayan_artists', JSON.stringify(artists));
-    } catch (e) {}
-  }, [artists]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('shuvayan_banners', JSON.stringify(banners));
-    } catch (e) {}
-  }, [banners]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('shuvayan_testimonials', JSON.stringify(testimonials));
-    } catch (e) {}
-  }, [testimonials]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('shuvayan_settings', JSON.stringify(settings));
-    } catch (e) {}
-  }, [settings]);
-
   // Auth methods
-  const login = (email: string, pass: string): boolean => {
-    if (
-      (email.trim().toLowerCase() === 'admin@shuvayan.com' || email.trim().toLowerCase() === 'admin') &&
-      (pass === 'shuvayan2026' || pass === 'admin123' || pass === 'admin')
-    ) {
-      const user = { name: 'Admin Manager', email: 'admin@shuvayan.com', role: 'Super Administrator' };
+  const login = (email: string, password: string): boolean => {
+    if (email === 'admin@shuvayan.com' && password === 'admin@2026') {
+      const user = { name: 'Admin Manager', email, role: 'Super Administrator' };
       setIsAuthenticated(true);
       setAdminUser(user);
-      localStorage.setItem('shuvayan_admin_session', JSON.stringify(user));
+      try {
+        localStorage.setItem('shuvayan_admin_session', JSON.stringify(user));
+      } catch (e) {}
       return true;
     }
     return false;
@@ -392,203 +293,167 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
   const logout = () => {
     setIsAuthenticated(false);
     setAdminUser(null);
-    localStorage.removeItem('shuvayan_admin_session');
+    try {
+      localStorage.removeItem('shuvayan_admin_session');
+    } catch (e) {}
   };
 
-  // Leads
-  const addLead = (lead: Omit<LeadItem, 'id' | 'createdAt' | 'status'>) => {
+  // Leads CRUD
+  const addLead = async (lead: Omit<LeadItem, 'id' | 'createdAt' | 'status'>) => {
     const newLead: LeadItem = {
       ...lead,
       id: `lead-${Date.now()}`,
       status: 'New',
-      createdAt: new Date().toISOString().replace('T', ' ').substring(0, 16),
+      createdAt: new Date().toISOString(),
     };
     const updated = [newLead, ...leads];
     setLeads(updated);
-    syncToCloud({ leads: updated });
+    await syncToCloud({ leads: updated });
   };
 
-  const updateLeadStatus = (id: string, status: LeadItem['status']) => {
+  const updateLeadStatus = async (id: string, status: LeadItem['status']) => {
     const updated = leads.map((l) => (l.id === id ? { ...l, status } : l));
     setLeads(updated);
-    syncToCloud({ leads: updated });
+    await syncToCloud({ leads: updated });
   };
 
-  const deleteLead = (id: string) => {
+  const deleteLead = async (id: string) => {
     const updated = leads.filter((l) => l.id !== id);
     setLeads(updated);
-    syncToCloud({ leads: updated });
+    await syncToCloud({ leads: updated });
   };
 
-  // Services
-  const addService = (service: Omit<ServiceItem, 'id'>) => {
+  // Services CRUD
+  const addService = async (service: Omit<ServiceItem, 'id'>) => {
     const newService: ServiceItem = {
       ...service,
       id: `service-${Date.now()}`,
     };
     const updated = [...services, newService];
     setServices(updated);
-    syncToCloud({ services: updated });
+    await syncToCloud({ services: updated });
   };
 
-  const updateService = (id: string, updatedService: Partial<ServiceItem>) => {
+  const updateService = async (id: string, updatedService: Partial<ServiceItem>) => {
     const updated = services.map((s) => (s.id === id ? { ...s, ...updatedService } : s));
     setServices(updated);
-    syncToCloud({ services: updated });
+    await syncToCloud({ services: updated });
   };
 
-  const deleteService = (id: string) => {
+  const deleteService = async (id: string) => {
     const updated = services.filter((s) => s.id !== id);
     setServices(updated);
-    syncToCloud({ services: updated });
+    await syncToCloud({ services: updated });
   };
 
-  // Packages
-  const addPackage = (pkg: Omit<PackageData, 'id'>) => {
+  // Packages CRUD
+  const addPackage = async (pkg: Omit<PackageData, 'id'>) => {
     const newPkg: PackageData = {
       ...pkg,
       id: `pkg-${Date.now()}`,
     };
     const updated = [...packages, newPkg];
     setPackages(updated);
-    syncToCloud({ packages: updated });
+    await syncToCloud({ packages: updated });
   };
 
-  const updatePackage = (id: string, updatedPkg: Partial<PackageData>) => {
-    const updated = packages.map((p) => (p.id === id ? { ...p, ...updatedPkg } : p));
+  const updatePackage = async (id: string, updatedPackage: Partial<PackageData>) => {
+    const updated = packages.map((p) => (p.id === id ? { ...p, ...updatedPackage } : p));
     setPackages(updated);
-    syncToCloud({ packages: updated });
+    await syncToCloud({ packages: updated });
   };
 
-  const deletePackage = (id: string) => {
+  const deletePackage = async (id: string) => {
     const updated = packages.filter((p) => p.id !== id);
     setPackages(updated);
-    syncToCloud({ packages: updated });
+    await syncToCloud({ packages: updated });
   };
 
-  // Categories & Artists
-  const addCategory = (category: string) => {
-    if (!categories.includes(category)) {
-      const updated = [...categories, category];
-      setCategories(updated);
-      syncToCloud({ categories: updated });
-    }
+  // Gallery Categories
+  const addCategory = async (category: string) => {
+    const trimmed = category.trim();
+    if (!trimmed || categories.includes(trimmed)) return;
+    const updated = [...categories, trimmed];
+    setCategories(updated);
+    await syncToCloud({ categories: updated });
   };
 
-  const deleteCategory = (category: string) => {
+  const deleteCategory = async (category: string) => {
     const updated = categories.filter((c) => c !== category);
     setCategories(updated);
-    syncToCloud({ categories: updated });
+    await syncToCloud({ categories: updated });
   };
 
-  const addArtist = (artist: Omit<ArtistProfile, 'id'>) => {
+  // Artists CRUD
+  const addArtist = async (artist: Omit<ArtistProfile, 'id'>) => {
     const newArtist: ArtistProfile = {
       ...artist,
       id: `artist-${Date.now()}`,
     };
-    const updated = [newArtist, ...artists];
+    const updated = [...artists, newArtist];
     setArtists(updated);
-    syncToCloud({ artists: updated });
+    await syncToCloud({ artists: updated });
   };
 
-  const updateArtist = (id: string, updatedArtist: Partial<ArtistProfile>) => {
+  const updateArtist = async (id: string, updatedArtist: Partial<ArtistProfile>) => {
     const updated = artists.map((a) => (a.id === id ? { ...a, ...updatedArtist } : a));
     setArtists(updated);
-    syncToCloud({ artists: updated });
+    await syncToCloud({ artists: updated });
   };
 
-  const deleteArtist = (id: string) => {
+  const deleteArtist = async (id: string) => {
     const updated = artists.filter((a) => a.id !== id);
     setArtists(updated);
-    syncToCloud({ artists: updated });
+    await syncToCloud({ artists: updated });
   };
 
-  const addPhotoToArtist = (artistId: string, photo: { title: string; image: string }) => {
+  const addPhotoToArtist = async (artistId: string, photo: { title: string; image: string }) => {
     const updated = artists.map((a) =>
       a.id === artistId ? { ...a, photos: [...a.photos, photo] } : a
     );
     setArtists(updated);
-    syncToCloud({ artists: updated });
+    await syncToCloud({ artists: updated });
   };
 
-  const removePhotoFromArtist = (artistId: string, photoIndex: number) => {
+  const removePhotoFromArtist = async (artistId: string, photoIndex: number) => {
     const updated = artists.map((a) =>
       a.id === artistId
         ? { ...a, photos: a.photos.filter((_, idx) => idx !== photoIndex) }
         : a
     );
     setArtists(updated);
-    syncToCloud({ artists: updated });
+    await syncToCloud({ artists: updated });
   };
 
   // Banners
-  const updateBanners = (updatedBanner: Partial<BannerSettings>) => {
+  const updateBanners = async (updatedBanner: Partial<BannerSettings>) => {
     const updated = { ...banners, ...updatedBanner };
     setBanners(updated);
-    syncToCloud({ banners: updated });
+    await syncToCloud({ banners: updated });
   };
 
   // Testimonials
-  const addTestimonial = (item: Omit<TestimonialItem, 'id'>) => {
+  const addTestimonial = async (item: Omit<TestimonialItem, 'id'>) => {
     const newTestimonial: TestimonialItem = {
       ...item,
       id: `testimonial-${Date.now()}`,
     };
     const updated = [newTestimonial, ...testimonials];
     setTestimonials(updated);
-    syncToCloud({ testimonials: updated });
+    await syncToCloud({ testimonials: updated });
   };
 
-  const updateTestimonial = (id: string, updatedTestimonial: Partial<TestimonialItem>) => {
-    const updated = testimonials.map((t) =>
-      t.id === id ? { ...t, ...updatedTestimonial } : t
-    );
-    setTestimonials(updated);
-    syncToCloud({ testimonials: updated });
-  };
-
-  const deleteTestimonial = (id: string) => {
+  const deleteTestimonial = async (id: string) => {
     const updated = testimonials.filter((t) => t.id !== id);
     setTestimonials(updated);
-    syncToCloud({ testimonials: updated });
+    await syncToCloud({ testimonials: updated });
   };
 
   // Site Settings
-  const updateSettings = (updatedSettings: Partial<SiteSettings>) => {
+  const updateSettings = async (updatedSettings: Partial<SiteSettings>) => {
     const updated = { ...settings, ...updatedSettings };
     setSettings(updated);
-    syncToCloud({ settings: updated });
-  };
-
-  const resetAllToDefault = () => {
-    setServices([]);
-    setPackages([]);
-    setCategories([]);
-    setArtists([]);
-    setBanners(emptyBanners);
-    setTestimonials([]);
-    setSettings(emptySettings);
-    setLeads([]);
-
-    localStorage.removeItem('shuvayan_services');
-    localStorage.removeItem('shuvayan_packages');
-    localStorage.removeItem('shuvayan_categories');
-    localStorage.removeItem('shuvayan_artists');
-    localStorage.removeItem('shuvayan_banners');
-    localStorage.removeItem('shuvayan_testimonials');
-    localStorage.removeItem('shuvayan_settings');
-    localStorage.removeItem('shuvayan_leads');
-
-    syncToCloud({
-      services: [],
-      packages: [],
-      categories: [],
-      artists: [],
-      banners: emptyBanners,
-      testimonials: [],
-      settings: emptySettings,
-      leads: [],
-    });
+    await syncToCloud({ settings: updated });
   };
 
   return (
@@ -599,6 +464,7 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
         login,
         logout,
         isLoading,
+        error,
         leads,
         addLead,
         updateLeadStatus,
@@ -627,7 +493,6 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
         deleteTestimonial,
         settings,
         updateSettings,
-        resetAllToDefault,
       }}
     >
       {children}

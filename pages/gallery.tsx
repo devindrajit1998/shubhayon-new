@@ -23,244 +23,16 @@ export interface ArtistProfile {
   }[];
 }
 
-export const galleryCategories = [
-  'Trey Decoration',
-  'Bridal Mehendi',
-  'Bridal Makeover',
-  'Photography',
-  'Venue Decoration',
-];
-
-export const artistList: ArtistProfile[] = [
-  // Bridal Makeover Artists
-  {
-    id: 'artist-1',
-    name: 'Tania Chakraborty',
-    role: 'Makeover Artist',
-    eventsCount: '150+ Events',
-    category: 'Bridal Makeover',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop',
-    bio: 'Specializing in timeless Bengali bridal makeovers, signature HD airbrush artistry, delicate Chandan calligraphy, and royal mukut draping with over 8 years of celebrated wedding experience.',
-    photos: [
-      {
-        title: 'Glamorous Bengali Reception HD Bridal Look',
-        image: '/images/sample-1.png',
-      },
-      {
-        title: 'Traditional Lal Banarasi & Tikli Makeup',
-        image: '/images/sample-2.png',
-      },
-      {
-        title: 'Royal Bridal Mirror Reflection & Mukut',
-        image: '/images/sample-3.png',
-      },
-      {
-        title: 'Shubho Drishti Bridal Radiance',
-        image: '/images/sample-4.png',
-      },
-      {
-        title: 'Intricate Gold Jewelry & Airbrush Finish',
-        image: '/images/sample-5.png',
-      },
-    ],
-  },
-  {
-    id: 'artist-2',
-    name: 'Joy Biswas',
-    role: 'Makeover Artist',
-    eventsCount: '90+ Events',
-    category: 'Bridal Makeover',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop',
-    bio: 'Celebrated for contemporary subtle makeup, radiant dewy glass-skin aesthetics, and elegant Bengali hair styling designed for day-long wedding comfort and cinematic photography.',
-    photos: [
-      {
-        title: 'Classic Bengali Eye Makeup & Chandan Art',
-        image: '/images/sample-1.png',
-      },
-      {
-        title: 'Vibrant Sangeet Pastel Makeover',
-        image: '/images/sample-2.png',
-      },
-      {
-        title: 'Mukut & Alta Styling for Sindoor Daan',
-        image: '/images/sample-3.png',
-      },
-      {
-        title: 'Lustrous Silk Saree Drape & Hair Styling',
-        image: '/images/sample-4.png',
-      },
-      {
-        title: 'Gaye Holud Fresh Dewy Glow',
-        image: '/images/sample-5.png',
-      },
-    ],
-  },
-  {
-    id: 'artist-3',
-    name: 'Purnima Lahiri',
-    role: 'Makeover Artist',
-    eventsCount: '90+ Events',
-    category: 'Bridal Makeover',
-    photos: [
-      {
-        title: 'Subtle Day Wedding Smokey Eye Styling',
-        image: '/images/sample-1.png',
-      },
-      {
-        title: 'Crimson Velvet Bridal Attire & Hairstyle',
-        image: '/images/sample-2.png',
-      },
-      {
-        title: 'Contemporary Bengali Fusion Bridal Look',
-        image: '/images/sample-3.png',
-      },
-      {
-        title: 'Traditional Shakha Pola & Jewelry Adornment',
-        image: '/images/sample-4.png',
-      },
-      {
-        title: 'Grand Reception Evening Glamour',
-        image: '/images/sample-5.png',
-      },
-    ],
-  },
-
-  // Trey & Tatta Decoration
-  {
-    id: 'artist-4',
-    name: 'Shuvayan Artisanal Studio',
-    role: 'Tatta Designer',
-    eventsCount: '120+ Events',
-    category: 'Trey Decoration',
-    photos: [
-      {
-        title: 'Handcrafted Fish & Saree Tatta Trays',
-        image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=800&auto=format&fit=crop',
-      },
-      {
-        title: 'Designer Sweets & Dry Fruits Presentation',
-        image: 'https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=800&auto=format&fit=crop',
-      },
-      {
-        title: 'Velvet & Brocade Gift Packaging',
-        image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop',
-      },
-      {
-        title: 'Traditional Wedding Dolls & Mukut Display',
-        image: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=800&auto=format&fit=crop',
-      },
-      {
-        title: 'Groom Shubh Bibaho Tatta Platter',
-        image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop',
-      },
-    ],
-  },
-
-  // Bridal Mehendi
-  {
-    id: 'artist-5',
-    name: 'Sunita Henna Arts',
-    role: 'Mehendi Master',
-    eventsCount: '200+ Events',
-    category: 'Bridal Mehendi',
-    photos: [
-      {
-        title: 'Detailed Radha-Krishna & Barat Mehendi Motif',
-        image: 'https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?q=80&w=800&auto=format&fit=crop',
-      },
-      {
-        title: 'Full Bridal Arms & Feet Henna Patterns',
-        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop',
-      },
-      {
-        title: 'Floral Mandala & Symmetrical Henna Palms',
-        image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop',
-      },
-      {
-        title: 'Arabic & Bengali Fusion Henna Art',
-        image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop',
-      },
-      {
-        title: 'Dark Organic Stain Organic Mehendi Design',
-        image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop',
-      },
-    ],
-  },
-
-  // Photography
-  {
-    id: 'artist-6',
-    name: 'Shuvayan Cinematic Vision',
-    role: 'Lead Photographer',
-    eventsCount: '300+ Events',
-    category: 'Photography',
-    photos: [
-      {
-        title: 'Royal Couple Cinematic Portrait',
-        image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop',
-      },
-      {
-        title: 'Emotional Saat Paake Bandha Candid Ritual',
-        image: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=800&auto=format&fit=crop',
-      },
-      {
-        title: 'Joyful Sindoor Daan Tearful Moments',
-        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop',
-      },
-      {
-        title: 'Drone Shot of Grand Outdoor Lawn Mandap',
-        image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop',
-      },
-      {
-        title: 'Pre-Wedding Sunset Lake Romance',
-        image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop',
-      },
-    ],
-  },
-
-  // Venue Decoration
-  {
-    id: 'artist-7',
-    name: 'Shuvayan Decor & Architecture',
-    role: 'Stage & Mandap Designer',
-    eventsCount: '180+ Events',
-    category: 'Venue Decoration',
-    photos: [
-      {
-        title: 'Grand Rajbari Palace Theme Mandap',
-        image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop',
-      },
-      {
-        title: 'Hanging Jasmine & Marigold Floral Chandelier',
-        image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=800&auto=format&fit=crop',
-      },
-      {
-        title: 'Illuminated Fairy Light Royal Entrance Gate',
-        image: 'https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=800&auto=format&fit=crop',
-      },
-      {
-        title: 'Photobooth with Vintage Bengali Rickshaw',
-        image: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=800&auto=format&fit=crop',
-      },
-      {
-        title: 'Opulent Reception Stage with Warm Bokeh Lamps',
-        image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop',
-      },
-    ],
-  },
-];
-
 export default function GalleryPage() {
   const { openLightbox, openQuoteModal } = useAppModals();
-  const { categories, artists, banners } = useAdminData();
+  const { categories, artists, banners, isLoading, error } = useAdminData();
 
-  const displayCategories = categories && categories.length > 0 ? categories : galleryCategories;
-  const displayArtists = artists && artists.length > 0 ? artists : artistList;
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
 
-  const [selectedCategory, setSelectedCategory] = useState(displayCategories[0] || 'Bridal Makeover');
+  const activeCategory = selectedCategory || (categories.length > 0 ? categories[0] : '');
 
-  const displayedArtists = displayArtists.filter(
-    (artist) => artist.category === selectedCategory
+  const displayedArtists = artists.filter(
+    (artist) => !activeCategory || artist.category === activeCategory
   );
 
   const bannerBg = banners?.galleryHeroBgImage || banners?.innerHeroBgImage || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/galler-banner.png';
@@ -289,157 +61,155 @@ export default function GalleryPage() {
       <Header activePage="gallery" />
 
       <main className="flex-1">
-        {/* 1. Hero Banner: Compact 340-350px height with absolute positioned Polaroid collage */}
+        {/* Banner Section */}
         <section
           id="gallery-hero"
-          className="relative z-20 h-[320px] sm:h-[340px] lg:h-[350px] overflow-visible bg-[#1a0f0e]"
+          className="relative z-10 bg-[#2b1614] text-white overflow-hidden pt-28 pb-16 sm:pt-36 sm:pb-20 lg:pt-40 lg:pb-24 border-b border-[#3d1f1f]"
         >
-          {/* Background image with dark warm wedding backdrop */}
-          <div className="absolute inset-0 z-0 overflow-hidden">
+          {/* Background image */}
+          <div className="absolute inset-0 z-0">
             <Image
               src={bannerBg}
-              alt="Gallery Wedding Background"
+              alt="Gallery Banner"
               fill
               priority
-              className="object-cover object-center brightness-95"
+              className="object-cover object-center opacity-35 brightness-75"
               referrerPolicy="no-referrer"
             />
-            {/* Left dark vignette for headline legibility */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#120606]/95 via-[#190908]/75 to-transparent" />
-            {/* Top dark gradient for header overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/30" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#2b1614] via-[#2b1614]/50 to-transparent" />
           </div>
 
-          {/* Main Container - max-w-[1340px] aligned with Header */}
-          <div className="relative z-10 max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col sm:flex-row items-center justify-between">
-            {/* Heading: Centered on mobile with balanced typography, left-aligned on sm+ */}
-            <div className="pt-20 sm:pt-12 lg:pt-14 text-center sm:text-left w-full sm:w-auto sm:max-w-md md:max-w-xl">
-              <h1 className="font-serif-display font-normal text-[26px] sm:text-4xl md:text-5xl lg:text-[58px] xl:text-[65px] text-white leading-[1.15] sm:leading-[1.12] tracking-tight drop-shadow-sm">
-                {bannerTitle.includes('last forever') ? (
-                  <>
-                    Moments that <br className="hidden sm:inline" />
-                    <span className="sm:inline">last forever</span>
-                  </>
-                ) : (
-                  bannerTitle
-                )}
-              </h1>
-            </div>
+          <div className="relative z-10 max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              {/* Left Column: Heading & Subtitle */}
+              <div className="lg:col-span-8 space-y-4 text-center lg:text-left">
+                <p className="text-xs sm:text-sm font-semibold tracking-widest text-[#d99824] uppercase">
+                  Our Work &amp; Specialists
+                </p>
+                <h1 className="font-serif-display text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white">
+                  {bannerTitle}
+                </h1>
+                <p className="text-xs sm:text-sm md:text-base text-gray-200 max-w-xl font-light leading-relaxed">
+                  Browse through real celebrations curated by our master artisans &amp; specialist teams.
+                </p>
+              </div>
 
-            {/* Polaroid Snapshots */}
-            <div className="absolute left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 lg:right-8 xl:right-12 top-[168px] sm:top-[115px] lg:top-[120px] z-30">
-              <div className="relative flex items-center justify-center w-56 sm:w-64 md:w-80 lg:w-[380px] xl:w-[420px]">
-                {/* Left Snapshot */}
-                <div
-                  onClick={() => openLightbox(1, polaroidPhotos)}
-                  className="absolute -left-2 sm:-left-4 md:-left-6 lg:-left-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform -rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
-                >
-                  <div className="relative w-full h-full overflow-hidden bg-gray-900">
-                    <Image
-                      src={snapLeft}
-                      alt="Groom & Bride"
-                      fill
-                      className="object-cover object-top"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                </div>
-
-                {/* Center Snapshot */}
-                <div
-                  onClick={() => openLightbox(0, polaroidPhotos)}
-                  className="relative z-20 w-24 sm:w-30 md:w-38 lg:w-46 xl:w-50 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_18px_35px_rgba(0,0,0,0.7)] transform hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
-                >
-                  <div className="relative w-full h-full overflow-hidden bg-gray-900">
-                    <Image
-                      src={snapMid}
-                      alt="Bengali Bride in Palki"
-                      fill
-                      className="object-cover object-center"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                </div>
-
-                {/* Right Snapshot */}
-                <div
-                  onClick={() => openLightbox(2, polaroidPhotos)}
-                  className="absolute -right-2 sm:-right-4 md:-right-6 lg:-right-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
-                >
-                  <div className="relative w-full h-full overflow-hidden bg-gray-900">
-                    <Image
-                      src={snapRight}
-                      alt="Wedding Couple"
-                      fill
-                      className="object-cover object-center"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
+              {/* Right Column: 3-Polaroid Cluster */}
+              <div className="lg:col-span-4 flex justify-center lg:justify-end">
+                <div className="relative w-64 sm:w-72 h-44 sm:h-48">
+                  {polaroidPhotos.map((photo, pIdx) => {
+                    const rotations = ['-rotate-8', 'rotate-0', 'rotate-8'];
+                    const translates = ['-translate-x-6', 'translate-x-0', 'translate-x-6'];
+                    const zIndexes = ['z-10', 'z-20', 'z-30'];
+                    return (
+                      <div
+                        key={pIdx}
+                        onClick={() => openLightbox(pIdx, polaroidPhotos)}
+                        className={`absolute top-0 w-28 sm:w-32 bg-white p-1.5 pb-5 rounded-md shadow-2xl border border-gray-200 cursor-pointer transform hover:scale-110 hover:z-40 transition-all duration-300 ${rotations[pIdx]} ${translates[pIdx]} ${zIndexes[pIdx]}`}
+                      >
+                        <div className="relative w-full aspect-[4/5] overflow-hidden bg-gray-900 rounded-xs">
+                          <Image
+                            src={photo.image}
+                            alt={photo.title}
+                            fill
+                            className="object-cover"
+                            referrerPolicy="no-referrer"
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* 2. Breadcrumbs Area matching max-w-[1340px] alignment */}
-        <div className="bg-[#fbf9f6] border-b border-[#ebdcc9] pt-8 pb-3 sm:py-3 relative z-10">
-          <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 text-xs sm:text-sm text-center sm:text-left">
-            <Link href="/" className="text-[#b81414] hover:underline font-medium">
-              Home
-            </Link>
-            <span className="text-gray-400 mx-2">&gt;</span>
-            <span className="text-gray-600 font-medium">Gallery</span>
+        {/* Gallery Content Section */}
+        <section className="py-12 sm:py-16 lg:py-20 max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section Header */}
+          <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
+            <p className="text-[#c8102e] font-semibold text-xs sm:text-sm tracking-normal mb-1">
+              Captured Moments
+            </p>
+            <h2 className="font-serif-display text-2xl sm:text-3xl lg:text-4xl font-normal text-[#5a5858] tracking-tight">
+              Explore Our Portfolio
+            </h2>
+
+            {/* Red line with Heart Divider */}
+            <div className="flex items-center justify-center gap-3 my-2.5">
+              <span className="w-12 sm:w-14 h-[1.5px] bg-[#c8102e]" />
+              <span className="relative w-3.5 h-3.5 inline-block">
+                <Image
+                  src="/images/heart.svg"
+                  alt="Heart"
+                  fill
+                  className="object-contain"
+                  referrerPolicy="no-referrer"
+                />
+              </span>
+              <span className="w-12 sm:w-14 h-[1.5px] bg-[#c8102e]" />
+            </div>
           </div>
-        </div>
 
-        {/* 3. Main Gallery / Explore Our Work Section */}
-        <section className="py-12 sm:py-16 bg-[#faf7f2]">
-          <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Section Header */}
-            <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
-              <p
-                id="gallery-subheading"
-                className="text-[#b81414] font-semibold text-xs sm:text-sm tracking-normal mb-1"
-              >
-                Browse moments
-              </p>
-              <h2
-                id="gallery-heading"
-                className="font-serif-display text-3xl sm:text-4xl lg:text-5xl font-normal text-[#1f2937] tracking-tight"
-              >
-                Explore Our Work
-              </h2>
-
-              {/* Red line with Heart Divider */}
-              <div className="flex items-center justify-center gap-3 my-3">
-                <span className="w-14 sm:w-16 h-[1.5px] bg-[#b81414]" />
-                <span className="relative w-3.5 h-3.5 inline-block">
-                  <Image
-                    src="/images/heart.svg"
-                    alt="Heart"
-                    fill
-                    className="object-contain"
-                    referrerPolicy="no-referrer"
-                  />
-                </span>
-                <span className="w-14 sm:w-16 h-[1.5px] bg-[#b81414]" />
+          {/* 1. Loading State */}
+          {isLoading && (
+            <div className="space-y-6">
+              <div className="flex justify-center gap-2">
+                {[1, 2, 3, 4].map((n) => (
+                  <div key={n} className="w-24 h-9 bg-gray-200 rounded-md animate-pulse" />
+                ))}
+              </div>
+              <div className="space-y-4">
+                {[1, 2].map((n) => (
+                  <div key={n} className="h-36 bg-gray-100 rounded-lg animate-pulse" />
+                ))}
               </div>
             </div>
+          )}
 
-            {/* Category Filter Pill Bar (Wrapped, No horizontal scroll on mobile) */}
-            <div className="max-w-4xl mx-auto mb-8 sm:mb-10">
-              <div className="bg-[#f6c367] rounded-xl p-1.5 sm:p-2 shadow-sm">
-                <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-                  {displayCategories.map((cat) => {
-                    const isActive = selectedCategory === cat;
+          {/* 2. Error State */}
+          {!isLoading && error && (
+            <div className="bg-red-50 border border-red-200 rounded-2xl p-8 text-center max-w-lg mx-auto">
+              <p className="text-sm font-semibold text-red-700">{error}</p>
+            </div>
+          )}
+
+          {/* 3. Empty State */}
+          {!isLoading && !error && (categories.length === 0 || artists.length === 0) && (
+            <div className="bg-[#fffdfa] border border-dashed border-[#d8b590] rounded-2xl p-12 text-center max-w-lg mx-auto">
+              <Camera className="w-10 h-10 text-[#d99824] mx-auto mb-3" />
+              <h3 className="font-serif-display text-lg font-bold text-gray-800 mb-1">
+                Gallery Coming Soon
+              </h3>
+              <p className="text-xs text-gray-500 mb-4">
+                Our team is currently publishing the latest wedding photography &amp; makeover portfolios.
+              </p>
+              <button
+                onClick={() => openQuoteModal('General Portfolio Inquiry')}
+                className="bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow transition-colors"
+              >
+                Inquire With Our Team
+              </button>
+            </div>
+          )}
+
+          {/* 4. Real Firebase Categories & Artists */}
+          {!isLoading && !error && categories.length > 0 && artists.length > 0 && (
+            <div className="space-y-8">
+              {/* Category Filter Tabs Bar */}
+              <div className="flex justify-center">
+                <div className="inline-flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 p-1.5 bg-[#f5ecdd] rounded-lg border border-[#e8d5bf] shadow-inner max-w-full">
+                  {categories.map((cat) => {
+                    const isSelected = activeCategory === cat;
                     return (
                       <button
                         key={cat}
                         onClick={() => setSelectedCategory(cat)}
-                        className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
-                          isActive
-                            ? 'bg-white text-[#2a1d1d] font-bold shadow-xs'
-                            : 'text-[#3d2a14] hover:text-black font-medium hover:bg-white/30'
+                        className={`px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#c8102e] text-white shadow-xs'
+                            : 'text-[#5a4242] hover:bg-[#ebd9c2] hover:text-[#74161f]'
                         }`}
                       >
                         {cat}
@@ -448,154 +218,100 @@ export default function GalleryPage() {
                   })}
                 </div>
               </div>
-            </div>
 
-            {/* Artists / Portfolio Cards List */}
-            <div className="space-y-6 sm:space-y-8">
-              {displayedArtists.map((artist) => (
-                <div
-                  key={artist.id}
-                  id={`artist-row-${artist.id}`}
-                  className="bg-[#fff2d8] rounded-lg border border-[#edd7bf] p-3.5 sm:p-4 shadow-xs hover:shadow-md transition-shadow"
-                >
-                  <div className="flex flex-col lg:flex-row items-center lg:items-stretch gap-4 sm:gap-5">
-                    {/* Left Column: Artist DP & View Button */}
-                    <div className="w-full lg:w-44 flex flex-col items-center justify-center text-center pb-3 lg:pb-0 lg:border-r border-[#ecdcc8] lg:pr-4 flex-shrink-0">
-                      {/* Artist Avatar Photo or Default Silhouette DP */}
-                      <Link href={`/gallery/artist/${artist.id}`} className="group block mb-1.5">
-                        <div className="relative w-16 h-16 sm:w-18 sm:h-18 mx-auto rounded-full overflow-hidden border-2 border-[#d99824]/40 bg-white shadow-xs group-hover:scale-105 group-hover:border-[#c8102e] transition-all">
-                          <Image
-                            src={artist.avatar || '/images/artist-dp.png'}
-                            alt={artist.name}
-                            fill
-                            className={artist.avatar ? 'object-cover object-top' : 'object-contain'}
-                            referrerPolicy="no-referrer"
-                          />
-                        </div>
-                      </Link>
-
-                      <span className="font-serif-display text-sm sm:text-[15px] font-bold text-[#74161f] leading-tight mb-0.5">
-                        {artist.role}
-                      </span>
-                      <span className="text-[11px] sm:text-xs text-[#523e3e] font-medium mb-2.5">
-                        {artist.name}
-                      </span>
-
-                      <Link
-                        href={`/gallery/artist/${artist.id}`}
-                        className="inline-block bg-[#b81414] hover:bg-[#991111] text-white text-[11px] font-semibold px-4 py-1.5 rounded-sm shadow-xs hover:shadow transition-all text-center cursor-pointer"
-                      >
-                        View Artist
-                      </Link>
-                    </div>
-
-                    {/* Middle Column: 5 Photo Thumbnails */}
-                    <div className="w-full flex-1 grid grid-cols-5 gap-1.5 sm:gap-2.5 items-center">
-                      {artist.photos.map((photo, pIdx) => {
-                        const isLastPhoto = pIdx === 4;
-                        const artistPhotosList = artist.photos.map((p) => ({
-                          title: p.title || artist.name,
-                          image: p.image,
-                          category: artist.category.toUpperCase(),
-                        }));
-
-                        return (
-                          <div
-                            key={pIdx}
-                            onClick={() => openLightbox(pIdx, artistPhotosList)}
-                            className="group relative aspect-[3/4] rounded-xs overflow-hidden bg-gray-100 shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer"
-                          >
-                            <Image
-                              src={photo.image}
-                              alt={photo.title}
-                              fill
-                              className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
-                              referrerPolicy="no-referrer"
-                            />
-
-                            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/25 transition-colors" />
-
-                            {/* +20 Photos Badge on 5th Thumbnail */}
-                            {isLastPhoto && (
-                              <div className="absolute bottom-1 right-1 bg-black/85 text-white text-[8px] sm:text-[10px] font-medium px-1 sm:px-1.5 py-0.5 rounded-xs leading-none">
-                                +20 Photos
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    {/* Right Column: Makeup Brush PNG + Events Counter */}
-                    <div className="w-full lg:w-28 flex flex-row lg:flex-col items-center justify-center gap-2 pt-2 lg:pt-0 border-t lg:border-t-0 lg:border-l border-[#ecdcc8] lg:pl-3 flex-shrink-0">
-                      <div className="relative w-8 h-8 sm:w-9 sm:h-9">
-                        <Image
-                          src="/images/makeup-brush.png"
-                          alt="Makeup Brush"
-                          fill
-                          className="object-contain"
-                          referrerPolicy="no-referrer"
-                        />
-                      </div>
-                      <div className="text-left lg:text-center">
-                        <span className="font-serif-display text-sm sm:text-base font-bold text-[#8a1414] block leading-tight">
-                          {artist.eventsCount.split(' ')[0]}
-                        </span>
-                        <span className="text-[11px] sm:text-xs text-[#8a1414] font-medium block leading-tight">
-                          Events
-                        </span>
-                      </div>
-                    </div>
+              {/* Artists / Portfolio Cards List */}
+              <div className="space-y-6 sm:space-y-8">
+                {displayedArtists.length === 0 ? (
+                  <div className="text-center py-12 bg-[#fffdfa] rounded-lg border border-[#edd7bf] text-gray-500 text-xs">
+                    No specialist portfolios found under &quot;{activeCategory}&quot;.
                   </div>
-                </div>
-              ))}
+                ) : (
+                  displayedArtists.map((artist) => (
+                    <div
+                      key={artist.id}
+                      id={`artist-row-${artist.id}`}
+                      className="bg-[#fff2d8] rounded-lg border border-[#edd7bf] p-3.5 sm:p-4 shadow-xs hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex flex-col lg:flex-row items-center lg:items-stretch gap-4 sm:gap-5">
+                        {/* Left Column: Artist DP & View Button */}
+                        <div className="w-full lg:w-44 flex flex-col items-center justify-center text-center pb-3 lg:pb-0 lg:border-r border-[#ecdcc8] lg:pr-4 flex-shrink-0">
+                          <Link href={`/gallery/artist/${artist.id}`} className="group block mb-1.5">
+                            <div className="relative w-16 h-16 sm:w-18 sm:h-18 mx-auto rounded-full overflow-hidden border-2 border-[#d99824]/40 bg-white shadow-xs group-hover:scale-105 group-hover:border-[#c8102e] transition-all">
+                              <Image
+                                src={artist.avatar || '/images/artist-dp.png'}
+                                alt={artist.name}
+                                fill
+                                className={artist.avatar ? 'object-cover object-top' : 'object-contain'}
+                                referrerPolicy="no-referrer"
+                              />
+                            </div>
+                          </Link>
+
+                          <span className="font-serif-display text-sm sm:text-[15px] font-bold text-[#74161f] leading-tight mb-0.5">
+                            {artist.role}
+                          </span>
+                          <span className="text-[11px] sm:text-xs text-[#523e3e] font-medium mb-2.5">
+                            {artist.name}
+                          </span>
+
+                          <Link
+                            href={`/gallery/artist/${artist.id}`}
+                            className="inline-block bg-[#b81414] hover:bg-[#991111] text-white text-[11px] font-semibold px-4 py-1.5 rounded-sm shadow-xs hover:shadow transition-all text-center cursor-pointer"
+                          >
+                            View Artist
+                          </Link>
+                        </div>
+
+                        {/* Middle Column: Photo Thumbnails Grid */}
+                        <div className="w-full flex-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-1.5 sm:gap-2.5 items-center">
+                          {artist.photos.map((photo, pIdx) => {
+                            const artistPhotosList = artist.photos.map((p) => ({
+                              title: p.title || artist.name,
+                              image: p.image,
+                              category: artist.category.toUpperCase(),
+                            }));
+
+                            return (
+                              <div
+                                key={pIdx}
+                                onClick={() => openLightbox(pIdx, artistPhotosList)}
+                                className="group relative aspect-[3/4] bg-[#241715] rounded-md overflow-hidden border border-[#eedfcb] shadow-xs hover:shadow-md transition-all duration-200 transform hover:scale-[1.03] cursor-pointer flex flex-col justify-end"
+                              >
+                                <Image
+                                  src={photo.image}
+                                  alt={photo.title || artist.name}
+                                  fill
+                                  className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                                  referrerPolicy="no-referrer"
+                                />
+
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                  <Maximize2 className="w-4 h-4 text-amber-300 drop-shadow" />
+                                </div>
+
+                                <div className="relative z-10 p-1.5 bg-black/60 backdrop-blur-xs text-white">
+                                  <p className="text-[9px] sm:text-[10px] truncate leading-tight font-medium text-center">
+                                    {photo.title || `Work Sample #${pIdx + 1}`}
+                                  </p>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </section>
 
-        {/* 4. Gallery Bottom Quote & Enquiry Banner */}
-        <section
-          id="gallery-bottom-cta"
-          className="relative py-16 sm:py-20 lg:py-24 overflow-hidden bg-[#faf5eb] border-t border-[#f0e2cf]"
-        >
-          {/* Floral Background */}
-          <div className="absolute inset-0 z-0 pointer-events-none">
-            <Image
-              src="/images/Layer 40.png"
-              alt="Floral Background"
-              fill
-              priority
-              className="object-cover object-center"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-
-          <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            {/* Cursive Quote in Red */}
-            <p className="font-script text-3xl sm:text-4xl lg:text-5xl text-[#a81414] leading-[1.3] drop-shadow-xs">
-              From ideas to execution,
-              <br />
-              we are with you at every step to make it perfect.
-            </p>
-
-            {/* Enquire Now Button */}
-            <div className="mt-7">
-              <button
-                id="gallery-enquire-now-btn"
-                onClick={() => openQuoteModal()}
-                className="group inline-flex items-center justify-center gap-2.5 bg-[#b81414] hover:bg-[#9e1111] text-white text-xs sm:text-sm font-semibold px-6 py-2.5 rounded-md shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
-              >
-                <span>Enquire Now</span>
-                <span className="w-5 h-5 rounded-full border border-white flex items-center justify-center transition-transform group-hover:translate-x-0.5">
-                  <ChevronRight className="w-3 h-3 text-white stroke-[2.5]" />
-                </span>
-              </button>
-            </div>
-          </div>
-        </section>
+        {/* Bottom CTA Banner */}
+        <CtaBanner />
       </main>
 
-      {/* 5. Footer */}
+      {/* Footer */}
       <Footer />
     </div>
   );

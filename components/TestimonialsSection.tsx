@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { Star, MessageSquareQuote, ChevronLeft, ChevronRight, Heart, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Star, MessageSquareQuote, Sparkles, CheckCircle2 } from 'lucide-react';
 import { useAdminData } from '@/context/AdminDataContext';
-import { useAppModals } from '@/context/AppModalContext';
 
 export default function TestimonialsSection() {
-  const { testimonials, addTestimonial } = useAdminData();
-  const { openQuoteModal } = useAppModals();
+  const { testimonials, addTestimonial, isLoading, error } = useAdminData();
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewerName, setReviewerName] = useState('');
   const [reviewerEvent, setReviewerEvent] = useState('');
@@ -14,43 +12,11 @@ export default function TestimonialsSection() {
   const [reviewerQuote, setReviewerQuote] = useState('');
   const [submittedReview, setSubmittedReview] = useState(false);
 
-  const defaultTestimonials = [
-    {
-      id: 't-1',
-      name: 'Priyanka & Debashis',
-      event: 'Vedic Wedding & Royal Mandap, Kolkata',
-      date: 'January 2026',
-      rating: 5,
-      quote:
-        'Shuvayan made our dream wedding flawless! From the Sanskrit Vedic mantras to the grand mandap decor and live Bhetki Paturi banquet, every single guest was mesmerized.',
-    },
-    {
-      id: 't-2',
-      name: 'Ananya & Souvik',
-      event: 'Bespoke Tatta Trays & Bridal Makeover',
-      date: 'December 2025',
-      rating: 5,
-      quote:
-        'The artisanal Tatta tray decoration was the highlight of our Gaye Holud. The bride makeover was so elegant and stayed flawless throughout the night!',
-    },
-    {
-      id: 't-3',
-      name: 'Rupsha & Sayantan',
-      event: 'Grand Reception & Cinematic Photography',
-      date: 'November 2025',
-      rating: 5,
-      quote:
-        'Stress-free, luxurious, and deeply rooted in Bengali culture. Their team handled everything with utter professionalism and warmth. Highly recommended!',
-    },
-  ];
-
-  const displayTestimonials = testimonials && testimonials.length > 0 ? testimonials : defaultTestimonials;
-
-  const handleSubmitReview = (e: React.FormEvent) => {
+  const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!reviewerName || !reviewerQuote) return;
 
-    addTestimonial({
+    await addTestimonial({
       name: reviewerName,
       event: reviewerEvent || 'Wedding Celebration',
       date: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
@@ -73,22 +39,16 @@ export default function TestimonialsSection() {
       <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-          <p
-            id="testimonials-subheading"
-            className="text-[#c8102e] font-semibold text-sm sm:text-base tracking-normal mb-1.5"
-          >
-            Heartfelt Stories
+          <p className="text-[#c8102e] font-semibold text-xs sm:text-sm tracking-normal mb-1">
+            Cherished Words
           </p>
-          <h2
-            id="testimonials-heading"
-            className="font-serif-display text-3xl sm:text-4xl lg:text-5xl font-normal text-[#4a4646] tracking-tight"
-          >
-            What Our Couples Say
+          <h2 className="font-serif-display text-2xl sm:text-3xl lg:text-4xl font-normal text-[#5a5858] tracking-tight">
+            Couple Reviews &amp; Testimonials
           </h2>
 
           {/* Red line with Heart Divider */}
-          <div className="flex items-center justify-center gap-3 my-3">
-            <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
+          <div className="flex items-center justify-center gap-3 my-2.5">
+            <span className="w-12 sm:w-14 h-[1.5px] bg-[#c8102e]" />
             <span className="relative w-3.5 h-3.5 inline-block">
               <Image
                 src="/images/heart.svg"
@@ -98,7 +58,7 @@ export default function TestimonialsSection() {
                 referrerPolicy="no-referrer"
               />
             </span>
-            <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
+            <span className="w-12 sm:w-14 h-[1.5px] bg-[#c8102e]" />
           </div>
 
           <p className="text-xs sm:text-sm text-gray-500 max-w-lg mx-auto mt-2">
@@ -106,69 +66,123 @@ export default function TestimonialsSection() {
           </p>
         </div>
 
-        {/* Testimonials Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {displayTestimonials.map((t, idx) => (
-            <div
-              key={t.id || idx}
-              className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between relative group hover:-translate-y-1"
-            >
-              {/* Top Quote Icon and Star Rating */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-2xl bg-amber-50 text-[#d99824] flex items-center justify-center border border-amber-200">
-                    <MessageSquareQuote className="w-5 h-5" />
-                  </div>
-                  <div className="flex items-center gap-1">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className={`w-4 h-4 ${
-                          star <= (t.rating || 5)
-                            ? 'text-amber-400 fill-amber-400'
-                            : 'text-gray-200'
-                        }`}
-                      />
-                    ))}
-                  </div>
+        {/* 1. Loading State */}
+        {isLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {[1, 2, 3].map((n) => (
+              <div
+                key={n}
+                className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] animate-pulse space-y-4"
+              >
+                <div className="w-10 h-10 bg-gray-200 rounded-2xl" />
+                <div className="h-4 bg-gray-200 rounded w-full" />
+                <div className="h-4 bg-gray-200 rounded w-5/6" />
+                <div className="pt-6 border-t border-gray-100 flex justify-between">
+                  <div className="h-4 bg-gray-200 rounded w-1/3" />
+                  <div className="h-4 bg-gray-200 rounded w-1/4" />
                 </div>
-
-                <p className="text-xs sm:text-sm text-[#4b4646] leading-relaxed italic pt-2">
-                  &ldquo;{t.quote}&rdquo;
-                </p>
               </div>
+            ))}
+          </div>
+        )}
 
-              {/* Author & Event Details */}
-              <div className="pt-6 mt-6 border-t border-gray-100 flex items-center justify-between">
-                <div>
-                  <h4 className="font-serif-display text-base font-bold text-gray-900">
-                    {t.name}
-                  </h4>
-                  <p className="text-[11px] text-[#c8102e] font-semibold mt-0.5">
-                    {t.event}
-                  </p>
-                </div>
-                {t.date && (
-                  <span className="text-[10px] text-gray-400 font-medium whitespace-nowrap">
-                    {t.date}
-                  </span>
-                )}
-              </div>
+        {/* 2. Error State */}
+        {!isLoading && error && (
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-8 text-center max-w-lg mx-auto">
+            <p className="text-sm font-semibold text-red-700">{error}</p>
+          </div>
+        )}
+
+        {/* 3. Empty State */}
+        {!isLoading && !error && testimonials.length === 0 && (
+          <div className="bg-white border border-dashed border-[#e8dfd3] rounded-3xl p-12 text-center max-w-lg mx-auto space-y-3">
+            <MessageSquareQuote className="w-10 h-10 text-[#d99824] mx-auto" />
+            <h3 className="font-serif-display text-lg font-bold text-gray-800">
+              No Reviews Published Yet
+            </h3>
+            <p className="text-xs text-gray-500">
+              Were you a guest or couple at a recent Shuvayan celebration? We&apos;d love to hear your story!
+            </p>
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => setShowReviewModal(true)}
+                className="inline-flex items-center gap-2 bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow transition-colors cursor-pointer"
+              >
+                <Sparkles className="w-4 h-4 text-amber-300" />
+                <span>Leave the First Review</span>
+              </button>
             </div>
-          ))}
-        </div>
+          </div>
+        )}
 
-        {/* Share Review CTA Footer */}
-        <div className="mt-12 text-center flex items-center justify-center gap-4 flex-wrap">
-          <button
-            type="button"
-            onClick={() => setShowReviewModal(true)}
-            className="inline-flex items-center gap-2 bg-[#fffdfa] hover:bg-white text-[#784d16] border border-[#e0cbaf] text-xs sm:text-sm font-bold px-6 py-3 rounded-2xl shadow-xs hover:shadow-md transition-all cursor-pointer"
-          >
-            <Sparkles className="w-4 h-4 text-[#d99824]" />
-            <span>Leave a Couple Review</span>
-          </button>
-        </div>
+        {/* 4. Real Firebase Testimonials Grid */}
+        {!isLoading && !error && testimonials.length > 0 && (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {testimonials.map((t, idx) => (
+                <div
+                  key={t.id || idx}
+                  className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between relative group hover:-translate-y-1"
+                >
+                  {/* Top Quote Icon and Star Rating */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="w-10 h-10 rounded-2xl bg-amber-50 text-[#d99824] flex items-center justify-center border border-amber-200">
+                        <MessageSquareQuote className="w-5 h-5" />
+                      </div>
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            className={`w-4 h-4 ${
+                              star <= (t.rating || 5)
+                                ? 'text-amber-400 fill-amber-400'
+                                : 'text-gray-200'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    <p className="text-xs sm:text-sm text-[#4b4646] leading-relaxed italic pt-2">
+                      &ldquo;{t.quote}&rdquo;
+                    </p>
+                  </div>
+
+                  {/* Author & Event Details */}
+                  <div className="pt-6 mt-6 border-t border-gray-100 flex items-center justify-between">
+                    <div>
+                      <h4 className="font-serif-display text-base font-bold text-gray-900">
+                        {t.name}
+                      </h4>
+                      <p className="text-[11px] text-[#c8102e] font-semibold mt-0.5">
+                        {t.event}
+                      </p>
+                    </div>
+                    {t.date && (
+                      <span className="text-[10px] text-gray-400 font-medium whitespace-nowrap">
+                        {t.date}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Share Review CTA Footer */}
+            <div className="mt-12 text-center flex items-center justify-center gap-4 flex-wrap">
+              <button
+                type="button"
+                onClick={() => setShowReviewModal(true)}
+                className="inline-flex items-center gap-2 bg-[#fffdfa] hover:bg-white text-[#784d16] border border-[#e0cbaf] text-xs sm:text-sm font-bold px-6 py-3 rounded-2xl shadow-xs hover:shadow-md transition-all cursor-pointer"
+              >
+                <Sparkles className="w-4 h-4 text-[#d99824]" />
+                <span>Leave a Couple Review</span>
+              </button>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Review Submission Modal */}
@@ -180,12 +194,12 @@ export default function TestimonialsSection() {
                 <h3 className="text-lg font-bold font-serif-display text-gray-900">
                   Share Your Wedding Experience
                 </h3>
-                <p className="text-xs text-gray-500">Your feedback helps inspire future Bengali brides & grooms</p>
+                <p className="text-xs text-gray-500">Your feedback helps inspire future Bengali brides &amp; grooms</p>
               </div>
               <button
                 type="button"
                 onClick={() => setShowReviewModal(false)}
-                className="text-gray-400 hover:text-gray-700 p-1.5 rounded-lg text-sm"
+                className="text-gray-400 hover:text-gray-700 p-1.5 rounded-lg text-sm cursor-pointer"
               >
                 ✕
               </button>
@@ -206,7 +220,7 @@ export default function TestimonialsSection() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Sreya & Rahul"
+                    placeholder="e.g. Sreya &amp; Rahul"
                     value={reviewerName}
                     onChange={(e) => setReviewerName(e.target.value)}
                     className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] outline-none"
@@ -219,7 +233,7 @@ export default function TestimonialsSection() {
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. Vedic Wedding, ITC Sonar Kolkata"
+                    placeholder="e.g. Royal Mandap, Kolkata"
                     value={reviewerEvent}
                     onChange={(e) => setReviewerEvent(e.target.value)}
                     className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] outline-none"
@@ -228,15 +242,15 @@ export default function TestimonialsSection() {
 
                 <div>
                   <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
-                    Rating (Stars)
+                    Rating
                   </label>
-                  <div className="flex items-center gap-2 pt-1">
+                  <div className="flex items-center gap-2">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <button
                         key={star}
                         type="button"
                         onClick={() => setReviewerRating(star)}
-                        className="p-1 cursor-pointer hover:scale-110 transition-transform"
+                        className="p-1 hover:scale-110 transition-transform cursor-pointer"
                       >
                         <Star
                           className={`w-6 h-6 ${
@@ -247,37 +261,34 @@ export default function TestimonialsSection() {
                         />
                       </button>
                     ))}
-                    <span className="text-xs font-bold text-amber-700 ml-2">
-                      {reviewerRating} of 5 Stars
-                    </span>
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
-                    Your Review & Experience
+                    Your Wedding Story / Review
                   </label>
                   <textarea
                     rows={4}
                     required
-                    placeholder="Tell us about the rituals, decor, catering, and execution..."
+                    placeholder="Share what made your celebration unforgettable with Shuvayan..."
                     value={reviewerQuote}
                     onChange={(e) => setReviewerQuote(e.target.value)}
                     className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] outline-none resize-none"
                   />
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-2">
+                <div className="flex justify-end gap-3 pt-3 border-t border-gray-100">
                   <button
                     type="button"
                     onClick={() => setShowReviewModal(false)}
-                    className="px-4 py-2.5 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-xl"
+                    className="px-4 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow-md transition-colors cursor-pointer"
+                    className="px-6 py-2 text-xs font-bold text-white bg-[#c8102e] hover:bg-[#a80b24] rounded-xl shadow cursor-pointer"
                   >
                     Publish Review
                   </button>

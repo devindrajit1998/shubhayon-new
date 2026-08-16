@@ -8,34 +8,23 @@ import Footer from '@/components/Footer';
 import CtaBanner from '@/components/CtaBanner';
 import { useAppModals } from '@/context/AppModalContext';
 import { useAdminData } from '@/context/AdminDataContext';
-import { packagesList } from '@/components/PackagesSection';
 import { CheckCircle2, Sparkles, Users, IndianRupee, ShieldCheck, ArrowLeft, ChevronRight } from 'lucide-react';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = packagesList.map((pkg) => ({
-    params: { id: pkg.id },
-  }));
-  return { paths, fallback: 'blocking' };
+  return { paths: [], fallback: 'blocking' };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const pkg = packagesList.find((p) => p.id === params?.id) || null;
+export const getStaticProps: GetStaticProps = async () => {
   return {
-    props: {
-      pkg,
-    },
+    props: {},
   };
 };
 
-interface PackageDetailsPageProps {
-  pkg: (typeof packagesList)[0] | null;
-}
-
-export default function PackageDetailsPage({ pkg: initialPkg }: PackageDetailsPageProps) {
+export default function PackageDetailsPage() {
   const router = useRouter();
   const { openQuoteModal, openLightbox } = useAppModals();
-  const { packages, banners } = useAdminData();
+  const { packages, banners, isLoading } = useAdminData();
 
   const snapLeft = banners?.snapshotLeft || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-left.jpg';
   const snapMid = banners?.snapshotMid || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-mid.png';
@@ -47,34 +36,46 @@ export default function PackageDetailsPage({ pkg: initialPkg }: PackageDetailsPa
     { title: 'Wedding Celebration', image: snapRight, category: 'FEATURED SNAPSHOT' },
   ];
 
-  // Prefer live Firebase package if available
-  const currentId = (router.query.id as string) || initialPkg?.id;
-  const livePkg = packages?.find((p) => p.id === currentId);
-  const pkg = livePkg || initialPkg;
+  const currentId = router.query.id as string;
+  const pkg = packages?.find((p) => p.id === currentId);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col justify-center items-center bg-[#fcfaf7]">
+        <div className="w-10 h-10 border-3 border-[#c8102e] border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-xs text-gray-500">Loading package details...</p>
+      </div>
+    );
+  }
 
   if (!pkg) {
     return (
-      <div className="min-h-screen flex flex-col justify-center items-center bg-[#fcfaf7]">
-        <h1 className="text-2xl font-bold mb-4 text-[#74161f]">Package Not Found</h1>
-        <Link href="/" className="text-[#b81414] underline">
-          Return to Home
+      <div className="min-h-screen flex flex-col justify-center items-center bg-[#fcfaf7] px-4 text-center">
+        <h1 className="text-2xl font-bold mb-2 text-[#74161f]">Package Not Found</h1>
+        <p className="text-xs text-gray-500 mb-6">
+          The wedding package you are looking for is currently unavailable or has been updated.
+        </p>
+        <Link
+          href="/packages"
+          className="inline-flex items-center gap-2 bg-[#c8102e] text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Return to All Packages</span>
         </Link>
       </div>
     );
   }
 
   // Other packages for recommendation
-  const otherPackages = (packages && packages.length > 0 ? packages : packagesList).filter(
-    (p) => p.id !== pkg.id
-  );
+  const otherPackages = packages.filter((p) => p.id !== pkg.id);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fffdfa] selection:bg-[#c8102e] selection:text-white">
       <Head>
-        <title>{pkg.title} | Shuvayan Bengali Wedding & Event Management</title>
+        <title>{`${pkg.title} | Shuvayan Bengali Wedding & Event Management`}</title>
         <meta
           name="description"
-          content={`Detailed inclusions and pricing for ${pkg.title} - ${pkg.tagline || ''}. Authentic Bengali wedding planning by Shuvayan.`}
+          content={`Explore details, full features, pricing & catering included in the ${pkg.title} for Bengali Weddings by Shuvayan.`}
         />
       </Head>
 
@@ -82,290 +83,208 @@ export default function PackageDetailsPage({ pkg: initialPkg }: PackageDetailsPa
       <Header activePage="packages" />
 
       <main className="flex-1">
-        {/* 1. Hero Banner: Compact 340-350px height with absolute positioned Polaroid collage */}
+        {/* Banner Section */}
         <section
-          id="package-details-hero"
-          className="relative z-20 h-[320px] sm:h-[340px] lg:h-[350px] overflow-visible bg-[#1a0f0e]"
+          id="package-detail-hero"
+          className="relative z-10 bg-[#1e0d0c] text-white overflow-hidden pt-28 pb-16 sm:pt-36 sm:pb-20 lg:pt-40 lg:pb-24 border-b border-[#3d1f1f]"
         >
-          {/* Background image with dark warm wedding backdrop */}
-          <div className="absolute inset-0 z-0 overflow-hidden">
+          <div className="absolute inset-0 z-0">
             <Image
-              src={banners?.innerHeroBgImage || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/galler-banner.png'}
-              alt="Wedding Background"
+              src={banners?.packagesHeroBgImage || banners?.innerHeroBgImage || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/galler-banner.png'}
+              alt={pkg.title}
               fill
               priority
-              className="object-cover object-center brightness-95"
+              className="object-cover object-center opacity-30 brightness-75"
               referrerPolicy="no-referrer"
             />
-            {/* Left dark vignette for headline legibility */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#120606]/95 via-[#190908]/75 to-transparent" />
-            {/* Top dark gradient for header overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/30" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1e0d0c] via-[#1e0d0c]/60 to-transparent" />
           </div>
 
-          {/* Main Container - max-w-[1340px] aligned with Header */}
-          <div className="relative z-10 max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col sm:flex-row items-center justify-between">
-            {/* Heading: Centered on mobile with balanced typography, left-aligned on sm+ */}
-            <div className="pt-20 sm:pt-12 lg:pt-14 text-center sm:text-left w-full sm:w-auto sm:max-w-md md:max-w-xl">
-              <h1 className="font-serif-display font-normal text-[26px] sm:text-4xl md:text-5xl lg:text-[58px] xl:text-[65px] text-white leading-[1.15] sm:leading-[1.12] tracking-tight drop-shadow-sm">
-                {pkg.title}
-              </h1>
-            </div>
+          <div className="relative z-10 max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Back Button */}
+            <Link
+              href="/packages"
+              className="inline-flex items-center gap-1.5 text-xs text-amber-200 hover:text-white transition-colors mb-6 font-medium"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to All Packages</span>
+            </Link>
 
-            {/* Polaroid Snapshots: Beautifully centered hanging over the breadcrumb on mobile, right-aligned on sm+ */}
-            <div className="absolute left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 lg:right-8 xl:right-12 top-[168px] sm:top-[115px] lg:top-[120px] z-30">
-              <div className="relative flex items-center justify-center w-56 sm:w-64 md:w-80 lg:w-[380px] xl:w-[420px]">
-                {/* Left Snapshot: Tilted -14deg */}
-                <div
-                  onClick={() => openLightbox(1, polaroidPhotos)}
-                  className="absolute -left-2 sm:-left-4 md:-left-6 lg:-left-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform -rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
-                >
-                  <div className="relative w-full h-full overflow-hidden bg-gray-900">
-                    <Image
-                      src={snapLeft}
-                      alt="Groom & Bride"
-                      fill
-                      className="object-cover object-top"
-                      referrerPolicy="no-referrer"
-                    />
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              <div className="lg:col-span-8 space-y-4">
+                {pkg.badge && (
+                  <span className="inline-block bg-[#c8102e] text-white text-xs font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md">
+                    {pkg.badge}
+                  </span>
+                )}
+                <h1 className="font-serif-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
+                  {pkg.title}
+                </h1>
+                <p className="text-sm sm:text-base text-gray-300 max-w-2xl leading-relaxed">
+                  {pkg.tagline}
+                </p>
+
+                {/* Meta Highlights */}
+                <div className="flex flex-wrap gap-4 pt-2 text-xs sm:text-sm text-amber-100">
+                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xs px-3.5 py-1.5 rounded-lg border border-white/10">
+                    <IndianRupee className="w-4 h-4 text-amber-300" />
+                    <span>{pkg.priceRange}</span>
                   </div>
-                </div>
-
-                {/* Center Snapshot: Upright in Front */}
-                <div
-                  onClick={() => openLightbox(0, polaroidPhotos)}
-                  className="relative z-20 w-24 sm:w-30 md:w-38 lg:w-46 xl:w-50 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_18px_35px_rgba(0,0,0,0.7)] transform hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
-                >
-                  <div className="relative w-full h-full overflow-hidden bg-gray-900">
-                    <Image
-                      src={snapMid}
-                      alt="Bengali Bride Topor"
-                      fill
-                      className="object-cover object-top"
-                      referrerPolicy="no-referrer"
-                    />
+                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xs px-3.5 py-1.5 rounded-lg border border-white/10">
+                    <Users className="w-4 h-4 text-amber-300" />
+                    <span>{pkg.idealFor}</span>
                   </div>
-                </div>
-
-                {/* Right Snapshot: Tilted +14deg */}
-                <div
-                  onClick={() => openLightbox(2, polaroidPhotos)}
-                  className="absolute -right-2 sm:-right-4 md:-right-6 lg:-right-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
-                >
-                  <div className="relative w-full h-full overflow-hidden bg-gray-900">
-                    <Image
-                      src={snapRight}
-                      alt="Bride Smiling"
-                      fill
-                      className="object-cover object-top"
-                      referrerPolicy="no-referrer"
-                    />
+                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xs px-3.5 py-1.5 rounded-lg border border-white/10">
+                    <ShieldCheck className="w-4 h-4 text-amber-300" />
+                    <span>100% Customized Execution</span>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
 
-        {/* 2. Breadcrumbs Area matching max-w-[1340px] alignment */}
-        <div className="bg-[#fbf9f6] border-b border-[#ebdcc9] pt-8 pb-3 sm:py-3 relative z-10">
-          <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 text-xs sm:text-sm flex items-center justify-center sm:justify-start gap-2 flex-wrap">
-            <Link href="/" className="text-[#b81414] hover:underline font-medium">
-              Home
-            </Link>
-            <span className="text-gray-400">&gt;</span>
-            <Link href="/packages" className="text-[#b81414] hover:underline font-medium">
-              Packages
-            </Link>
-            <span className="text-gray-400">&gt;</span>
-            <span className="text-gray-600 font-medium">{pkg.title}</span>
-          </div>
-        </div>
-
-        {/* 3. Package Main Details Content */}
-        <section className="py-12 sm:py-16 bg-[#faf7f2]">
-          <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10">
-              {/* Left Column: Key Details & Inclusions (8 cols) */}
-              <div className="lg:col-span-8 space-y-8">
-                {/* Overview Card */}
-                <div className="bg-white rounded-2xl border border-[#ecdcc8] p-6 sm:p-8 shadow-sm">
-                  <div className="flex flex-wrap items-center justify-between gap-4 mb-6 pb-6 border-b border-gray-100">
-                    <div>
-                      {pkg.badge && (
-                        <span className="inline-block bg-[#fdf2e9] text-[#c87a14] border border-[#fbd38d] text-xs font-bold px-3 py-1 rounded-full mb-2">
-                          {pkg.badge}
-                        </span>
-                      )}
-                      <h2 className="font-serif-display text-2xl sm:text-3xl font-bold text-[#74161f]">
-                        {pkg.title} Overview
-                      </h2>
-                    </div>
-
-                    <div className="text-right">
-                      <p className="text-xs text-gray-500 font-medium">Estimated Investment</p>
-                      <p className="font-serif-display text-xl sm:text-2xl font-extrabold text-[#b81414]">
-                        {pkg.priceRange || 'Custom Quote'}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Highlights Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                    <div className="flex items-center gap-3 bg-[#faf7f2] p-4 rounded-xl border border-[#ecdcc8]">
-                      <div className="w-10 h-10 rounded-full bg-[#fde8e8] text-[#b81414] flex items-center justify-center">
-                        <Users className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500 font-medium">Ideal Gathering</p>
-                        <p className="text-sm font-bold text-gray-800">{pkg.idealFor || 'All Gatherings'}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3 bg-[#faf7f2] p-4 rounded-xl border border-[#ecdcc8]">
-                      <div className="w-10 h-10 rounded-full bg-[#fffbeb] text-[#d97706] flex items-center justify-center">
-                        <ShieldCheck className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500 font-medium">Execution Guarantee</p>
-                        <p className="text-sm font-bold text-gray-800">100% Dedicated Team</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Comprehensive Inclusions */}
-                  <h3 className="font-serif-display text-xl font-bold text-[#74161f] mb-4">
-                    What&apos;s Included in {pkg.title}
-                  </h3>
-
-                  <ul className="space-y-3.5 mb-8">
-                    {(pkg.fullFeatures || pkg.features).map((feature, fIdx) => (
-                      <li
-                        key={fIdx}
-                        className="flex items-start gap-3 text-sm text-[#333333] bg-[#fffdfa] p-3 rounded-lg border border-[#f0e6da]"
+              {/* 3-Polaroid Cluster */}
+              <div className="lg:col-span-4 flex justify-center lg:justify-end">
+                <div className="relative w-64 sm:w-72 h-44 sm:h-48">
+                  {polaroidPhotos.map((photo, pIdx) => {
+                    const rotations = ['-rotate-8', 'rotate-0', 'rotate-8'];
+                    const translates = ['-translate-x-6', 'translate-x-0', 'translate-x-6'];
+                    const zIndexes = ['z-10', 'z-20', 'z-30'];
+                    return (
+                      <div
+                        key={pIdx}
+                        onClick={() => openLightbox(pIdx, polaroidPhotos)}
+                        className={`absolute top-0 w-28 sm:w-32 bg-white p-1.5 pb-5 rounded-md shadow-2xl border border-gray-200 cursor-pointer transform hover:scale-110 hover:z-40 transition-all duration-300 ${rotations[pIdx]} ${translates[pIdx]} ${zIndexes[pIdx]}`}
                       >
-                        <span className="relative w-4 h-4 flex-shrink-0 mt-0.5 inline-block">
+                        <div className="relative w-full aspect-[4/5] overflow-hidden bg-gray-900 rounded-xs">
                           <Image
-                            src="/images/bullet.svg"
-                            alt="Bullet"
+                            src={photo.image}
+                            alt={photo.title}
                             fill
-                            className="object-contain"
+                            className="object-cover"
                             referrerPolicy="no-referrer"
                           />
-                        </span>
-                        <span className="leading-relaxed font-medium">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* Booking CTA Button */}
-                  <div className="pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <p className="text-xs text-gray-500">
-                      Need custom modifications or dietary requirements? We tailor packages to your family.
-                    </p>
-                    <button
-                      onClick={() => openQuoteModal(pkg.title)}
-                      className="w-full sm:w-auto bg-[#b81414] hover:bg-[#991111] text-white font-semibold text-sm px-7 py-3 rounded-md shadow-md hover:shadow-lg transition-all"
-                    >
-                      Book This Package
-                    </button>
-                  </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              </div>
-
-              {/* Right Column: Quick Booking Card & Contact Help (4 cols) */}
-              <div className="lg:col-span-4 space-y-6">
-                <div className="bg-white rounded-2xl border border-[#e5a83b] p-6 shadow-md sticky top-28">
-                  <div className="text-center pb-6 border-b border-gray-100">
-                    <p className="text-xs uppercase tracking-wider text-[#b81414] font-bold mb-1">
-                      Ready to Celebrate?
-                    </p>
-                    <h3 className="font-serif-display text-xl font-bold text-gray-900 mb-2">
-                      Get Instant Quote
-                    </h3>
-                    <p className="text-xs text-gray-500">
-                      Lock your wedding date with our priority booking desk.
-                    </p>
-                  </div>
-
-                  <div className="py-6 space-y-4 text-xs sm:text-sm text-gray-700">
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-500">Package:</span>
-                      <span className="font-bold text-[#74161f]">{pkg.title}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-500">Price Estimate:</span>
-                      <span className="font-bold text-[#b81414]">{pkg.priceRange}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-500">Availability:</span>
-                      <span className="text-green-700 font-semibold flex items-center gap-1">
-                        <CheckCircle2 className="w-4 h-4" /> Open for 2026-2027
-                      </span>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => openQuoteModal(pkg.title)}
-                    className="w-full bg-[#b81414] hover:bg-[#991111] text-white font-bold text-sm py-3 px-4 rounded-md shadow-md hover:shadow-lg transition-all duration-200 text-center"
-                  >
-                    Request Custom Quote
-                  </button>
-
-                  <div className="mt-6 pt-6 border-t border-gray-100 text-center">
-                    <p className="text-xs text-gray-500 mb-1">Prefer speaking with an advisor?</p>
-                    <a
-                      href="tel:7439442349"
-                      className="text-sm font-bold text-[#74161f] hover:text-[#b81414] transition-colors"
-                    >
-                      Call: +91 7439442349
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Other Packages Carousel Section */}
-            <div className="mt-16 sm:mt-20">
-              <h3 className="font-serif-display text-2xl sm:text-3xl font-bold text-[#5c5959] text-center mb-8">
-                Explore Other Packages
-              </h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {otherPackages.map((other) => (
-                  <div
-                    key={other.id}
-                    className="bg-white rounded-xl border border-[#ecdcc8] p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
-                  >
-                    <div>
-                      <h4 className="font-serif-display text-xl font-bold text-[#74161f] mb-1">
-                        {other.title}
-                      </h4>
-                      <p className="text-xs text-gray-500 mb-4">{other.tagline}</p>
-                      <p className="font-serif-display text-sm font-bold text-[#b81414] mb-4">
-                        {other.priceRange}
-                      </p>
-                    </div>
-
-                    <Link
-                      href={`/packages/${other.id}`}
-                      className="text-center text-xs font-semibold text-[#b81414] hover:underline flex items-center justify-center gap-1 pt-3 border-t border-gray-100"
-                    >
-                      <span>View Details</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
         </section>
 
-        {/* 4. Bottom CTA */}
+        {/* Content Section */}
+        <section className="py-14 sm:py-20 max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+            {/* Left Column: Full Features Breakdown */}
+            <div className="lg:col-span-8 space-y-8">
+              <div className="bg-white rounded-2xl p-6 sm:p-8 border border-[#e8d7c3] shadow-sm space-y-6">
+                <div className="border-b border-gray-100 pb-4">
+                  <h2 className="font-serif-display text-2xl sm:text-3xl font-bold text-[#74161f]">
+                    What&apos;s Included in {pkg.title}
+                  </h2>
+                  <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                    Every service component is managed by experienced in-house specialists.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {(pkg.fullFeatures || pkg.features || []).map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-start gap-3 bg-[#fcfaf7] p-3.5 rounded-xl border border-[#ebdcc8]"
+                    >
+                      <CheckCircle2 className="w-5 h-5 text-[#c8102e] flex-shrink-0 mt-0.5" />
+                      <span className="text-xs sm:text-sm text-gray-800 leading-snug font-medium">
+                        {item}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Other Packages Strip */}
+              {otherPackages.length > 0 && (
+                <div className="space-y-4 pt-4">
+                  <h3 className="font-serif-display text-xl font-bold text-gray-900">
+                    Compare Other Wedding Packages
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    {otherPackages.map((other) => (
+                      <Link
+                        key={other.id}
+                        href={`/packages/${other.id}`}
+                        className="bg-[#fcfaf7] hover:bg-white rounded-xl p-4 border border-[#ebdcc8] hover:border-[#c8102e] shadow-xs hover:shadow-md transition-all group flex flex-col justify-between"
+                      >
+                        <div>
+                          <h4 className="font-serif-display text-base font-bold text-[#74161f] group-hover:text-[#c8102e] transition-colors">
+                            {other.title}
+                          </h4>
+                          <p className="text-xs text-gray-500 line-clamp-2 mt-1">
+                            {other.tagline}
+                          </p>
+                        </div>
+                        <div className="flex items-center justify-between mt-3 pt-2 border-t border-[#f0e2d3] text-xs font-semibold text-[#c8102e]">
+                          <span>View Details</span>
+                          <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Right Column: Quote Inquiry Widget */}
+            <div className="lg:col-span-4">
+              <div className="sticky top-28 bg-[#241312] text-white rounded-2xl p-6 sm:p-7 border border-[#4a2824] shadow-xl space-y-5">
+                <div>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/20 px-3 py-1 rounded-full border border-[#d99824]/40 mb-2 inline-block">
+                    Inquire for this Package
+                  </span>
+                  <h3 className="font-serif-display text-xl sm:text-2xl font-bold text-white">
+                    Book {pkg.title}
+                  </h3>
+                  <p className="text-xs text-gray-300 mt-1">
+                    Get an itemized custom quote tailored to your exact dates &amp; venue location.
+                  </p>
+                </div>
+
+                <div className="p-4 bg-white/10 rounded-xl space-y-2 border border-white/10">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-300">Package Tier:</span>
+                    <span className="font-bold text-white">{pkg.title}</span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-300">Estimated Range:</span>
+                    <span className="font-bold text-amber-300">{pkg.priceRange}</span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-300">Guest Scope:</span>
+                    <span className="font-bold text-white">{pkg.idealFor}</span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => openQuoteModal(pkg.title)}
+                  className="w-full bg-[#c8102e] hover:bg-[#a80b24] text-white font-bold text-xs sm:text-sm py-3.5 px-6 rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <Sparkles className="w-4 h-4 text-amber-300" />
+                  <span>Request Custom Quotation</span>
+                </button>
+
+                <p className="text-[11px] text-center text-gray-400">
+                  No commitment required. Our wedding coordinator will call within 24 hours.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Bottom CTA Banner */}
         <CtaBanner />
       </main>
 
-      {/* 5. Footer */}
+      {/* Footer */}
       <Footer />
     </div>
   );

@@ -22,7 +22,7 @@ import AdminLayout from '@/components/admin/AdminLayout';
 import { useAdminData, LeadItem } from '@/context/AdminDataContext';
 
 export default function AdminDashboardPage() {
-  const { leads, services, packages, artists, updateLeadStatus, isLoading } = useAdminData();
+  const { leads, services, packages, artists, updateLeadStatus, isLoading, error } = useAdminData();
   const [selectedLead, setSelectedLead] = useState<LeadItem | null>(null);
 
   const newLeads = leads.filter((l) => l.status === 'New');

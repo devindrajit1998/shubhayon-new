@@ -21,7 +21,7 @@ import ImageKitUploader from '@/components/admin/ImageKitUploader';
 import { useAdminData } from '@/context/AdminDataContext';
 
 export default function AdminSettingsPage() {
-  const { settings, updateSettings, resetAllToDefault } = useAdminData();
+  const { settings, updateSettings } = useAdminData();
   const [formData, setFormData] = useState(settings);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
@@ -310,36 +310,6 @@ export default function AdminSettingsPage() {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* 4. Danger Zone / Reset Defaults */}
-        <div className="bg-red-50/70 rounded-2xl p-6 border border-red-200 shadow-xs space-y-3">
-          <div className="flex items-center gap-2 text-red-800">
-            <AlertTriangle className="w-4 h-4" />
-            <h3 className="text-sm font-bold">Reset Demo Data</h3>
-          </div>
-          <p className="text-xs text-red-700 leading-relaxed">
-            Reset all content (services, packages, artists, and banners) back to default starter demo values and clear local modifications.
-          </p>
-
-          <button
-            type="button"
-            onClick={() => {
-              if (
-                confirm(
-                  'Are you sure you want to reset all content back to factory default values? This cannot be undone.'
-                )
-              ) {
-                resetAllToDefault();
-                alert('Site content reset to factory defaults.');
-                window.location.reload();
-              }
-            }}
-            className="inline-flex items-center gap-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-xs transition-colors cursor-pointer"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Reset All to Defaults</span>
-          </button>
         </div>
 
         {/* Save button bottom */}
