@@ -5,12 +5,14 @@ import { X, Check, Sparkles, ArrowRight, ShieldCheck, Clock } from 'lucide-react
 export interface PackageData {
   id: string;
   title: string;
-  tagline: string;
+  tagline?: string;
   features: string[];
-  fullFeatures: string[];
+  fullFeatures?: string[];
   priceRange: string;
-  idealFor: string;
+  idealFor?: string;
+  idealGuests?: string;
   badge?: string;
+  description?: string;
 }
 
 interface PackageDetailModalProps {
@@ -83,14 +85,14 @@ export default function PackageDetailModal({
               Included In This Package:
             </h4>
             <ul className="space-y-3">
-              {packageData.fullFeatures.map((feat, idx) => (
+              {(packageData.fullFeatures || packageData.features || []).map((feat, idx) => (
                 <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-[#374151]">
                   <span className="relative w-4 h-4 flex-shrink-0 mt-0.5 inline-block">
                     <Image
                       src="/images/bullet.svg"
                       alt="Bullet"
                       fill
-                      className="object-contain"
+                      className="object-cover"
                       referrerPolicy="no-referrer"
                     />
                   </span>

@@ -31,7 +31,7 @@ export default function AdminPackagesPage() {
     setFormTitle(pkg.title);
     setFormBadge(pkg.badge || '');
     setFormPrice(pkg.priceRange || '');
-    setFormGuests(pkg.idealGuests || '');
+    setFormGuests(pkg.idealGuests || pkg.idealFor || '');
     setFormDesc(pkg.description || '');
     setFormFeatures(pkg.features?.join('\n') || '');
   };

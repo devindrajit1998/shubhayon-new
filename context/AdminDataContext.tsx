@@ -169,12 +169,12 @@ const defaultBanners: BannerSettings = {
   homeHeroTitle: 'Every moment Unforgettable',
   homeHeroSubtitle: 'We make',
   homeHeroTagline: 'Shuvayan brings your dream celebration to life with creativity, elegance & flawless execution.',
-  homeHeroBgImage: '/images/Index-banner.jpg',
+  homeHeroBgImage: 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/Index-banner.jpg',
   innerHeroTitle: 'Moments that last forever',
-  innerHeroBgImage: '/images/galler-banner.png',
-  snapshotLeft: '/images/banner-left.jpg',
-  snapshotMid: '/images/banner-mid.png',
-  snapshotRight: '/images/banner-right.jpg',
+  innerHeroBgImage: 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/galler-banner.png',
+  snapshotLeft: 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-left.jpg',
+  snapshotMid: 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-mid.png',
+  snapshotRight: 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-right.jpg',
 };
 
 const defaultTestimonials: TestimonialItem[] = [

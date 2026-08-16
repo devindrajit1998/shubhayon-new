@@ -1,10 +1,16 @@
 import ImageKit from 'imagekit';
 
+const imageKitConfig = {
+  publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY || "public_s5KRlNc2+EJsGqw/EEaBctV//P4=",
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY || "private_bFBEz2HCbIhdzWJ2CYiAtz5Jkwc=",
+  urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT || "https://ik.imagekit.io/thhqkqsnb",
+};
+
 export const isImageKitConfigured = (): boolean => {
   return Boolean(
-    process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY &&
-    process.env.IMAGEKIT_PRIVATE_KEY &&
-    process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT
+    imageKitConfig.publicKey &&
+    imageKitConfig.privateKey &&
+    imageKitConfig.urlEndpoint
   );
 };
 
@@ -12,8 +18,8 @@ export const getImageKitServerInstance = (): ImageKit | null => {
   if (!isImageKitConfigured()) return null;
 
   return new ImageKit({
-    publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY as string,
-    privateKey: process.env.IMAGEKIT_PRIVATE_KEY as string,
-    urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT as string,
+    publicKey: imageKitConfig.publicKey,
+    privateKey: imageKitConfig.privateKey,
+    urlEndpoint: imageKitConfig.urlEndpoint,
   });
 };
