@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 140" width="100%" height="100%">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F7E7CE" />
+      <stop offset="50%" stop-color="#EED5B7" />
+      <stop offset="100%" stop-color="#D4AF37" />
+    </linearGradient>
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E60000" />
+      <stop offset="100%" stop-color="#B30006" />
+    </linearGradient>
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#76B852" />
+      <stop offset="100%" stop-color="#4B8E27" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Bengali Calligraphy: শুভায়ন (Shuvayan) -->
+  <g id="logo-art" filter="url(#shadow)">
+    <!-- Red Initial Flourish for 'শু' -->
+    <path d="M 45 40 C 25 15, 10 35, 12 60 C 14 85, 30 115, 55 118 C 65 119, 75 110, 68 95 C 60 80, 42 75, 45 60 C 47 48, 56 42, 65 48 C 76 55, 78 72, 70 82 C 65 88, 75 96, 85 85 C 98 70, 95 48, 82 35 C 68 22, 52 28, 45 40 Z" fill="url(#redGrad)"/>
+    <circle cx="28" cy="85" r="5" fill="#E60000"/>
+    
+    <!-- Shehnai / Sanai Instrument on top right -->
+    <g transform="translate(260, 12) scale(0.9)">
+      <!-- Shehnai pipe -->
+      <path d="M 0 12 L 130 12 L 145 2 L 155 2 L 155 22 L 145 22 L 130 12 Z" fill="url(#goldGrad)" stroke="#B38F4D" stroke-width="1"/>
+      <ellipse cx="155" cy="12" rx="4" ry="10" fill="#2A1B0E" />
+      <!-- Finger holes -->
+      <circle cx="35" cy="12" r="2.5" fill="#2A1B0E"/>
+      <circle cx="55" cy="12" r="2.5" fill="#2A1B0E"/>
+      <circle cx="75" cy="12" r="2.5" fill="#2A1B0E"/>
+      <circle cx="95" cy="12" r="2.5" fill="#2A1B0E"/>
+      <circle cx="115" cy="12" r="2.5" fill="#2A1B0E"/>
+    </g>
+
+    <!-- Main Lettering (ভ া য় ন) in Cream Gold -->
+    <!-- ভ -->
+    <path d="M 120 42 C 105 45, 95 60, 102 78 C 108 92, 124 100, 138 92 C 148 85, 150 72, 142 62 C 135 52, 120 54, 122 66 C 124 74, 134 74, 133 68 C 130 62, 118 64, 120 74 C 122 84, 140 85, 145 68 C 150 50, 138 40, 120 42 Z" fill="#EED5B7"/>
+    <path d="M 140 38 L 155 38 L 155 105 L 145 105 Z" fill="#EED5B7"/>
+
+    <!-- া (A-kar) -->
+    <path d="M 168 38 L 180 38 L 180 105 L 168 105 Z" fill="#EED5B7"/>
+    <path d="M 160 38 Q 174 25 188 38" stroke="#EED5B7" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+    <!-- য় (Ya) with Red Dot -->
+    <path d="M 200 40 C 188 55, 192 78, 205 85 C 218 92, 230 80, 235 68 L 245 105 L 256 105 L 246 38 L 235 38 C 235 55, 222 72, 210 65 C 202 58, 205 45, 212 40 Z" fill="#EED5B7"/>
+    <!-- Red Bindi for 'য়' -->
+    <circle cx="230" cy="98" r="7" fill="url(#redGrad)"/>
+
+    <!-- ন (Na) -->
+    <path d="M 275 38 L 320 38 L 320 105 L 308 105 L 308 65 C 298 62, 280 65, 282 82 C 284 94, 298 94, 302 85 L 308 88 C 302 102, 275 104, 270 85 C 265 65, 285 52, 308 52 L 308 46 L 275 46 Z" fill="#EED5B7"/>
+
+    <!-- Green Leaf Motif at right -->
+    <g transform="translate(325, 60) rotate(-15)">
+      <path d="M 0 35 C 10 15, 30 5, 42 0 C 38 22, 24 38, 0 35 Z" fill="url(#leafGrad)"/>
+      <path d="M 0 35 Q 20 18 42 0" stroke="#FFFFFF" stroke-width="1" fill="none" opacity="0.6"/>
+    </g>
+
+    <!-- Bottom Swirl / underline flourish -->
+    <path d="M 100 105 C 150 125, 230 130, 285 110 C 310 100, 335 115, 350 125" stroke="#EED5B7" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="195" cy="122" r="4.5" fill="url(#redGrad)"/>
+  </g>
+</svg>

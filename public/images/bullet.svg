@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" fill="none">
+  <!-- Central Diamond Flower Bullet -->
+  <path d="M8 1.5C8.3 4.2 9.2 5.8 11.5 6.5C9.2 7.2 8.3 8.8 8 11.5C7.7 8.8 6.8 7.2 4.5 6.5C6.8 5.8 7.7 4.2 8 1.5Z" fill="#B81414" />
+  <circle cx="8" cy="6.5" r="1.5" fill="#FFEAE8" />
+  <circle cx="8" cy="6.5" r="0.75" fill="#B81414" />
+  <!-- Corner Petals -->
+  <circle cx="4.8" cy="3.3" r="0.8" fill="#B81414" opacity="0.8" />
+  <circle cx="11.2" cy="3.3" r="0.8" fill="#B81414" opacity="0.8" />
+  <circle cx="4.8" cy="9.7" r="0.8" fill="#B81414" opacity="0.8" />
+  <circle cx="11.2" cy="9.7" r="0.8" fill="#B81414" opacity="0.8" />
+</svg>

@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 320" width="100%" height="100%" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="ctaCreamGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFECC7" />
+      <stop offset="30%" stop-color="#FFF5E4" />
+      <stop offset="70%" stop-color="#FFF7EC" />
+      <stop offset="100%" stop-color="#FEDFA4" />
+    </linearGradient>
+    <radialGradient id="roseGlowLeft" cx="10%" cy="50%" r="40%">
+      <stop offset="0%" stop-color="#F6B84A" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#FFF5E4" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="roseGlowRight" cx="90%" cy="50%" r="40%">
+      <stop offset="0%" stop-color="#F6B84A" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#FFF5E4" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="100%" height="100%" fill="url(#ctaCreamGrad)"/>
+  <rect width="100%" height="100%" fill="url(#roseGlowLeft)"/>
+  <rect width="100%" height="100%" fill="url(#roseGlowRight)"/>
+
+  <!-- Left Rose Cluster silhouettes & petals -->
+  <g transform="translate(10, 20) scale(0.75)" opacity="0.45" stroke="#D49326" stroke-width="1.2" fill="#FCEFD2">
+    <!-- Rose 1 -->
+    <circle cx="80" cy="100" r="60" />
+    <path d="M 80 50 C 60 70, 70 120, 100 130 C 120 100, 110 60, 80 50 Z" />
+    <path d="M 50 90 C 70 110, 110 100, 120 80 C 100 60, 60 70, 50 90 Z" />
+    <!-- Rose 2 -->
+    <circle cx="160" cy="180" r="50" />
+    <!-- Baby breath sprigs -->
+    <path d="M 20 180 Q 90 140 140 80" stroke="#B87B18" fill="none" stroke-width="1.5"/>
+    <circle cx="30" cy="170" r="3" fill="#D49326" stroke="none" />
+    <circle cx="50" cy="155" r="3" fill="#D49326" stroke="none" />
+    <circle cx="75" cy="135" r="3" fill="#D49326" stroke="none" />
+    <circle cx="110" cy="100" r="3" fill="#D49326" stroke="none" />
+  </g>
+
+  <!-- Right Rose Cluster silhouettes & petals -->
+  <g transform="translate(1360, 20) scale(0.75)" opacity="0.5" stroke="#D49326" stroke-width="1.2" fill="#FCEFD2">
+    <!-- Rose 1 -->
+    <circle cx="140" cy="120" r="65" />
+    <path d="M 140 70 C 110 90, 120 140, 160 150 C 180 120, 170 80, 140 70 Z" />
+    <!-- Rose 2 -->
+    <circle cx="60" cy="190" r="55" />
+    <!-- Sprigs -->
+    <path d="M 190 200 Q 110 150 40 90" stroke="#B87B18" fill="none" stroke-width="1.5"/>
+    <circle cx="170" cy="185" r="3" fill="#D49326" stroke="none" />
+    <circle cx="130" cy="155" r="3" fill="#D49326" stroke="none" />
+    <circle cx="85" cy="115" r="3" fill="#D49326" stroke="none" />
+    <circle cx="50" cy="95" r="3" fill="#D49326" stroke="none" />
+  </g>
+
+  <!-- Floating Golden Petals -->
+  <g opacity="0.35" fill="#E59B20">
+    <ellipse cx="450" cy="90" rx="14" ry="9" transform="rotate(25 450 90)" />
+    <ellipse cx="980" cy="240" rx="16" ry="10" transform="rotate(-35 980 240)" />
+    <ellipse cx="720" cy="50" rx="10" ry="6" transform="rotate(15 720 50)" />
+    <ellipse cx="1180" cy="90" rx="12" ry="8" transform="rotate(-15 1180 90)" />
+  </g>
+</svg>

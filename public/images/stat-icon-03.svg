@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Team leader / user circle -->
+  <circle cx="28" cy="24" r="9" />
+  <path d="M12 52 C12 40, 18 36, 28 36 C34 36, 39 38, 41 43" />
+  <!-- Badge circle on the right -->
+  <circle cx="46" cy="38" r="14" stroke-dasharray="1 0" />
+  <!-- Star inside badge -->
+  <path d="M46 29 L48 34 L53 35 L49 39 L50 44 L46 41.5 L42 44 L43 39 L39 35 L44 34 Z" fill="#FFFFFF" stroke="none" />
+</svg>

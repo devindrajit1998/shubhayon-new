@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Central person -->
+  <circle cx="32" cy="27" r="7" />
+  <path d="M22 47 C22 40, 26 37, 32 37 C38 37, 42 40, 42 47" />
+
+  <!-- Orbit ring 1 -->
+  <ellipse cx="32" cy="32" rx="27" ry="14" transform="rotate(-30 32 32)" />
+  <circle cx="10" cy="20" r="2.5" fill="#FFFFFF" />
+  <circle cx="54" cy="44" r="2.5" fill="#FFFFFF" />
+
+  <!-- Orbit ring 2 -->
+  <ellipse cx="32" cy="32" rx="27" ry="14" transform="rotate(30 32 32)" />
+  <circle cx="10" cy="44" r="2.5" fill="#FFFFFF" />
+  <circle cx="54" cy="20" r="2.5" fill="#FFFFFF" />
+</svg>
