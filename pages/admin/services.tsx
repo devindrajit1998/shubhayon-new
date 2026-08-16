@@ -181,29 +181,36 @@ export default function AdminServicesPage() {
 
       {/* Add / Edit Service Modal */}
       {(isAddModalOpen || editingService) && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-[#ebdcc8] space-y-4">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-              <h3 className="text-base font-bold font-serif-display text-gray-900">
-                {editingService ? `Edit Service: ${editingService.title}` : 'Add New Wedding Service'}
-              </h3>
+        <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-[#ebdcc8] space-y-6 my-8 animate-fadeIn">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-1 inline-block">
+                  {editingService ? 'Edit Offering' : 'New Offering'}
+                </span>
+                <h3 className="text-xl font-bold font-serif-display text-gray-900">
+                  {editingService ? `Edit Service: ${editingService.title}` : 'Add Wedding Service'}
+                </h3>
+              </div>
               <button
                 onClick={() => {
                   setIsAddModalOpen(false);
                   setEditingService(null);
                 }}
-                className="text-gray-400 hover:text-gray-700 text-lg font-bold"
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-900 flex items-center justify-center transition-colors cursor-pointer"
               >
-                &times;
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             <form
               onSubmit={editingService ? handleSaveEdit : handleCreateService}
-              className="space-y-4 text-xs sm:text-sm"
+              className="space-y-5 text-xs sm:text-sm"
             >
+              {/* Service Title */}
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
                   Service Title *
                 </label>
                 <input
@@ -212,94 +219,83 @@ export default function AdminServicesPage() {
                   placeholder="e.g. Traditional Mandap & Floral Decor"
                   value={formTitle}
                   onChange={(e) => setFormTitle(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#c8102e] outline-none"
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
                 />
               </div>
 
+              {/* Category Tag & Suggestions */}
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
                   Category Tag
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Decoration, Makeover, Catering, Photography"
+                  placeholder="e.g. Decoration, Beauty & Styling, Catering..."
                   value={formCategory}
                   onChange={(e) => setFormCategory(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#c8102e] outline-none"
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all mb-2"
                 />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">
-                  Service Image
-                </label>
-                
-                {/* ImageKit Direct Uploader */}
-                <div className="mb-3">
-                  <ImageKitUploader
-                    label="Upload to ImageKit CDN"
-                    folder="/shuvayan_services"
-                    onUploadSuccess={(url) => setFormImage(url)}
-                  />
-                </div>
-
-                <input
-                  type="text"
-                  required
-                  placeholder="/images/gallery-1.jpg or https://ik.imagekit.io/..."
-                  value={formImage}
-                  onChange={(e) => setFormImage(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#c8102e] outline-none"
-                />
-                <div className="flex items-center gap-2 mt-2">
-                  <span className="text-[11px] text-gray-500">Quick select sample image:</span>
-                  {['/images/gallery-1.jpg', '/images/gallery-2.jpg', '/images/gallery-3.jpg', '/images/banner-left.jpg'].map(
-                    (img) => (
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="text-[11px] text-gray-400 font-medium">Quick suggestions:</span>
+                  {['Decoration', 'Beauty & Styling', 'Photography', 'Catering', 'Rituals', 'Music & Entry'].map(
+                    (cat) => (
                       <button
                         type="button"
-                        key={img}
-                        onClick={() => setFormImage(img)}
-                        className={`text-[10px] px-2 py-0.5 rounded border ${
-                          formImage === img
+                        key={cat}
+                        onClick={() => setFormCategory(cat)}
+                        className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${
+                          formCategory === cat
                             ? 'bg-[#c8102e] text-white border-[#c8102e]'
-                            : 'bg-gray-100 text-gray-600 border-gray-300'
+                            : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-200'
                         }`}
                       >
-                        {img.split('/').pop()?.split('.')[0]}
+                        {cat}
                       </button>
                     )
                   )}
                 </div>
               </div>
 
+              {/* Enhanced ImageKit Uploader with Real Thumbnail Preview */}
+              <div className="pt-1">
+                <ImageKitUploader
+                  label="Service Photo"
+                  folder="/shuvayan_services"
+                  currentImageUrl={formImage}
+                  onUploadSuccess={(url) => setFormImage(url)}
+                />
+              </div>
+
+              {/* Description */}
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">
-                  Service Description
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Service Description *
                 </label>
                 <textarea
                   rows={3}
                   required
-                  placeholder="Describe what this service entails for clients..."
+                  placeholder="Describe what this service entails for wedding clients..."
                   value={formDesc}
                   onChange={(e) => setFormDesc(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#c8102e] outline-none"
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
                 />
               </div>
 
-              <div className="flex justify-end gap-2 pt-3 border-t border-gray-100">
+              {/* Footer Actions */}
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
                 <button
                   type="button"
                   onClick={() => {
                     setIsAddModalOpen(false);
                     setEditingService(null);
                   }}
-                  className="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-xl"
+                  className="px-5 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-semibold text-white bg-[#c8102e] hover:bg-[#a80b24] rounded-xl shadow-xs"
+                  className="px-6 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-[#c8102e] to-[#9e0a22] hover:from-[#a80b24] hover:to-[#80071a] rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer"
                 >
                   {editingService ? 'Save Changes' : 'Create Service'}
                 </button>

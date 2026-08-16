@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { doc, setDoc, getDoc, onSnapshot } from 'firebase/firestore';
+import { db, isFirebaseConfigured } from '@/lib/firebase';
 import { ServiceItem, servicesList as defaultServices } from '@/components/ServicesSection';
 import { PackageData } from '@/components/PackageDetailModal';
 import { packagesList as defaultPackages } from '@/components/PackagesSection';
@@ -233,7 +235,18 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
   const [testimonials, setTestimonials] = useState<TestimonialItem[]>(defaultTestimonials);
   const [settings, setSettings] = useState<SiteSettings>(defaultSiteSettings);
 
-  // Load from localStorage on mount
+  // Helper to sync changes to Firebase Firestore Cloud Database
+  const syncToCloud = async (partialData: Record<string, any>) => {
+    if (!db) return;
+    try {
+      const docRef = doc(db, 'content', 'site_data');
+      await setDoc(docRef, partialData, { merge: true });
+    } catch (err) {
+      console.warn('Firebase cloud sync note:', err);
+    }
+  };
+
+  // Load from localStorage & subscribe to Firestore on mount
   useEffect(() => {
     try {
       const authSession = localStorage.getItem('shuvayan_admin_session');
@@ -268,6 +281,42 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
       if (storedSettings) setSettings(JSON.parse(storedSettings));
     } catch (e) {
       console.warn('Error loading admin state from localStorage', e);
+    }
+
+    // Subscribe to real-time Firestore cloud database
+    if (db) {
+      try {
+        const docRef = doc(db, 'content', 'site_data');
+        const unsubscribe = onSnapshot(docRef, (docSnap) => {
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            if (data.services) setServices(data.services);
+            if (data.packages) setPackages(data.packages);
+            if (data.categories) setCategories(data.categories);
+            if (data.artists) setArtists(data.artists);
+            if (data.banners) setBanners(data.banners);
+            if (data.testimonials) setTestimonials(data.testimonials);
+            if (data.settings) setSettings(data.settings);
+            if (data.leads) setLeads(data.leads);
+          } else {
+            // Seed initial data to cloud if document is empty
+            setDoc(docRef, {
+              services: defaultServices,
+              packages: defaultPackages,
+              categories: defaultCategories,
+              artists: defaultArtists,
+              banners: defaultBanners,
+              testimonials: defaultTestimonials,
+              settings: defaultSiteSettings,
+              leads: defaultLeads,
+            }, { merge: true }).catch(() => {});
+          }
+        });
+
+        return () => unsubscribe();
+      } catch (err) {
+        console.warn('Firestore subscription failed:', err);
+      }
     }
   }, []);
 
@@ -349,15 +398,21 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
       status: 'New',
       createdAt: new Date().toISOString().replace('T', ' ').substring(0, 16),
     };
-    setLeads((prev) => [newLead, ...prev]);
+    const updated = [newLead, ...leads];
+    setLeads(updated);
+    syncToCloud({ leads: updated });
   };
 
   const updateLeadStatus = (id: string, status: LeadItem['status']) => {
-    setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, status } : l)));
+    const updated = leads.map((l) => (l.id === id ? { ...l, status } : l));
+    setLeads(updated);
+    syncToCloud({ leads: updated });
   };
 
   const deleteLead = (id: string) => {
-    setLeads((prev) => prev.filter((l) => l.id !== id));
+    const updated = leads.filter((l) => l.id !== id);
+    setLeads(updated);
+    syncToCloud({ leads: updated });
   };
 
   // Services
@@ -366,15 +421,21 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
       ...service,
       id: `service-${Date.now()}`,
     };
-    setServices((prev) => [...prev, newService]);
+    const updated = [...services, newService];
+    setServices(updated);
+    syncToCloud({ services: updated });
   };
 
-  const updateService = (id: string, updated: Partial<ServiceItem>) => {
-    setServices((prev) => prev.map((s) => (s.id === id ? { ...s, ...updated } : s)));
+  const updateService = (id: string, updatedService: Partial<ServiceItem>) => {
+    const updated = services.map((s) => (s.id === id ? { ...s, ...updatedService } : s));
+    setServices(updated);
+    syncToCloud({ services: updated });
   };
 
   const deleteService = (id: string) => {
-    setServices((prev) => prev.filter((s) => s.id !== id));
+    const updated = services.filter((s) => s.id !== id);
+    setServices(updated);
+    syncToCloud({ services: updated });
   };
 
   // Packages
@@ -383,26 +444,36 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
       ...pkg,
       id: `pkg-${Date.now()}`,
     };
-    setPackages((prev) => [...prev, newPkg]);
+    const updated = [...packages, newPkg];
+    setPackages(updated);
+    syncToCloud({ packages: updated });
   };
 
-  const updatePackage = (id: string, updated: Partial<PackageData>) => {
-    setPackages((prev) => prev.map((p) => (p.id === id ? { ...p, ...updated } : p)));
+  const updatePackage = (id: string, updatedPkg: Partial<PackageData>) => {
+    const updated = packages.map((p) => (p.id === id ? { ...p, ...updatedPkg } : p));
+    setPackages(updated);
+    syncToCloud({ packages: updated });
   };
 
   const deletePackage = (id: string) => {
-    setPackages((prev) => prev.filter((p) => p.id !== id));
+    const updated = packages.filter((p) => p.id !== id);
+    setPackages(updated);
+    syncToCloud({ packages: updated });
   };
 
   // Categories & Artists
   const addCategory = (category: string) => {
     if (!categories.includes(category)) {
-      setCategories((prev) => [...prev, category]);
+      const updated = [...categories, category];
+      setCategories(updated);
+      syncToCloud({ categories: updated });
     }
   };
 
   const deleteCategory = (category: string) => {
-    setCategories((prev) => prev.filter((c) => c !== category));
+    const updated = categories.filter((c) => c !== category);
+    setCategories(updated);
+    syncToCloud({ categories: updated });
   };
 
   const addArtist = (artist: Omit<ArtistProfile, 'id'>) => {
@@ -410,36 +481,46 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
       ...artist,
       id: `artist-${Date.now()}`,
     };
-    setArtists((prev) => [newArtist, ...prev]);
+    const updated = [newArtist, ...artists];
+    setArtists(updated);
+    syncToCloud({ artists: updated });
   };
 
-  const updateArtist = (id: string, updated: Partial<ArtistProfile>) => {
-    setArtists((prev) => prev.map((a) => (a.id === id ? { ...a, ...updated } : a)));
+  const updateArtist = (id: string, updatedArtist: Partial<ArtistProfile>) => {
+    const updated = artists.map((a) => (a.id === id ? { ...a, ...updatedArtist } : a));
+    setArtists(updated);
+    syncToCloud({ artists: updated });
   };
 
   const deleteArtist = (id: string) => {
-    setArtists((prev) => prev.filter((a) => a.id !== id));
+    const updated = artists.filter((a) => a.id !== id);
+    setArtists(updated);
+    syncToCloud({ artists: updated });
   };
 
   const addPhotoToArtist = (artistId: string, photo: { title: string; image: string }) => {
-    setArtists((prev) =>
-      prev.map((a) => (a.id === artistId ? { ...a, photos: [...a.photos, photo] } : a))
+    const updated = artists.map((a) =>
+      a.id === artistId ? { ...a, photos: [...a.photos, photo] } : a
     );
+    setArtists(updated);
+    syncToCloud({ artists: updated });
   };
 
   const removePhotoFromArtist = (artistId: string, photoIndex: number) => {
-    setArtists((prev) =>
-      prev.map((a) =>
-        a.id === artistId
-          ? { ...a, photos: a.photos.filter((_, idx) => idx !== photoIndex) }
-          : a
-      )
+    const updated = artists.map((a) =>
+      a.id === artistId
+        ? { ...a, photos: a.photos.filter((_, idx) => idx !== photoIndex) }
+        : a
     );
+    setArtists(updated);
+    syncToCloud({ artists: updated });
   };
 
   // Banners
-  const updateBanners = (updated: Partial<BannerSettings>) => {
-    setBanners((prev) => ({ ...prev, ...updated }));
+  const updateBanners = (updatedBanner: Partial<BannerSettings>) => {
+    const updated = { ...banners, ...updatedBanner };
+    setBanners(updated);
+    syncToCloud({ banners: updated });
   };
 
   // Testimonials
@@ -448,21 +529,33 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
       ...item,
       id: `testimonial-${Date.now()}`,
     };
-    setTestimonials((prev) => [newTestimonial, ...prev]);
+    const updated = [newTestimonial, ...testimonials];
+    setTestimonials(updated);
+    syncToCloud({ testimonials: updated });
+  };
+
+  const updateTestimonial = (id: string, updatedTestimonial: Partial<TestimonialItem>) => {
+    const updated = testimonials.map((t) =>
+      t.id === id ? { ...t, ...updatedTestimonial } : t
+    );
+    setTestimonials(updated);
+    syncToCloud({ testimonials: updated });
   };
 
   const deleteTestimonial = (id: string) => {
-    setTestimonials((prev) => prev.filter((t) => t.id !== id));
+    const updated = testimonials.filter((t) => t.id !== id);
+    setTestimonials(updated);
+    syncToCloud({ testimonials: updated });
   };
 
-  // Settings
-  const updateSettings = (updated: Partial<SiteSettings>) => {
-    setSettings((prev) => ({ ...prev, ...updated }));
+  // Site Settings
+  const updateSettings = (updatedSettings: Partial<SiteSettings>) => {
+    const updated = { ...settings, ...updatedSettings };
+    setSettings(updated);
+    syncToCloud({ settings: updated });
   };
 
-  // Reset
   const resetAllToDefault = () => {
-    setLeads(defaultLeads);
     setServices(defaultServices);
     setPackages(defaultPackages);
     setCategories(defaultCategories);
@@ -470,7 +563,27 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
     setBanners(defaultBanners);
     setTestimonials(defaultTestimonials);
     setSettings(defaultSiteSettings);
-    localStorage.clear();
+    setLeads(defaultLeads);
+
+    localStorage.removeItem('shuvayan_services');
+    localStorage.removeItem('shuvayan_packages');
+    localStorage.removeItem('shuvayan_categories');
+    localStorage.removeItem('shuvayan_artists');
+    localStorage.removeItem('shuvayan_banners');
+    localStorage.removeItem('shuvayan_testimonials');
+    localStorage.removeItem('shuvayan_settings');
+    localStorage.removeItem('shuvayan_leads');
+
+    syncToCloud({
+      services: defaultServices,
+      packages: defaultPackages,
+      categories: defaultCategories,
+      artists: defaultArtists,
+      banners: defaultBanners,
+      testimonials: defaultTestimonials,
+      settings: defaultSiteSettings,
+      leads: defaultLeads,
+    });
   };
 
   return (

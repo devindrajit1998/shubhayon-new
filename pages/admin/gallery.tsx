@@ -420,82 +420,93 @@ export default function AdminGalleryPage() {
 
       {/* Photo Manager Modal for Specific Artist */}
       {activePhotoArtist && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-[#ebdcc8] space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+        <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl border border-[#ebdcc8] space-y-6 my-8 max-h-[90vh] overflow-y-auto animate-fadeIn">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
               <div>
-                <h3 className="text-base font-bold font-serif-display text-gray-900">
-                  Manage Photos: {activePhotoArtist.name}
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-1 inline-block">
+                  {activePhotoArtist.category} Portfolio
+                </span>
+                <h3 className="text-xl font-bold font-serif-display text-gray-900">
+                  Portfolio Gallery &bull; {activePhotoArtist.name}
                 </h3>
-                <p className="text-xs text-gray-500">
-                  {activePhotoArtist.photos.length} Portfolio Photos Active
-                </p>
               </div>
               <button
                 onClick={() => setActivePhotoArtist(null)}
-                className="text-gray-400 hover:text-gray-700 text-lg font-bold"
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-900 flex items-center justify-center transition-colors cursor-pointer"
               >
-                &times;
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Add New Photo Form with ImageKit */}
+            {/* Add New Photo Card */}
             <form
               onSubmit={handleAddPhoto}
-              className="bg-[#faf7f2] p-4 rounded-xl border border-[#ebdcc8] space-y-3"
+              className="bg-[#fcfaf7] p-5 rounded-2xl border border-[#ebdcc8] space-y-4 shadow-xs"
             >
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700">
-                Add New Photo to Portfolio
-              </h4>
-
-              <div className="mb-2">
-                <ImageKitUploader
-                  label="Upload Photo to ImageKit CDN"
-                  folder={`/shuvayan_gallery/${activePhotoArtist.category}`}
-                  onUploadSuccess={(url) => setNewPhotoImage(url)}
-                />
+              <div className="flex items-center justify-between">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-800 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-[#d99824]" />
+                  <span>Upload &amp; Add New Showcase Photo</span>
+                </h4>
               </div>
+
+              <ImageKitUploader
+                label="Portfolio Photo"
+                folder={`/shuvayan_gallery/${activePhotoArtist.category}`}
+                currentImageUrl={newPhotoImage}
+                onUploadSuccess={(url) => setNewPhotoImage(url)}
+              />
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-1">Photo Title / Caption</label>
+                  <label className="block font-bold text-gray-700 uppercase tracking-wider mb-1">
+                    Photo Title / Caption
+                  </label>
                   <input
                     type="text"
                     placeholder="e.g. Royal Bengali Mukut"
                     value={newPhotoTitle}
                     onChange={(e) => setNewPhotoTitle(e.target.value)}
-                    className="w-full px-3 py-1.5 bg-white border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-[#c8102e]"
+                    className="w-full px-3.5 py-2.5 bg-white border border-[#d8c5b0] rounded-xl outline-none focus:ring-2 focus:ring-[#c8102e]"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-1">Image URL / Path</label>
+                  <label className="block font-bold text-gray-700 uppercase tracking-wider mb-1">
+                    Image Link / Path
+                  </label>
                   <input
                     type="text"
                     required
-                    placeholder="/images/gallery-1.jpg or https://ik.imagekit.io/..."
+                    placeholder="https://..."
                     value={newPhotoImage}
                     onChange={(e) => setNewPhotoImage(e.target.value)}
-                    className="w-full px-3 py-1.5 bg-white border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-[#c8102e]"
+                    className="w-full px-3.5 py-2.5 bg-white border border-[#d8c5b0] rounded-xl outline-none focus:ring-2 focus:ring-[#c8102e] font-mono text-xs"
                   />
                 </div>
               </div>
-              <div className="flex justify-end">
+
+              <div className="flex justify-end pt-1">
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-white bg-[#c8102e] hover:bg-[#a80b24] px-4 py-1.5 rounded-lg shadow-xs cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-gradient-to-r from-[#c8102e] to-[#9e0a22] hover:from-[#a80b24] hover:to-[#80071a] px-5 py-2 rounded-xl shadow-md transition-all cursor-pointer"
                 >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Add to Portfolio</span>
+                  <Plus className="w-4 h-4" />
+                  <span>Add to Portfolio Showcase</span>
                 </button>
               </div>
             </form>
 
-            {/* Current Photos Grid with Delete Option */}
-            <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700">
-                Current Photo Gallery
-              </h4>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {/* Current Photos Gallery Grid */}
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center justify-between">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700">
+                  Current Showcase Strip ({activePhotoArtist.photos.length} Photos)
+                </h4>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">
                 {activePhotoArtist.photos.map((p, idx) => (
                   <div
                     key={idx}
@@ -505,10 +516,10 @@ export default function AdminGalleryPage() {
                       src={p.image}
                       alt={p.title}
                       fill
-                      className="object-cover"
+                      className="object-cover group-hover:scale-105 transition-transform"
                       referrerPolicy="no-referrer"
                     />
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-2">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-2">
                       <button
                         type="button"
                         onClick={() => {
@@ -516,7 +527,7 @@ export default function AdminGalleryPage() {
                           const updated = artists.find((a) => a.id === activePhotoArtist.id);
                           if (updated) setActivePhotoArtist(updated);
                         }}
-                        className="self-end p-1 bg-red-600 hover:bg-red-700 text-white rounded-md shadow"
+                        className="self-end p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow cursor-pointer transition-colors"
                         title="Delete photo"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -528,12 +539,13 @@ export default function AdminGalleryPage() {
               </div>
             </div>
 
-            <div className="flex justify-end pt-3 border-t border-gray-100">
+            {/* Modal Footer */}
+            <div className="flex justify-end pt-4 border-t border-gray-100">
               <button
                 onClick={() => setActivePhotoArtist(null)}
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold px-4 py-2 rounded-xl"
+                className="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold px-6 py-2.5 rounded-xl transition-colors cursor-pointer"
               >
-                Done
+                Close &amp; Save
               </button>
             </div>
           </div>
