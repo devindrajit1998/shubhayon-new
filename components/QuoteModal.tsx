@@ -10,7 +10,7 @@ interface QuoteModalProps {
 }
 
 export default function QuoteModal({ isOpen, onClose, initialService }: QuoteModalProps) {
-  const { addLead } = useAdminData();
+  const { addLead, services } = useAdminData();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
@@ -22,7 +22,7 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const availableServices = [
+  const defaultServiceOptions = [
     'Priest / Vedic Priests',
     'Trey Decor (Tatta Trays)',
     'Bridal Mehendi & Henna',
@@ -34,6 +34,10 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
     'Grand Bride & Groom Entry',
     'Digital Animated Invitation',
   ];
+
+  const availableServices = services && services.length > 0
+    ? Array.from(new Set(services.map((s) => s.title)))
+    : defaultServiceOptions;
 
   const selectedServices = initialService
     ? Array.from(new Set([initialService, ...customServices]))
@@ -49,12 +53,11 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Send to Admin Data Context
-    addLead({
+    const leadPayload = {
       name: name || 'Prospective Client',
       phone: phone,
       email: email || 'N/A',
@@ -64,12 +67,26 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
       guestCount: guestCount,
       budget: 'Standard',
       message: notes || 'Submitted via Get Quote on website.',
-    });
+    };
+
+    // 1. Sync to Admin Context & Firebase Firestore directly
+    addLead(leadPayload);
+
+    // 2. Also send to /api/leads endpoint
+    try {
+      await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(leadPayload),
+      });
+    } catch (err) {
+      console.warn('API leads submission note:', err);
+    }
 
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
-    }, 600);
+    }, 500);
   };
 
   const resetAndClose = () => {

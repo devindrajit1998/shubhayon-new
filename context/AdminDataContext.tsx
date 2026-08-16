@@ -22,12 +22,42 @@ export interface LeadItem {
 }
 
 export interface BannerSettings {
+  // 1. Homepage
   homeHeroTitle: string;
   homeHeroSubtitle: string;
   homeHeroTagline: string;
   homeHeroBgImage: string;
+
+  // 2. About Us Page
+  aboutHeroTitle?: string;
+  aboutHeroSubtitle?: string;
+  aboutHeroBgImage?: string;
+
+  // 3. Services Page
+  servicesHeroTitle?: string;
+  servicesHeroSubtitle?: string;
+  servicesHeroBgImage?: string;
+
+  // 4. Packages Page
+  packagesHeroTitle?: string;
+  packagesHeroSubtitle?: string;
+  packagesHeroBgImage?: string;
+
+  // 5. Gallery Page
+  galleryHeroTitle?: string;
+  galleryHeroSubtitle?: string;
+  galleryHeroBgImage?: string;
+
+  // 6. Policy & Terms Page
+  policyHeroTitle?: string;
+  policyHeroSubtitle?: string;
+  policyHeroBgImage?: string;
+
+  // Generic Inner Fallback
   innerHeroTitle: string;
   innerHeroBgImage: string;
+
+  // 3-Polaroid Snapshot Cluster
   snapshotLeft: string;
   snapshotMid: string;
   snapshotRight: string;
@@ -45,6 +75,7 @@ export interface TestimonialItem {
 
 export interface SiteSettings {
   siteTitle: string;
+  logoUrl?: string;
   primaryPhone: string;
   secondaryPhone: string;
   whatsappNumber: string;
@@ -55,12 +86,53 @@ export interface SiteSettings {
   youtubeUrl: string;
 }
 
+export const emptyBanners: BannerSettings = {
+  homeHeroTitle: '',
+  homeHeroSubtitle: '',
+  homeHeroTagline: '',
+  homeHeroBgImage: '',
+  aboutHeroTitle: '',
+  aboutHeroSubtitle: '',
+  aboutHeroBgImage: '',
+  servicesHeroTitle: '',
+  servicesHeroSubtitle: '',
+  servicesHeroBgImage: '',
+  packagesHeroTitle: '',
+  packagesHeroSubtitle: '',
+  packagesHeroBgImage: '',
+  galleryHeroTitle: '',
+  galleryHeroSubtitle: '',
+  galleryHeroBgImage: '',
+  policyHeroTitle: '',
+  policyHeroSubtitle: '',
+  policyHeroBgImage: '',
+  innerHeroTitle: '',
+  innerHeroBgImage: '',
+  snapshotLeft: '',
+  snapshotMid: '',
+  snapshotRight: '',
+};
+
+export const emptySettings: SiteSettings = {
+  siteTitle: '',
+  logoUrl: '',
+  primaryPhone: '',
+  secondaryPhone: '',
+  whatsappNumber: '',
+  contactEmail: '',
+  address: '',
+  facebookUrl: '',
+  instagramUrl: '',
+  youtubeUrl: '',
+};
+
 interface AdminDataContextType {
   // Auth
   isAuthenticated: boolean;
   adminUser: { name: string; email: string; role: string } | null;
   login: (email: string, password: string) => boolean;
   logout: () => void;
+  isLoading: boolean;
 
   // Leads
   leads: LeadItem[];
@@ -108,132 +180,32 @@ interface AdminDataContextType {
   resetAllToDefault: () => void;
 }
 
-const defaultLeads: LeadItem[] = [
-  {
-    id: 'lead-1',
-    name: 'Sayan Mukherjee',
-    phone: '+91 98301 23456',
-    email: 'sayan.m@gmail.com',
-    eventDate: '2026-11-20',
-    eventType: 'Bengali Wedding',
-    service: 'Bridal Makeover & Photography',
-    guestCount: '350',
-    budget: '₹4,50,000',
-    message: 'Looking for authentic Vedic priest and full cinematic video coverage in Kolkata.',
-    status: 'New',
-    createdAt: '2026-08-15 14:30',
-  },
-  {
-    id: 'lead-2',
-    name: 'Priyanka Banerjee',
-    phone: '+91 94330 87654',
-    email: 'priyanka.b@outlook.com',
-    eventDate: '2026-12-05',
-    eventType: 'Reception & Tatta Decor',
-    service: 'Trey Decor & Mehendi',
-    guestCount: '200',
-    budget: '₹2,20,000',
-    message: 'Need 15 custom decorated tatta trays with traditional Bengali sweet hampers.',
-    status: 'Contacted',
-    createdAt: '2026-08-14 11:15',
-  },
-  {
-    id: 'lead-3',
-    name: 'Debanjan Roy',
-    phone: '+91 87770 12389',
-    email: 'debanjan.roy@gmail.com',
-    eventDate: '2026-10-18',
-    eventType: 'Royal Bengali Wedding',
-    service: 'Premium Package',
-    guestCount: '500',
-    budget: '₹8,50,000',
-    message: 'Interested in the full Premium Package with floral mandap and drone cinematography.',
-    status: 'Confirmed',
-    createdAt: '2026-08-12 18:40',
-  },
-  {
-    id: 'lead-4',
-    name: 'Ananya Sen',
-    phone: '+91 90071 45678',
-    email: 'ananya.sen@yahoo.com',
-    eventDate: '2026-09-28',
-    eventType: 'Aiburobhat & Gaye Holud',
-    service: 'Mehendi & Floral Decor',
-    guestCount: '80',
-    budget: '₹1,50,000',
-    message: 'Intimate pre-wedding ceremony styling required.',
-    status: 'In Progress',
-    createdAt: '2026-08-10 09:20',
-  },
-];
-
-const defaultBanners: BannerSettings = {
-  homeHeroTitle: 'Every moment Unforgettable',
-  homeHeroSubtitle: 'We make',
-  homeHeroTagline: 'Shuvayan brings your dream celebration to life with creativity, elegance & flawless execution.',
-  homeHeroBgImage: 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/Index-banner.jpg',
-  innerHeroTitle: 'Moments that last forever',
-  innerHeroBgImage: 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/galler-banner.png',
-  snapshotLeft: 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-left.jpg',
-  snapshotMid: 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-mid.png',
-  snapshotRight: 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-right.jpg',
-};
-
-const defaultTestimonials: TestimonialItem[] = [
-  {
-    id: 't-1',
-    name: 'Sourav & Tanushree',
-    event: 'Wedding at Rajbari Bawali',
-    date: 'February 2026',
-    rating: 5,
-    quote: 'Shuvayan made our wedding completely magical! Every ritual, tatta tray, and the floral mandap exceeded our expectations. Our guests are still raving about the hospitality.',
-  },
-  {
-    id: 't-2',
-    name: 'Anirban & Sreemoyee',
-    event: 'Reception at ITC Royal Bengal',
-    date: 'January 2026',
-    rating: 5,
-    quote: 'The makeover team was phenomenal. Tania made the bride look like a queen! From photography to time management, everything was executed flawlessly.',
-  },
-  {
-    id: 't-3',
-    name: 'Subhashish & Payel',
-    event: 'Traditional Bengali Wedding',
-    date: 'December 2025',
-    rating: 5,
-    quote: 'Highly professional and deeply respectful of authentic Bengali traditions. The priest, the shehnai, the food arrangement—everything was 10/10.',
-  },
-];
-
-const defaultSiteSettings: SiteSettings = {
-  siteTitle: 'Shuvayan | Bengali Wedding & Event Management',
-  primaryPhone: '+91 98300 00000',
-  secondaryPhone: '+91 98311 11111',
-  whatsappNumber: '+91 98300 00000',
-  contactEmail: 'contact@shuvayan.com',
-  address: 'Salt Lake Sector V, Kolkata, West Bengal 700091',
-  facebookUrl: 'https://facebook.com',
-  instagramUrl: 'https://instagram.com',
-  youtubeUrl: 'https://youtube.com',
-};
-
 const AdminDataContext = createContext<AdminDataContextType | undefined>(undefined);
+
+export const normalizeImageUrl = (url?: string): string => {
+  if (!url) return '';
+  if (url.startsWith('/images/')) {
+    const filename = url.replace('/images/', '');
+    return `https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/${filename}`;
+  }
+  return url;
+};
 
 export function AdminDataProvider({ children }: { children: React.ReactNode }) {
   // Auth state
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [adminUser, setAdminUser] = useState<{ name: string; email: string; role: string } | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Content states
-  const [leads, setLeads] = useState<LeadItem[]>(defaultLeads);
-  const [services, setServices] = useState<ServiceItem[]>(defaultServices);
-  const [packages, setPackages] = useState<PackageData[]>(defaultPackages);
-  const [categories, setCategories] = useState<string[]>(defaultCategories);
-  const [artists, setArtists] = useState<ArtistProfile[]>(defaultArtists);
-  const [banners, setBanners] = useState<BannerSettings>(defaultBanners);
-  const [testimonials, setTestimonials] = useState<TestimonialItem[]>(defaultTestimonials);
-  const [settings, setSettings] = useState<SiteSettings>(defaultSiteSettings);
+  // Pure dynamic Firebase state (starts empty)
+  const [leads, setLeads] = useState<LeadItem[]>([]);
+  const [services, setServices] = useState<ServiceItem[]>([]);
+  const [packages, setPackages] = useState<PackageData[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [artists, setArtists] = useState<ArtistProfile[]>([]);
+  const [banners, setBanners] = useState<BannerSettings>(emptyBanners);
+  const [testimonials, setTestimonials] = useState<TestimonialItem[]>([]);
+  const [settings, setSettings] = useState<SiteSettings>(emptySettings);
 
   // Helper to sync changes to Firebase Firestore Cloud Database
   const syncToCloud = async (partialData: Record<string, any>) => {
@@ -260,7 +232,10 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
       if (storedLeads) setLeads(JSON.parse(storedLeads));
 
       const storedServices = localStorage.getItem('shuvayan_services');
-      if (storedServices) setServices(JSON.parse(storedServices));
+      if (storedServices) {
+        const parsed = JSON.parse(storedServices);
+        setServices(parsed.map((s: ServiceItem) => ({ ...s, image: normalizeImageUrl(s.image) })));
+      }
 
       const storedPackages = localStorage.getItem('shuvayan_packages');
       if (storedPackages) setPackages(JSON.parse(storedPackages));
@@ -269,7 +244,15 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
       if (storedCategories) setCategories(JSON.parse(storedCategories));
 
       const storedArtists = localStorage.getItem('shuvayan_artists');
-      if (storedArtists) setArtists(JSON.parse(storedArtists));
+      if (storedArtists) {
+        const parsed = JSON.parse(storedArtists);
+        setArtists(
+          parsed.map((a: ArtistProfile) => ({
+            ...a,
+            photos: a.photos.map((p) => ({ ...p, image: normalizeImageUrl(p.image) })),
+          }))
+        );
+      }
 
       const storedBanners = localStorage.getItem('shuvayan_banners');
       if (storedBanners) setBanners(JSON.parse(storedBanners));
@@ -283,40 +266,62 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
       console.warn('Error loading admin state from localStorage', e);
     }
 
+    // Safety timeout to ensure spinner never hangs indefinitely
+    const safetyTimer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+
     // Subscribe to real-time Firestore cloud database
     if (db) {
       try {
         const docRef = doc(db, 'content', 'site_data');
-        const unsubscribe = onSnapshot(docRef, (docSnap) => {
-          if (docSnap.exists()) {
-            const data = docSnap.data();
-            if (data.services) setServices(data.services);
-            if (data.packages) setPackages(data.packages);
-            if (data.categories) setCategories(data.categories);
-            if (data.artists) setArtists(data.artists);
-            if (data.banners) setBanners(data.banners);
-            if (data.testimonials) setTestimonials(data.testimonials);
-            if (data.settings) setSettings(data.settings);
-            if (data.leads) setLeads(data.leads);
-          } else {
-            // Seed initial data to cloud if document is empty
-            setDoc(docRef, {
-              services: defaultServices,
-              packages: defaultPackages,
-              categories: defaultCategories,
-              artists: defaultArtists,
-              banners: defaultBanners,
-              testimonials: defaultTestimonials,
-              settings: defaultSiteSettings,
-              leads: defaultLeads,
-            }, { merge: true }).catch(() => {});
+        const unsubscribe = onSnapshot(
+          docRef,
+          (docSnap) => {
+            clearTimeout(safetyTimer);
+            setIsLoading(false);
+            if (docSnap.exists()) {
+              const data = docSnap.data();
+              if (data.services) {
+                setServices(
+                  data.services.map((s: ServiceItem) => ({ ...s, image: normalizeImageUrl(s.image) }))
+                );
+              }
+              if (data.packages) setPackages(data.packages);
+              if (data.categories) setCategories(data.categories);
+              if (data.artists) {
+                setArtists(
+                  data.artists.map((a: ArtistProfile) => ({
+                    ...a,
+                    photos: a.photos.map((p: any) => ({ ...p, image: normalizeImageUrl(p.image) })),
+                  }))
+                );
+              }
+              if (data.banners) setBanners(data.banners);
+              if (data.testimonials) setTestimonials(data.testimonials || []);
+              if (data.settings) setSettings(data.settings);
+              if (data.leads) setLeads(data.leads);
+            }
+          },
+          (err) => {
+            clearTimeout(safetyTimer);
+            setIsLoading(false);
+            console.warn('Firestore subscription note / offline fallback:', err);
           }
-        });
+        );
 
-        return () => unsubscribe();
+        return () => {
+          clearTimeout(safetyTimer);
+          unsubscribe();
+        };
       } catch (err) {
+        clearTimeout(safetyTimer);
+        setIsLoading(false);
         console.warn('Firestore subscription failed:', err);
       }
+    } else {
+      clearTimeout(safetyTimer);
+      setIsLoading(false);
     }
   }, []);
 
@@ -556,14 +561,14 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const resetAllToDefault = () => {
-    setServices(defaultServices);
-    setPackages(defaultPackages);
-    setCategories(defaultCategories);
-    setArtists(defaultArtists);
-    setBanners(defaultBanners);
-    setTestimonials(defaultTestimonials);
-    setSettings(defaultSiteSettings);
-    setLeads(defaultLeads);
+    setServices([]);
+    setPackages([]);
+    setCategories([]);
+    setArtists([]);
+    setBanners(emptyBanners);
+    setTestimonials([]);
+    setSettings(emptySettings);
+    setLeads([]);
 
     localStorage.removeItem('shuvayan_services');
     localStorage.removeItem('shuvayan_packages');
@@ -575,14 +580,14 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem('shuvayan_leads');
 
     syncToCloud({
-      services: defaultServices,
-      packages: defaultPackages,
-      categories: defaultCategories,
-      artists: defaultArtists,
-      banners: defaultBanners,
-      testimonials: defaultTestimonials,
-      settings: defaultSiteSettings,
-      leads: defaultLeads,
+      services: [],
+      packages: [],
+      categories: [],
+      artists: [],
+      banners: emptyBanners,
+      testimonials: [],
+      settings: emptySettings,
+      leads: [],
     });
   };
 
@@ -593,6 +598,7 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
         adminUser,
         login,
         logout,
+        isLoading,
         leads,
         addLead,
         updateLeadStatus,

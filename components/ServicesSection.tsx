@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAppModals } from '@/context/AppModalContext';
+import { useAdminData } from '@/context/AdminDataContext';
 
 export interface ServiceItem {
   id: string;
@@ -16,21 +17,21 @@ export const servicesList: ServiceItem[] = [
     id: 'priest',
     title: 'Priest / Vedic Priests',
     description: 'Experienced Bengali Vedic Priests.',
-    image: '/images/Service-thumb-01.jpg',
+    image: 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/Service-thumb-01.jpg',
     category: 'Rituals & Ceremony',
   },
   {
     id: 'trey-decor',
     title: 'Trey Decor',
     description: 'Elegent and creative trey decor for the ritual.',
-    image: '/images/Service-thumb-02.jpg',
+    image: 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/Service-thumb-02.jpg',
     category: 'Tatta & Trays',
   },
   {
     id: 'mehendi',
     title: 'Mehendi',
     description: 'Intricate mehendi designs that add charm to your celebration.',
-    image: '/images/Service-thumb-03.jpg',
+    image: 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/Service-thumb-03.jpg',
     category: 'Bridal Art',
   },
   {
@@ -72,6 +73,8 @@ export const servicesList: ServiceItem[] = [
 
 export default function ServicesSection() {
   const { openQuoteModal } = useAppModals();
+  const { services } = useAdminData();
+  const displayServices = services && services.length > 0 ? services : servicesList;
 
   return (
     <section id="services" className="py-16 sm:py-20 lg:py-24 bg-white">
@@ -107,9 +110,9 @@ export default function ServicesSection() {
           </div>
         </div>
 
-        {/* 8 Services Grid: 4 columns x 2 rows */}
+        {/* Dynamic Services Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-          {servicesList.map((service) => (
+          {displayServices.map((service) => (
             <div
               key={service.id}
               id={`service-card-${service.id}`}

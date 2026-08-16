@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import {
   Settings,
   Phone,
@@ -9,14 +11,26 @@ import {
   CheckCircle2,
   AlertTriangle,
   RotateCcw,
+  Sparkles,
+  ExternalLink,
+  X,
+  ImageIcon,
 } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
+import ImageKitUploader from '@/components/admin/ImageKitUploader';
 import { useAdminData } from '@/context/AdminDataContext';
 
 export default function AdminSettingsPage() {
   const { settings, updateSettings, resetAllToDefault } = useAdminData();
   const [formData, setFormData] = useState(settings);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+
+  useEffect(() => {
+    if (settings) {
+      setFormData(settings);
+    }
+  }, [settings]);
 
   const handleChange = (field: keyof typeof settings, val: string) => {
     setFormData((prev) => ({ ...prev, [field]: val }));
@@ -27,8 +41,11 @@ export default function AdminSettingsPage() {
     e.preventDefault();
     updateSettings(formData);
     setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 3000);
+    setShowSuccessPopup(true);
+    setTimeout(() => setSaveSuccess(false), 4000);
   };
+
+  const currentLogo = formData.logoUrl || '/images/logo.png';
 
   return (
     <AdminLayout
@@ -36,7 +53,7 @@ export default function AdminSettingsPage() {
       subtitle="Update phone numbers, WhatsApp, email, office address, and social links displayed across the footer and header."
       activeNav="settings"
     >
-      <form onSubmit={handleSave} className="space-y-8 max-w-4xl">
+      <form onSubmit={handleSave} className="w-full space-y-8">
         {/* Save Bar */}
         <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#e8dfd3] shadow-xs flex items-center justify-between">
           <div>
@@ -59,6 +76,83 @@ export default function AdminSettingsPage() {
               <Save className="w-4 h-4" />
               <span>Save Settings</span>
             </button>
+          </div>
+        </div>
+
+        {/* 0. Brand Logo Upload & Real-Time Preview Card */}
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] shadow-xs space-y-6">
+          <div className="border-b border-gray-100 pb-3 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="p-2 rounded-xl bg-amber-50 text-[#d99824] border border-amber-200">
+                <ImageIcon className="w-4 h-4" />
+              </span>
+              <div>
+                <h3 className="text-lg font-bold font-serif-display text-gray-900">
+                  Brand Logo &amp; Identity
+                </h3>
+                <p className="text-xs text-gray-500">
+                  Updates header navigation, footer branding, and mobile menu across the entire website.
+                </p>
+              </div>
+            </div>
+
+            <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+              Active Brand Asset
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            {/* Live Dual Background Logo Preview (Dark Header & Light Card) */}
+            <div className="lg:col-span-6 space-y-3">
+              <span className="text-xs font-bold text-gray-700 uppercase tracking-wider block">
+                Live Backdrop Preview
+              </span>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* On Dark Header */}
+                <div className="bg-[#140706] rounded-2xl p-5 border border-[#301c1a] flex flex-col items-center justify-center text-center shadow-inner group">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] mb-3">
+                    On Dark Header
+                  </span>
+                  <div className="relative w-44 h-12">
+                    <Image
+                      src={currentLogo}
+                      alt="Brand Logo on dark backdrop"
+                      fill
+                      className="object-contain object-center group-hover:scale-105 transition-transform"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                </div>
+
+                {/* On Light Backdrop */}
+                <div className="bg-[#fbf9f6] rounded-2xl p-5 border border-[#e8dfd3] flex flex-col items-center justify-center text-center shadow-inner group">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-3">
+                    On Light Background
+                  </span>
+                  <div className="relative w-44 h-12">
+                    <Image
+                      src={currentLogo}
+                      alt="Brand Logo on light backdrop"
+                      fill
+                      className="object-contain object-center group-hover:scale-105 transition-transform"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Logo ImageKit Uploader */}
+            <div className="lg:col-span-6 bg-[#fcfaf7] p-5 rounded-2xl border border-[#ebdcc8]">
+              <ImageKitUploader
+                label="Upload New Brand Logo (PNG / SVG / WebP)"
+                folder="/shuvayan_assets"
+                currentImageUrl={formData.logoUrl}
+                onUploadSuccess={(url) => handleChange('logoUrl', url)}
+                onClear={() => handleChange('logoUrl', '')}
+              />
+            </div>
           </div>
         </div>
 
@@ -252,13 +346,56 @@ export default function AdminSettingsPage() {
         <div className="flex justify-end pt-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs font-semibold px-6 py-3 rounded-xl shadow-md transition-colors"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#c8102e] to-[#9e0a22] hover:from-[#a80b24] hover:to-[#80071a] text-white text-xs font-bold px-8 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer"
           >
             <Save className="w-4 h-4" />
             <span>Save All Settings</span>
           </button>
         </div>
       </form>
+
+      {/* Success Confirmation Popup Modal */}
+      {showSuccessPopup && (
+        <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-[#ebdcc8] text-center space-y-5 animate-scaleUp">
+            {/* Animated Check Icon */}
+            <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 border-2 border-emerald-200 flex items-center justify-center mx-auto shadow-inner">
+              <CheckCircle2 className="w-9 h-9" />
+            </div>
+
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-2 inline-block">
+                Firebase Cloud Synced
+              </span>
+              <h3 className="text-xl font-bold font-serif-display text-gray-900">
+                Settings Saved Successfully!
+              </h3>
+              <p className="text-xs text-gray-500 mt-2 leading-relaxed">
+                Your contact numbers, WhatsApp link, email, office address, and social links are saved and live across the website.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+              <Link
+                href="/"
+                target="_blank"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl border border-[#e0cbaf] bg-[#faf7f2] hover:bg-[#f3ede1] text-[#784d16] transition-colors"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>View Live Site</span>
+              </Link>
+
+              <button
+                type="button"
+                onClick={() => setShowSuccessPopup(false)}
+                className="w-full sm:w-auto inline-flex items-center justify-center bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow-md transition-colors cursor-pointer"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </AdminLayout>
   );
 }

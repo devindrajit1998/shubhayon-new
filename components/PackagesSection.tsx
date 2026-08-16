@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAppModals } from '@/context/AppModalContext';
+import { useAdminData } from '@/context/AdminDataContext';
 import { PackageData } from '@/components/PackageDetailModal';
 
 export const packagesList: PackageData[] = [
@@ -100,6 +101,8 @@ export const packagesList: PackageData[] = [
 
 export default function PackagesSection() {
   const { openPackageModal } = useAppModals();
+  const { packages } = useAdminData();
+  const displayPackages = packages && packages.length > 0 ? packages : packagesList;
 
   // Alternating top border colors: Basic (Red), Mid (Gold), Standard (Red), Premium (Gold)
   const topBorderColors: Record<string, string> = {
@@ -143,10 +146,10 @@ export default function PackagesSection() {
           </div>
         </div>
 
-        {/* 4 Columns Package Cards */}
+        {/* Dynamic Package Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7">
-          {packagesList.map((pkg) => {
-            const topBorderClass = topBorderColors[pkg.id] || 'border-t-[#b81414]';
+          {displayPackages.map((pkg, idx) => {
+            const topBorderClass = topBorderColors[pkg.id] || (idx % 2 === 0 ? 'border-t-[#b81414]' : 'border-t-[#e5a83b]');
             return (
               <div
                 key={pkg.id}

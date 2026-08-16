@@ -22,7 +22,7 @@ import AdminLayout from '@/components/admin/AdminLayout';
 import { useAdminData, LeadItem } from '@/context/AdminDataContext';
 
 export default function AdminDashboardPage() {
-  const { leads, services, packages, artists, updateLeadStatus } = useAdminData();
+  const { leads, services, packages, artists, updateLeadStatus, isLoading } = useAdminData();
   const [selectedLead, setSelectedLead] = useState<LeadItem | null>(null);
 
   const newLeads = leads.filter((l) => l.status === 'New');
@@ -230,7 +230,21 @@ export default function AdminDashboardPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#ebdcc8]/50">
-                {leads.slice(0, 5).map((lead) => (
+                {isLoading ? (
+                  <tr>
+                    <td colSpan={5} className="py-12 text-center text-gray-500">
+                      <div className="w-6 h-6 border-2 border-[#c8102e] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                      Loading Firebase data...
+                    </td>
+                  </tr>
+                ) : leads.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="py-10 text-center text-gray-500">
+                      No customer inquiries found in Firebase yet.
+                    </td>
+                  </tr>
+                ) : (
+                  leads.slice(0, 5).map((lead) => (
                   <tr key={lead.id} className="hover:bg-[#fcfaf7] transition-colors">
                     <td className="py-3.5 px-4 sm:px-6 font-semibold text-gray-900">
                       <div>{lead.name}</div>
@@ -285,7 +299,7 @@ export default function AdminDashboardPage() {
                       </button>
                     </td>
                   </tr>
-                ))}
+                )))}
               </tbody>
             </table>
           </div>

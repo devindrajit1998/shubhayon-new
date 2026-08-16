@@ -4,7 +4,7 @@ import { getImageKitServerInstance, isImageKitConfigured } from '@/lib/imagekit'
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: '15mb',
+      sizeLimit: '25mb',
     },
   },
 };
@@ -15,37 +15,48 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { file, fileName, folder } = req.body;
+    const { file, fileName, folder } = req.body || {};
 
-    if (!file || !fileName) {
-      return res.status(400).json({ error: 'Missing file data or fileName' });
+    if (!file) {
+      return res.status(400).json({ error: 'Missing image file data' });
     }
 
+    const safeName = (fileName || `upload_${Date.now()}.jpg`).replace(/[^a-zA-Z0-9._-]/g, '_');
+
     if (!isImageKitConfigured()) {
-      // In local mode without keys, return the data url
-      return res.status(200).json({ url: file });
+      return res.status(200).json({ url: file, mode: 'local' });
     }
 
     const imagekit = getImageKitServerInstance();
     if (!imagekit) {
-      return res.status(500).json({ error: 'Could not initialize ImageKit server' });
+      return res.status(200).json({ url: file, mode: 'fallback' });
     }
 
-    const result = await imagekit.upload({
-      file: file, // accepts base64 data string or URL
-      fileName: fileName,
-      folder: folder || '/shuvayan_assets',
-      useUniqueFileName: true,
-    });
+    try {
+      const result = await imagekit.upload({
+        file: file,
+        fileName: safeName,
+        folder: folder || '/shuvayan_assets',
+        useUniqueFileName: true,
+      });
 
-    return res.status(200).json({
-      url: result.url,
-      fileId: result.fileId,
-      name: result.name,
-      thumbnailUrl: result.thumbnailUrl,
-    });
+      return res.status(200).json({
+        url: result.url,
+        fileId: result.fileId,
+        name: result.name,
+        thumbnailUrl: result.thumbnailUrl,
+      });
+    } catch (sdkErr: any) {
+      console.warn('ImageKit direct upload warning, using local data fallback:', sdkErr.message);
+      // Return safe data fallback so admin is never blocked
+      return res.status(200).json({ url: file, fallback: true });
+    }
   } catch (error: any) {
-    console.error('ImageKit server upload error:', error);
+    console.error('ImageKit upload handler error:', error);
+    // If request body has file, return it rather than returning 500
+    if (req.body?.file) {
+      return res.status(200).json({ url: req.body.file, fallback: true });
+    }
     return res.status(500).json({ error: error.message || 'ImageKit upload failed' });
   }
 }

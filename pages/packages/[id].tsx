@@ -7,6 +7,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CtaBanner from '@/components/CtaBanner';
 import { useAppModals } from '@/context/AppModalContext';
+import { useAdminData } from '@/context/AdminDataContext';
 import { packagesList } from '@/components/PackagesSection';
 import { CheckCircle2, Sparkles, Users, IndianRupee, ShieldCheck, ArrowLeft, ChevronRight } from 'lucide-react';
 import type { GetStaticPaths, GetStaticProps } from 'next';
@@ -15,7 +16,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const paths = packagesList.map((pkg) => ({
     params: { id: pkg.id },
   }));
-  return { paths, fallback: false };
+  return { paths, fallback: 'blocking' };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
@@ -31,9 +32,25 @@ interface PackageDetailsPageProps {
   pkg: (typeof packagesList)[0] | null;
 }
 
-export default function PackageDetailsPage({ pkg }: PackageDetailsPageProps) {
+export default function PackageDetailsPage({ pkg: initialPkg }: PackageDetailsPageProps) {
   const router = useRouter();
-  const { openQuoteModal } = useAppModals();
+  const { openQuoteModal, openLightbox } = useAppModals();
+  const { packages, banners } = useAdminData();
+
+  const snapLeft = banners?.snapshotLeft || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-left.jpg';
+  const snapMid = banners?.snapshotMid || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-mid.png';
+  const snapRight = banners?.snapshotRight || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-right.jpg';
+
+  const polaroidPhotos = [
+    { title: 'Spotlight Couple', image: snapMid, category: 'FEATURED SNAPSHOT' },
+    { title: 'Groom & Bride', image: snapLeft, category: 'FEATURED SNAPSHOT' },
+    { title: 'Wedding Celebration', image: snapRight, category: 'FEATURED SNAPSHOT' },
+  ];
+
+  // Prefer live Firebase package if available
+  const currentId = (router.query.id as string) || initialPkg?.id;
+  const livePkg = packages?.find((p) => p.id === currentId);
+  const pkg = livePkg || initialPkg;
 
   if (!pkg) {
     return (
@@ -47,7 +64,9 @@ export default function PackageDetailsPage({ pkg }: PackageDetailsPageProps) {
   }
 
   // Other packages for recommendation
-  const otherPackages = packagesList.filter((p) => p.id !== pkg.id);
+  const otherPackages = (packages && packages.length > 0 ? packages : packagesList).filter(
+    (p) => p.id !== pkg.id
+  );
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fffdfa] selection:bg-[#c8102e] selection:text-white">
@@ -55,7 +74,7 @@ export default function PackageDetailsPage({ pkg }: PackageDetailsPageProps) {
         <title>{pkg.title} | Shuvayan Bengali Wedding & Event Management</title>
         <meta
           name="description"
-          content={`Detailed inclusions and pricing for ${pkg.title} - ${pkg.tagline}. Authentic Bengali wedding planning by Shuvayan.`}
+          content={`Detailed inclusions and pricing for ${pkg.title} - ${pkg.tagline || ''}. Authentic Bengali wedding planning by Shuvayan.`}
         />
       </Head>
 
@@ -71,7 +90,7 @@ export default function PackageDetailsPage({ pkg }: PackageDetailsPageProps) {
           {/* Background image with dark warm wedding backdrop */}
           <div className="absolute inset-0 z-0 overflow-hidden">
             <Image
-              src="/images/galler-banner.png"
+              src={banners?.innerHeroBgImage || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/galler-banner.png'}
               alt="Wedding Background"
               fill
               priority
@@ -98,11 +117,12 @@ export default function PackageDetailsPage({ pkg }: PackageDetailsPageProps) {
               <div className="relative flex items-center justify-center w-56 sm:w-64 md:w-80 lg:w-[380px] xl:w-[420px]">
                 {/* Left Snapshot: Tilted -14deg */}
                 <div
+                  onClick={() => openLightbox(1, polaroidPhotos)}
                   className="absolute -left-2 sm:-left-4 md:-left-6 lg:-left-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform -rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
-                      src="/images/banner-left.jpg"
+                      src={snapLeft}
                       alt="Groom & Bride"
                       fill
                       className="object-cover object-top"
@@ -113,14 +133,15 @@ export default function PackageDetailsPage({ pkg }: PackageDetailsPageProps) {
 
                 {/* Center Snapshot: Upright in Front */}
                 <div
+                  onClick={() => openLightbox(0, polaroidPhotos)}
                   className="relative z-20 w-24 sm:w-30 md:w-38 lg:w-46 xl:w-50 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_18px_35px_rgba(0,0,0,0.7)] transform hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
-                      src="/images/banner-mid.png"
-                      alt="Bengali Bride in Palki"
+                      src={snapMid}
+                      alt="Bengali Bride Topor"
                       fill
-                      className="object-cover object-center"
+                      className="object-cover object-top"
                       referrerPolicy="no-referrer"
                     />
                   </div>
@@ -128,14 +149,15 @@ export default function PackageDetailsPage({ pkg }: PackageDetailsPageProps) {
 
                 {/* Right Snapshot: Tilted +14deg */}
                 <div
+                  onClick={() => openLightbox(2, polaroidPhotos)}
                   className="absolute -right-2 sm:-right-4 md:-right-6 lg:-right-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
-                      src="/images/banner-right.jpg"
-                      alt="Wedding Couple"
+                      src={snapRight}
+                      alt="Bride Smiling"
                       fill
-                      className="object-cover object-center"
+                      className="object-cover object-top"
                       referrerPolicy="no-referrer"
                     />
                   </div>

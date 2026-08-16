@@ -6,6 +6,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CtaBanner from '@/components/CtaBanner';
 import { useAppModals } from '@/context/AppModalContext';
+import { useAdminData } from '@/context/AdminDataContext';
 import { Sparkles, Camera, Award, ChevronRight, Maximize2 } from 'lucide-react';
 
 export interface ArtistProfile {
@@ -14,6 +15,8 @@ export interface ArtistProfile {
   role: string;
   eventsCount: string;
   category: string;
+  avatar?: string;
+  bio?: string;
   photos: {
     title: string;
     image: string;
@@ -36,6 +39,8 @@ export const artistList: ArtistProfile[] = [
     role: 'Makeover Artist',
     eventsCount: '150+ Events',
     category: 'Bridal Makeover',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop',
+    bio: 'Specializing in timeless Bengali bridal makeovers, signature HD airbrush artistry, delicate Chandan calligraphy, and royal mukut draping with over 8 years of celebrated wedding experience.',
     photos: [
       {
         title: 'Glamorous Bengali Reception HD Bridal Look',
@@ -65,6 +70,8 @@ export const artistList: ArtistProfile[] = [
     role: 'Makeover Artist',
     eventsCount: '90+ Events',
     category: 'Bridal Makeover',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop',
+    bio: 'Celebrated for contemporary subtle makeup, radiant dewy glass-skin aesthetics, and elegant Bengali hair styling designed for day-long wedding comfort and cinematic photography.',
     photos: [
       {
         title: 'Classic Bengali Eye Makeup & Chandan Art',
@@ -245,11 +252,28 @@ export const artistList: ArtistProfile[] = [
 
 export default function GalleryPage() {
   const { openLightbox, openQuoteModal } = useAppModals();
-  const [selectedCategory, setSelectedCategory] = useState('Bridal Makeover');
+  const { categories, artists, banners } = useAdminData();
 
-  const displayedArtists = artistList.filter(
+  const displayCategories = categories && categories.length > 0 ? categories : galleryCategories;
+  const displayArtists = artists && artists.length > 0 ? artists : artistList;
+
+  const [selectedCategory, setSelectedCategory] = useState(displayCategories[0] || 'Bridal Makeover');
+
+  const displayedArtists = displayArtists.filter(
     (artist) => artist.category === selectedCategory
   );
+
+  const bannerBg = banners?.galleryHeroBgImage || banners?.innerHeroBgImage || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/galler-banner.png';
+  const bannerTitle = banners?.galleryHeroTitle || banners?.innerHeroTitle || 'Moments that last forever';
+  const snapLeft = banners?.snapshotLeft || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-left.jpg';
+  const snapMid = banners?.snapshotMid || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-mid.png';
+  const snapRight = banners?.snapshotRight || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-right.jpg';
+
+  const polaroidPhotos = [
+    { title: 'Spotlight Couple', image: snapMid, category: 'FEATURED SNAPSHOT' },
+    { title: 'Groom & Bride', image: snapLeft, category: 'FEATURED SNAPSHOT' },
+    { title: 'Wedding Celebration', image: snapRight, category: 'FEATURED SNAPSHOT' },
+  ];
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fffdfa] selection:bg-[#c8102e] selection:text-white">
@@ -273,7 +297,7 @@ export default function GalleryPage() {
           {/* Background image with dark warm wedding backdrop */}
           <div className="absolute inset-0 z-0 overflow-hidden">
             <Image
-              src="/images/galler-banner.png"
+              src={bannerBg}
               alt="Gallery Wedding Background"
               fill
               priority
@@ -291,22 +315,28 @@ export default function GalleryPage() {
             {/* Heading: Centered on mobile with balanced typography, left-aligned on sm+ */}
             <div className="pt-20 sm:pt-12 lg:pt-14 text-center sm:text-left w-full sm:w-auto sm:max-w-md md:max-w-xl">
               <h1 className="font-serif-display font-normal text-[26px] sm:text-4xl md:text-5xl lg:text-[58px] xl:text-[65px] text-white leading-[1.15] sm:leading-[1.12] tracking-tight drop-shadow-sm">
-                Moments that <br className="hidden sm:inline" />
-                <span className="sm:inline">last forever</span>
+                {bannerTitle.includes('last forever') ? (
+                  <>
+                    Moments that <br className="hidden sm:inline" />
+                    <span className="sm:inline">last forever</span>
+                  </>
+                ) : (
+                  bannerTitle
+                )}
               </h1>
             </div>
 
-            {/* Polaroid Snapshots: Beautifully centered hanging over the breadcrumb on mobile, right-aligned on sm+ */}
+            {/* Polaroid Snapshots */}
             <div className="absolute left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 lg:right-8 xl:right-12 top-[168px] sm:top-[115px] lg:top-[120px] z-30">
               <div className="relative flex items-center justify-center w-56 sm:w-64 md:w-80 lg:w-[380px] xl:w-[420px]">
-                {/* Left Snapshot: Tilted -14deg */}
+                {/* Left Snapshot */}
                 <div
-                  onClick={() => openLightbox(1)}
+                  onClick={() => openLightbox(1, polaroidPhotos)}
                   className="absolute -left-2 sm:-left-4 md:-left-6 lg:-left-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform -rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
-                      src="/images/banner-left.jpg"
+                      src={snapLeft}
                       alt="Groom & Bride"
                       fill
                       className="object-cover object-top"
@@ -315,14 +345,14 @@ export default function GalleryPage() {
                   </div>
                 </div>
 
-                {/* Center Snapshot: Upright in Front */}
+                {/* Center Snapshot */}
                 <div
-                  onClick={() => openLightbox(0)}
+                  onClick={() => openLightbox(0, polaroidPhotos)}
                   className="relative z-20 w-24 sm:w-30 md:w-38 lg:w-46 xl:w-50 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_18px_35px_rgba(0,0,0,0.7)] transform hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
-                      src="/images/banner-mid.png"
+                      src={snapMid}
                       alt="Bengali Bride in Palki"
                       fill
                       className="object-cover object-center"
@@ -331,14 +361,14 @@ export default function GalleryPage() {
                   </div>
                 </div>
 
-                {/* Right Snapshot: Tilted +14deg */}
+                {/* Right Snapshot */}
                 <div
-                  onClick={() => openLightbox(2)}
+                  onClick={() => openLightbox(2, polaroidPhotos)}
                   className="absolute -right-2 sm:-right-4 md:-right-6 lg:-right-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
-                      src="/images/banner-right.jpg"
+                      src={snapRight}
                       alt="Wedding Couple"
                       fill
                       className="object-cover object-center"
@@ -400,7 +430,7 @@ export default function GalleryPage() {
             <div className="max-w-4xl mx-auto mb-8 sm:mb-10">
               <div className="bg-[#f6c367] rounded-xl p-1.5 sm:p-2 shadow-sm">
                 <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-                  {galleryCategories.map((cat) => {
+                  {displayCategories.map((cat) => {
                     const isActive = selectedCategory === cat;
                     return (
                       <button
@@ -431,16 +461,18 @@ export default function GalleryPage() {
                   <div className="flex flex-col lg:flex-row items-center lg:items-stretch gap-4 sm:gap-5">
                     {/* Left Column: Artist DP & View Button */}
                     <div className="w-full lg:w-44 flex flex-col items-center justify-center text-center pb-3 lg:pb-0 lg:border-r border-[#ecdcc8] lg:pr-4 flex-shrink-0">
-                      {/* Exact Artist DP PNG */}
-                      <div className="relative w-16 h-16 sm:w-18 sm:h-18 mx-auto mb-1">
-                        <Image
-                          src="/images/artist-dp.png"
-                          alt={artist.name}
-                          fill
-                          className="object-contain"
-                          referrerPolicy="no-referrer"
-                        />
-                      </div>
+                      {/* Artist Avatar Photo or Default Silhouette DP */}
+                      <Link href={`/gallery/artist/${artist.id}`} className="group block mb-1.5">
+                        <div className="relative w-16 h-16 sm:w-18 sm:h-18 mx-auto rounded-full overflow-hidden border-2 border-[#d99824]/40 bg-white shadow-xs group-hover:scale-105 group-hover:border-[#c8102e] transition-all">
+                          <Image
+                            src={artist.avatar || '/images/artist-dp.png'}
+                            alt={artist.name}
+                            fill
+                            className={artist.avatar ? 'object-cover object-top' : 'object-contain'}
+                            referrerPolicy="no-referrer"
+                          />
+                        </div>
+                      </Link>
 
                       <span className="font-serif-display text-sm sm:text-[15px] font-bold text-[#74161f] leading-tight mb-0.5">
                         {artist.role}
@@ -449,22 +481,28 @@ export default function GalleryPage() {
                         {artist.name}
                       </span>
 
-                      <button
-                        onClick={() => openQuoteModal(`${artist.role} - ${artist.name}`)}
-                        className="bg-[#b81414] hover:bg-[#991111] text-white text-[11px] font-semibold px-4 py-1.5 rounded-sm shadow-xs hover:shadow transition-all"
+                      <Link
+                        href={`/gallery/artist/${artist.id}`}
+                        className="inline-block bg-[#b81414] hover:bg-[#991111] text-white text-[11px] font-semibold px-4 py-1.5 rounded-sm shadow-xs hover:shadow transition-all text-center cursor-pointer"
                       >
                         View Artist
-                      </button>
+                      </Link>
                     </div>
 
                     {/* Middle Column: 5 Photo Thumbnails */}
                     <div className="w-full flex-1 grid grid-cols-5 gap-1.5 sm:gap-2.5 items-center">
                       {artist.photos.map((photo, pIdx) => {
                         const isLastPhoto = pIdx === 4;
+                        const artistPhotosList = artist.photos.map((p) => ({
+                          title: p.title || artist.name,
+                          image: p.image,
+                          category: artist.category.toUpperCase(),
+                        }));
+
                         return (
                           <div
                             key={pIdx}
-                            onClick={() => openLightbox(pIdx % 7)}
+                            onClick={() => openLightbox(pIdx, artistPhotosList)}
                             className="group relative aspect-[3/4] rounded-xs overflow-hidden bg-gray-100 shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer"
                           >
                             <Image

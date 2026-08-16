@@ -2,9 +2,16 @@ import React from 'react';
 import Image from 'next/image';
 import { ChevronRight, Sparkles, Heart } from 'lucide-react';
 import { useAppModals } from '@/context/AppModalContext';
+import { useAdminData } from '@/context/AdminDataContext';
 
 export default function HeroSection() {
   const { openQuoteModal } = useAppModals();
+  const { banners } = useAdminData();
+
+  const heroBg = banners?.homeHeroBgImage || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/Index-banner.jpg';
+  const heroSubtitle = banners?.homeHeroSubtitle || 'We make';
+  const heroTitle = banners?.homeHeroTitle || 'Every moment Unforgettable';
+  const heroTagline = banners?.homeHeroTagline || 'Shuvayan brings your dream celebration to life with creativity, elegance & flawless execution.';
 
   return (
     <section
@@ -14,7 +21,7 @@ export default function HeroSection() {
       {/* Background Wedding Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/Index-banner.jpg"
+          src={heroBg}
           alt="Traditional Bengali Bride and Groom Celebration"
           fill
           priority
@@ -30,36 +37,42 @@ export default function HeroSection() {
       {/* Hero Content Container */}
       <div className="relative z-10 max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 sm:py-36 lg:py-44 w-full">
         <div className="max-w-xl lg:max-w-2xl text-left">
-          {/* Script Subtitle: "We make" */}
+          {/* Script Subtitle */}
           <div className="mb-1 sm:mb-2">
             <span
               id="hero-script-intro"
               className="font-script text-3xl sm:text-4xl lg:text-5xl text-[#dca142] drop-shadow tracking-wide block"
             >
-              We make
+              {heroSubtitle}
             </span>
           </div>
 
-          {/* Main Title: "Every moment Unforgettable ❤️" */}
+          {/* Main Title */}
           <h1
             id="hero-main-heading"
             className="font-serif-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.14] mb-4 sm:mb-5 drop-shadow-md"
           >
-            Every moment
-            <span className="block mt-1">
-              Un<span className="text-[#c8102e]">f</span>orge<span className="text-[#c8102e]">t</span>able
-              <span className="inline-block ml-2 align-middle -translate-y-1">
-                <span className="relative inline-block w-4 h-4 sm:w-5 sm:h-5">
-                  <Image
-                    src="/images/heart.svg"
-                    alt="Heart"
-                    fill
-                    className="object-contain"
-                    referrerPolicy="no-referrer"
-                  />
+            {heroTitle.includes('Unforgettable') ? (
+              <>
+                {heroTitle.replace(/Unforgettable/i, '').trim() || 'Every moment'}
+                <span className="block mt-1">
+                  Un<span className="text-[#c8102e]">f</span>orge<span className="text-[#c8102e]">t</span>able
+                  <span className="inline-block ml-2 align-middle -translate-y-1">
+                    <span className="relative inline-block w-4 h-4 sm:w-5 sm:h-5">
+                      <Image
+                        src="/images/heart.svg"
+                        alt="Heart"
+                        fill
+                        className="object-contain"
+                        referrerPolicy="no-referrer"
+                      />
+                    </span>
+                  </span>
                 </span>
-              </span>
-            </span>
+              </>
+            ) : (
+              heroTitle
+            )}
           </h1>
 
           {/* Subheading / Description */}
@@ -67,10 +80,10 @@ export default function HeroSection() {
             id="hero-description"
             className="text-sm sm:text-base lg:text-lg text-white/90 font-normal leading-relaxed mb-8 max-w-lg drop-shadow"
           >
-            Shuvayan brings your dream celebration to life with creativity, elegance &amp; flawless execution.
+            {heroTagline}
           </p>
 
-          {/* Action CTA: Get Quote Button (Creamy rounded-md button with dark red text) */}
+          {/* Action CTA: Get Quote Button */}
           <div className="flex items-center">
             <button
               id="hero-get-quote-btn"

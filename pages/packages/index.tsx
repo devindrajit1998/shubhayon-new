@@ -7,17 +7,30 @@ import Footer from '@/components/Footer';
 import CtaBanner from '@/components/CtaBanner';
 import PackagesSection from '@/components/PackagesSection';
 import { useAppModals } from '@/context/AppModalContext';
+import { useAdminData } from '@/context/AdminDataContext';
 
 export default function PackagesPage() {
   const { openLightbox } = useAppModals();
+  const { banners } = useAdminData();
+
+  const snapLeft = banners?.snapshotLeft || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-left.jpg';
+  const snapMid = banners?.snapshotMid || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-mid.png';
+  const snapRight = banners?.snapshotRight || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-right.jpg';
+  const bannerBg = banners?.packagesHeroBgImage || banners?.innerHeroBgImage || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/galler-banner.png';
+
+  const polaroidPhotos = [
+    { title: 'Spotlight Couple', image: snapMid, category: 'FEATURED SNAPSHOT' },
+    { title: 'Groom & Bride', image: snapLeft, category: 'FEATURED SNAPSHOT' },
+    { title: 'Wedding Celebration', image: snapRight, category: 'FEATURED SNAPSHOT' },
+  ];
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fffdfa] selection:bg-[#c8102e] selection:text-white">
       <Head>
-        <title>Wedding Packages | Shuvayan Bengali Wedding & Event Management</title>
+        <title>Curated Wedding Packages | Shuvayan</title>
         <meta
           name="description"
-          content="Choose from Basic, Mid, Standard, and Premium royal Bengali wedding packages curated by Shuvayan."
+          content="Explore our transparent wedding packages tailored for intimate family weddings to grand royal celebrations in Kolkata and West Bengal."
         />
       </Head>
 
@@ -33,8 +46,8 @@ export default function PackagesPage() {
           {/* Background image with dark warm wedding backdrop */}
           <div className="absolute inset-0 z-0 overflow-hidden">
             <Image
-              src="/images/galler-banner.png"
-              alt="Packages Background"
+              src={bannerBg}
+              alt="Packages Wedding Background"
               fill
               priority
               className="object-cover object-center brightness-95"
@@ -51,7 +64,7 @@ export default function PackagesPage() {
             {/* Heading: Centered on mobile with balanced typography, left-aligned on sm+ */}
             <div className="pt-20 sm:pt-12 lg:pt-14 text-center sm:text-left w-full sm:w-auto sm:max-w-md md:max-w-xl">
               <h1 className="font-serif-display font-normal text-[26px] sm:text-4xl md:text-5xl lg:text-[58px] xl:text-[65px] text-white leading-[1.15] sm:leading-[1.12] tracking-tight drop-shadow-sm">
-                Best Packages
+                {banners?.packagesHeroTitle || 'Best Packages'}
               </h1>
             </div>
 
@@ -60,12 +73,12 @@ export default function PackagesPage() {
               <div className="relative flex items-center justify-center w-56 sm:w-64 md:w-80 lg:w-[380px] xl:w-[420px]">
                 {/* Left Snapshot: Tilted -14deg */}
                 <div
-                  onClick={() => openLightbox(1)}
+                  onClick={() => openLightbox(1, polaroidPhotos)}
                   className="absolute -left-2 sm:-left-4 md:-left-6 lg:-left-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform -rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
-                      src="/images/banner-left.jpg"
+                      src={snapLeft}
                       alt="Groom & Bride"
                       fill
                       className="object-cover object-top"
@@ -76,15 +89,15 @@ export default function PackagesPage() {
 
                 {/* Center Snapshot: Upright in Front */}
                 <div
-                  onClick={() => openLightbox(0)}
+                  onClick={() => openLightbox(0, polaroidPhotos)}
                   className="relative z-20 w-24 sm:w-30 md:w-38 lg:w-46 xl:w-50 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_18px_35px_rgba(0,0,0,0.7)] transform hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
-                      src="/images/banner-mid.png"
+                      src={snapMid}
                       alt="Bengali Bride in Palki"
                       fill
-                      className="object-cover object-center"
+                      className="object-cover object-top"
                       referrerPolicy="no-referrer"
                     />
                   </div>
@@ -92,15 +105,15 @@ export default function PackagesPage() {
 
                 {/* Right Snapshot: Tilted +14deg */}
                 <div
-                  onClick={() => openLightbox(2)}
+                  onClick={() => openLightbox(2, polaroidPhotos)}
                   className="absolute -right-2 sm:-right-4 md:-right-6 lg:-right-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
-                      src="/images/banner-right.jpg"
+                      src={snapRight}
                       alt="Wedding Couple"
                       fill
-                      className="object-cover object-center"
+                      className="object-cover object-top"
                       referrerPolicy="no-referrer"
                     />
                   </div>

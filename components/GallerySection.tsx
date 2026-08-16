@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { useAppModals } from '@/context/AppModalContext';
+import { useAdminData } from '@/context/AdminDataContext';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
@@ -63,7 +64,20 @@ export const galleryPhotos: GalleryPhoto[] = [
 
 export default function GallerySection() {
   const { openLightbox } = useAppModals();
+  const { artists } = useAdminData();
   const swiperRef = useRef<SwiperType | null>(null);
+
+  // Extract all photos from active artists in Firebase
+  const dynamicPhotos: GalleryPhoto[] = artists?.flatMap((artist) =>
+    artist.photos.map((photo, idx) => ({
+      id: `${artist.id}-${idx}`,
+      title: photo.title || artist.name,
+      category: artist.category.toUpperCase(),
+      image: photo.image,
+    }))
+  ) || [];
+
+  const displayPhotos = dynamicPhotos.length > 0 ? dynamicPhotos : galleryPhotos;
 
   return (
     <section id="gallery" className="py-16 sm:py-20 lg:py-24 bg-white relative overflow-hidden">
@@ -127,7 +141,7 @@ export default function GallerySection() {
             onBeforeInit={(swiper) => {
               swiperRef.current = swiper;
             }}
-            loop={true}
+            loop={displayPhotos.length > 3}
             autoplay={{
               delay: 3500,
               disableOnInteraction: false,
@@ -143,11 +157,11 @@ export default function GallerySection() {
             }}
             className="w-full"
           >
-            {galleryPhotos.map((photo, index) => (
+            {displayPhotos.map((photo, index) => (
               <SwiperSlide key={photo.id}>
                 <div
                   id={`gallery-item-${photo.id}`}
-                  onClick={() => openLightbox(index)}
+                  onClick={() => openLightbox(index, displayPhotos)}
                   className="group relative w-full aspect-[3/4.2] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer bg-[#1c1414]"
                 >
                   <Image

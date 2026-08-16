@@ -46,7 +46,7 @@ export default function AdminLayout({
   activeNav,
 }: AdminLayoutProps) {
   const router = useRouter();
-  const { isAuthenticated, adminUser, logout, leads } = useAdminData();
+  const { isAuthenticated, adminUser, logout, leads, settings } = useAdminData();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
 
@@ -146,7 +146,7 @@ export default function AdminLayout({
           <Link href="/admin" className="flex items-center space-x-2">
             <div className="relative w-36 h-10">
               <Image
-                src="/images/logo.png"
+                src={settings?.logoUrl || '/images/logo.png'}
                 alt="Shuvayan Logo"
                 fill
                 className="object-contain object-left"
@@ -294,7 +294,7 @@ export default function AdminLayout({
         </header>
 
         {/* Page Content View */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">{children}</main>
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 w-full max-w-[1600px] mx-auto">{children}</main>
       </div>
 
       {/* Mobile Drawer Navigation */}
@@ -309,7 +309,7 @@ export default function AdminLayout({
             <div className="p-5 border-b border-[#301c1a] flex items-center justify-between">
               <div className="relative w-36 h-9">
                 <Image
-                  src="/images/logo.png"
+                  src={settings?.logoUrl || '/images/logo.png'}
                   alt="Shuvayan Logo"
                   fill
                   className="object-contain object-left"

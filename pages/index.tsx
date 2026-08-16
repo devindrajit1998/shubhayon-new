@@ -6,11 +6,11 @@ import ServicesSection from '@/components/ServicesSection';
 import PackagesSection from '@/components/PackagesSection';
 import StatsSection from '@/components/StatsSection';
 import GallerySection from '@/components/GallerySection';
+import TestimonialsSection from '@/components/TestimonialsSection';
 import CtaBanner from '@/components/CtaBanner';
 import Footer from '@/components/Footer';
 
 export default function HomePage() {
-
   return (
     <div className="min-h-screen flex flex-col bg-[#fcfaf7] selection:bg-[#c8102e] selection:text-white">
       <Head>
@@ -40,11 +40,14 @@ export default function HomePage() {
         {/* 5. Our Work - Moments we create */}
         <GallerySection />
 
-        {/* 6. Dream Celebration CTA Banner */}
+        {/* 6. Client Testimonials */}
+        <TestimonialsSection />
+
+        {/* 7. Dream Celebration CTA Banner */}
         <CtaBanner />
       </main>
 
-      {/* 7. Footer */}
+      {/* 8. Footer */}
       <Footer />
     </div>
   );

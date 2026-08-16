@@ -8,13 +8,14 @@ import {
   Users,
   Sparkles,
   Award,
+  X,
 } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { useAdminData } from '@/context/AdminDataContext';
 import { PackageData } from '@/components/PackageDetailModal';
 
 export default function AdminPackagesPage() {
-  const { packages, addPackage, updatePackage, deletePackage } = useAdminData();
+  const { packages, addPackage, updatePackage, deletePackage, isLoading } = useAdminData();
   const [editingPackage, setEditingPackage] = useState<PackageData | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
@@ -69,27 +70,33 @@ export default function AdminPackagesPage() {
     addPackage({
       title: formTitle,
       badge: formBadge || undefined,
-      priceRange: formPrice || 'Custom Quote',
-      idealGuests: formGuests || 'Flexible',
-      description: formDesc || 'Full-fledged authentic Bengali celebration package.',
-      features: featureList.length > 0 ? featureList : ['Complete Ritual Management', 'Priest & Purohit', 'Theme Decor'],
+      priceRange: formPrice || 'Contact for price',
+      idealGuests: formGuests || 'Flexible Guest Count',
+      description: formDesc || 'Custom wedding management package tailored to your preferences.',
+      features: featureList.length > 0 ? featureList : ['Complete Wedding Coordination'],
+      tagline: `Perfect for: ${formGuests}`,
+      fullFeatures: featureList,
     });
 
+    setFormTitle('');
+    setFormBadge('');
+    setFormPrice('');
+    setFormFeatures('');
     setIsAddModalOpen(false);
   };
 
   return (
     <AdminLayout
-      title="Packages Manager"
-      subtitle="Configure wedding package tiers, inclusions, guest limits, and pricing badges."
+      title="Packages & Pricing"
+      subtitle="Manage wedding packages, pricing tiers, and service inclusions in Firebase."
       activeNav="packages"
     >
       <div className="space-y-6">
-        {/* Top Header Controls */}
+        {/* Top Control Bar */}
         <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#e8dfd3] shadow-xs flex items-center justify-between">
           <div>
             <h2 className="text-sm font-bold text-gray-900">Active Package Tiers</h2>
-            <p className="text-xs text-gray-500">{packages.length} Packages live on the website</p>
+            <p className="text-xs text-gray-500">{packages.length} Packages in Firebase</p>
           </div>
 
           <button
@@ -109,18 +116,47 @@ export default function AdminPackagesPage() {
           </button>
         </div>
 
-        {/* Packages Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {packages.map((pkg) => (
-            <div
-              key={pkg.id}
-              className="bg-white rounded-2xl border border-[#e8dfd3] shadow-xs p-6 flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden"
+        {/* Loading State */}
+        {isLoading && (
+          <div className="py-16 text-center">
+            <div className="w-8 h-8 border-3 border-[#c8102e] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+            <p className="text-sm text-gray-500 font-medium">Connecting to Firebase Cloud Database...</p>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!isLoading && packages.length === 0 && (
+          <div className="bg-white rounded-2xl border border-dashed border-[#d5c3aa] p-12 text-center max-w-lg mx-auto">
+            <div className="w-12 h-12 rounded-full bg-[#fcedeb] text-[#c8102e] flex items-center justify-center mx-auto mb-3">
+              <Package className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-gray-800 mb-1">No Packages in Firebase</h3>
+            <p className="text-xs text-gray-500 mb-5">
+              Your Firebase packages collection is empty. Click below to create your first package.
+            </p>
+            <button
+              onClick={() => setIsAddModalOpen(true)}
+              className="inline-flex items-center gap-2 bg-[#c8102e] text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-xs"
             >
-              {pkg.badge && (
-                <div className="absolute top-4 right-4 bg-[#fcedc7] text-[#855106] border border-[#f0d492] text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full">
-                  {pkg.badge}
-                </div>
-              )}
+              <Plus className="w-4 h-4" />
+              <span>Create Your First Package</span>
+            </button>
+          </div>
+        )}
+
+        {/* Packages Cards Grid */}
+        {!isLoading && packages.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {packages.map((pkg) => (
+              <div
+                key={pkg.id}
+                className="bg-white rounded-2xl border border-[#e8dfd3] shadow-xs p-6 flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden"
+              >
+                {pkg.badge && (
+                  <div className="absolute top-4 right-4 bg-[#fcedc7] text-[#855106] border border-[#f0d492] text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full">
+                    {pkg.badge}
+                  </div>
+                )}
 
               <div>
                 <div className="flex items-center gap-2 mb-2">
@@ -182,126 +218,136 @@ export default function AdminPackagesPage() {
             </div>
           ))}
         </div>
-      </div>
+      )}
+    </div>
 
       {/* Add / Edit Package Modal */}
       {(isAddModalOpen || editingPackage) && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-[#ebdcc8] space-y-4">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-              <h3 className="text-base font-bold font-serif-display text-gray-900">
-                {editingPackage ? `Edit: ${editingPackage.title}` : 'Create New Package Tier'}
-              </h3>
+        <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-[#ebdcc8] space-y-6 my-8 animate-fadeIn">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-1 inline-block">
+                  {editingPackage ? 'Edit Tier' : 'New Package Tier'}
+                </span>
+                <h3 className="text-xl font-bold font-serif-display text-gray-900">
+                  {editingPackage ? `Edit: ${editingPackage.title}` : 'Create Wedding Package'}
+                </h3>
+              </div>
               <button
                 onClick={() => {
                   setIsAddModalOpen(false);
                   setEditingPackage(null);
                 }}
-                className="text-gray-400 hover:text-gray-700 text-lg font-bold"
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-900 flex items-center justify-center transition-colors cursor-pointer"
               >
-                &times;
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             <form
               onSubmit={editingPackage ? handleSaveEdit : handleCreatePackage}
-              className="space-y-3.5 text-xs sm:text-sm"
+              className="space-y-4 text-xs sm:text-sm"
             >
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
                   Package Title *
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Royal Bengali Heritage"
+                  placeholder="e.g. Royal Bengali Heritage / Premium Package"
                   value={formTitle}
                   onChange={(e) => setFormTitle(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#c8102e] outline-none"
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">
-                    Price Range
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                    Price Range / Badge
                   </label>
                   <input
                     type="text"
                     placeholder="₹3,50,000 - ₹5,50,000"
                     value={formPrice}
                     onChange={(e) => setFormPrice(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#c8102e] outline-none"
+                    className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">
-                    Badge / Highlight
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                    Highlight Tag (Optional)
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. Most Popular"
+                    placeholder="e.g. Most Popular / Luxury Tier"
                     value={formBadge}
                     onChange={(e) => setFormBadge(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#c8102e] outline-none"
+                    className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">
-                  Ideal Guest Size
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Ideal Guest Count
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. 250 - 450 Guests"
+                  placeholder="e.g. 250 - 400 Guests"
                   value={formGuests}
                   onChange={(e) => setFormGuests(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#c8102e] outline-none"
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
                   Summary Description
                 </label>
                 <textarea
                   rows={2}
-                  placeholder="Summary of what this package offers..."
+                  placeholder="A short summary of what makes this wedding package tier special..."
                   value={formDesc}
                   onChange={(e) => setFormDesc(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#c8102e] outline-none"
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">
-                  Inclusion Features (one per line)
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider">
+                    Package Inclusions
+                  </label>
+                  <span className="text-[11px] text-gray-400 font-medium">1 feature per line</span>
+                </div>
                 <textarea
                   rows={4}
-                  placeholder="Vedic Priest & Ritual items&#10;Bridal Makeover with HD Airbrush&#10;Custom Tatta Trays Decor (15 pcs)&#10;4K Cinematic Wedding Film"
+                  placeholder="Full Vedic Priest & Sacred Ritual Materials&#10;Bridal HD Makeover & Traditional Styling&#10;15 Custom Designer Tatta Trays&#10;Cinematic 4K Wedding Film & Drone Coverage&#10;Floral Royal Mandap & Entrance Gate"
                   value={formFeatures}
                   onChange={(e) => setFormFeatures(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#c8102e] outline-none font-mono text-xs"
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all font-mono text-xs leading-relaxed"
                 />
               </div>
 
-              <div className="flex justify-end gap-2 pt-3 border-t border-gray-100">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
                 <button
                   type="button"
                   onClick={() => {
                     setIsAddModalOpen(false);
                     setEditingPackage(null);
                   }}
-                  className="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-xl"
+                  className="px-5 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-semibold text-white bg-[#c8102e] hover:bg-[#a80b24] rounded-xl shadow-xs"
+                  className="px-6 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-[#c8102e] to-[#9e0a22] hover:from-[#a80b24] hover:to-[#80071a] rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer"
                 >
                   {editingPackage ? 'Save Changes' : 'Create Package'}
                 </button>

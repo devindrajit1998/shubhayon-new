@@ -7,10 +7,12 @@ import Footer from '@/components/Footer';
 import StatsSection from '@/components/StatsSection';
 import CtaBanner from '@/components/CtaBanner';
 import { useAppModals } from '@/context/AppModalContext';
+import { useAdminData } from '@/context/AdminDataContext';
 import { HeartHandshake, Sparkles, Award, ShieldCheck, CheckCircle2, Heart } from 'lucide-react';
 
 export default function AboutPage() {
   const { openQuoteModal, openLightbox } = useAppModals();
+  const { banners } = useAdminData();
 
   const values = [
     {
@@ -39,13 +41,24 @@ export default function AboutPage() {
     },
   ];
 
+  const snapLeft = banners?.snapshotLeft || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-left.jpg';
+  const snapMid = banners?.snapshotMid || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-mid.png';
+  const snapRight = banners?.snapshotRight || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-right.jpg';
+  const bannerBg = banners?.aboutHeroBgImage || banners?.innerHeroBgImage || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/galler-banner.png';
+
+  const polaroidPhotos = [
+    { title: 'Spotlight Couple', image: snapMid, category: 'FEATURED SNAPSHOT' },
+    { title: 'Groom & Bride', image: snapLeft, category: 'FEATURED SNAPSHOT' },
+    { title: 'Wedding Celebration', image: snapRight, category: 'FEATURED SNAPSHOT' },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col bg-[#fffdfa] selection:bg-[#c8102e] selection:text-white">
       <Head>
-        <title>About Us | Shuvayan Bengali Wedding & Event Management</title>
+        <title>About Us | Shuvayan Wedding & Event Management</title>
         <meta
           name="description"
-          content="Learn about Shuvayan's journey in preserving authentic Bengali wedding traditions with contemporary royal grandeur and impeccable execution."
+          content="Learn about Shuvayan - Kolkata's premier Bengali wedding planning company specializing in authentic rituals, royal decor, Vedic priests, and gourmet catering."
         />
       </Head>
 
@@ -53,7 +66,7 @@ export default function AboutPage() {
       <Header activePage="about" />
 
       <main className="flex-1">
-        {/* 1. Hero Banner: Compact 340-350px height with absolute positioned Polaroid collage */}
+        {/* 1. Hero Banner: Compact 340-350px height matching other inner pages */}
         <section
           id="about-hero"
           className="relative z-20 h-[320px] sm:h-[340px] lg:h-[350px] overflow-visible bg-[#1a0f0e]"
@@ -61,8 +74,8 @@ export default function AboutPage() {
           {/* Background image with dark warm wedding backdrop */}
           <div className="absolute inset-0 z-0 overflow-hidden">
             <Image
-              src="/images/galler-banner.png"
-              alt="About Us Background"
+              src={bannerBg}
+              alt="About Us Wedding Background"
               fill
               priority
               className="object-cover object-center brightness-95"
@@ -79,7 +92,7 @@ export default function AboutPage() {
             {/* Heading: Centered on mobile with balanced typography, left-aligned on sm+ */}
             <div className="pt-20 sm:pt-12 lg:pt-14 text-center sm:text-left w-full sm:w-auto sm:max-w-md md:max-w-xl">
               <h1 className="font-serif-display font-normal text-[26px] sm:text-4xl md:text-5xl lg:text-[58px] xl:text-[65px] text-white leading-[1.15] sm:leading-[1.12] tracking-tight drop-shadow-sm">
-                About Us
+                {banners?.aboutHeroTitle || 'About Us'}
               </h1>
             </div>
 
@@ -88,12 +101,12 @@ export default function AboutPage() {
               <div className="relative flex items-center justify-center w-56 sm:w-64 md:w-80 lg:w-[380px] xl:w-[420px]">
                 {/* Left Snapshot: Tilted -14deg */}
                 <div
-                  onClick={() => openLightbox(1)}
+                  onClick={() => openLightbox(1, polaroidPhotos)}
                   className="absolute -left-2 sm:-left-4 md:-left-6 lg:-left-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform -rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
-                      src="/images/banner-left.jpg"
+                      src={snapLeft}
                       alt="Groom & Bride"
                       fill
                       className="object-cover object-top"
@@ -104,15 +117,15 @@ export default function AboutPage() {
 
                 {/* Center Snapshot: Upright in Front */}
                 <div
-                  onClick={() => openLightbox(0)}
+                  onClick={() => openLightbox(0, polaroidPhotos)}
                   className="relative z-20 w-24 sm:w-30 md:w-38 lg:w-46 xl:w-50 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_18px_35px_rgba(0,0,0,0.7)] transform hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
-                      src="/images/banner-mid.png"
-                      alt="Bengali Bride in Palki"
+                      src={snapMid}
+                      alt="Bengali Bride Topor"
                       fill
-                      className="object-cover object-center"
+                      className="object-cover object-top"
                       referrerPolicy="no-referrer"
                     />
                   </div>
@@ -120,15 +133,15 @@ export default function AboutPage() {
 
                 {/* Right Snapshot: Tilted +14deg */}
                 <div
-                  onClick={() => openLightbox(2)}
+                  onClick={() => openLightbox(2, polaroidPhotos)}
                   className="absolute -right-2 sm:-right-4 md:-right-6 lg:-right-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
-                      src="/images/banner-right.jpg"
-                      alt="Wedding Couple"
+                      src={snapRight}
+                      alt="Bride Smiling"
                       fill
-                      className="object-cover object-center"
+                      className="object-cover object-top"
                       referrerPolicy="no-referrer"
                     />
                   </div>

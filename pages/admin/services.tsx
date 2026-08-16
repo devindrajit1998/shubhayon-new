@@ -18,16 +18,17 @@ import { ServiceItem } from '@/components/ServicesSection';
 import ImageKitUploader from '@/components/admin/ImageKitUploader';
 
 export default function AdminServicesPage() {
-  const { services, addService, updateService, deleteService } = useAdminData();
+  const { services, addService, updateService, deleteService, isLoading } = useAdminData();
   const [searchQuery, setSearchQuery] = useState('');
   const [editingService, setEditingService] = useState<ServiceItem | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [uploadKey, setUploadKey] = useState(0);
 
   // Form State for Add / Edit
   const [formTitle, setFormTitle] = useState('');
   const [formCategory, setFormCategory] = useState('Decoration');
   const [formDesc, setFormDesc] = useState('');
-  const [formImage, setFormImage] = useState('/images/gallery-1.jpg');
+  const [formImage, setFormImage] = useState('');
 
   const filteredServices = services.filter(
     (s) =>
@@ -41,6 +42,7 @@ export default function AdminServicesPage() {
     setFormCategory(service.category || 'Decoration');
     setFormDesc(service.description || '');
     setFormImage(service.image);
+    setUploadKey((k) => k + 1);
   };
 
   const handleSaveEdit = (e: React.FormEvent) => {
@@ -51,10 +53,13 @@ export default function AdminServicesPage() {
       title: formTitle,
       category: formCategory,
       description: formDesc,
-      image: formImage,
+      image: formImage || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/Service-thumb-01.jpg',
     });
 
     setEditingService(null);
+    setFormTitle('');
+    setFormDesc('');
+    setFormImage('');
   };
 
   const handleCreateService = (e: React.FormEvent) => {
@@ -65,18 +70,20 @@ export default function AdminServicesPage() {
       title: formTitle,
       category: formCategory,
       description: formDesc || 'Expert service tailored to traditional Bengali wedding celebrations.',
-      image: formImage || '/images/gallery-1.jpg',
+      image: formImage || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/Service-thumb-01.jpg',
     });
 
     setFormTitle('');
     setFormDesc('');
+    setFormImage('');
+    setUploadKey((k) => k + 1);
     setIsAddModalOpen(false);
   };
 
   return (
     <AdminLayout
       title="Services Manager"
-      subtitle="Manage, edit, and add the wedding services displayed across the Shuvayan website."
+      subtitle="Manage, edit, and add the wedding services stored in your Firebase cloud database."
       activeNav="services"
     >
       <div className="space-y-6">
@@ -95,17 +102,18 @@ export default function AdminServicesPage() {
 
           <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
             <span className="text-xs text-gray-500 hidden sm:inline">
-              {services.length} Total Services Active
+              {services.length} Total Services in Firebase
             </span>
             <button
               onClick={() => {
                 setFormTitle('');
                 setFormCategory('Decoration');
                 setFormDesc('');
-                setFormImage('/images/gallery-1.jpg');
+                setFormImage('');
+                setUploadKey((k) => k + 1);
                 setIsAddModalOpen(true);
               }}
-              className="inline-flex items-center gap-1.5 bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-xs transition-colors"
+              className="inline-flex items-center gap-1.5 bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-xs transition-colors cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Add New Service</span>
@@ -113,9 +121,40 @@ export default function AdminServicesPage() {
           </div>
         </div>
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="py-16 text-center">
+            <div className="w-8 h-8 border-3 border-[#c8102e] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+            <p className="text-sm text-gray-500 font-medium">Connecting to Firebase Cloud Database...</p>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!isLoading && filteredServices.length === 0 && (
+          <div className="bg-white rounded-2xl border border-dashed border-[#d5c3aa] p-12 text-center max-w-lg mx-auto">
+            <div className="w-12 h-12 rounded-full bg-[#fcedeb] text-[#c8102e] flex items-center justify-center mx-auto mb-3">
+              <Briefcase className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-gray-800 mb-1">No Services in Firebase</h3>
+            <p className="text-xs text-gray-500 mb-5">
+              {searchQuery
+                ? `No services matched "${searchQuery}".`
+                : 'Your Firebase services collection is empty. Click below to add your first service.'}
+            </p>
+            <button
+              onClick={() => setIsAddModalOpen(true)}
+              className="inline-flex items-center gap-2 bg-[#c8102e] text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-xs"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add Your First Service</span>
+            </button>
+          </div>
+        )}
+
         {/* Services Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filteredServices.map((service) => (
+        {!isLoading && filteredServices.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {filteredServices.map((service) => (
             <div
               key={service.id}
               className="bg-white rounded-2xl border border-[#e8dfd3] shadow-xs overflow-hidden hover:shadow-md transition-shadow flex flex-col justify-between"
@@ -177,7 +216,8 @@ export default function AdminServicesPage() {
             </div>
           ))}
         </div>
-      </div>
+      )}
+    </div>
 
       {/* Add / Edit Service Modal */}
       {(isAddModalOpen || editingService) && (
@@ -259,10 +299,12 @@ export default function AdminServicesPage() {
               {/* Enhanced ImageKit Uploader with Real Thumbnail Preview */}
               <div className="pt-1">
                 <ImageKitUploader
+                  key={uploadKey}
                   label="Service Photo"
                   folder="/shuvayan_services"
                   currentImageUrl={formImage}
                   onUploadSuccess={(url) => setFormImage(url)}
+                  onClear={() => setFormImage('')}
                 />
               </div>
 

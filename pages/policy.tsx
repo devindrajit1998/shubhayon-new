@@ -6,26 +6,39 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CtaBanner from '@/components/CtaBanner';
 import { useAppModals } from '@/context/AppModalContext';
+import { useAdminData } from '@/context/AdminDataContext';
 import { ShieldCheck, Clock, FileText, CheckCircle2, Phone, Mail, Lock } from 'lucide-react';
 
 export default function PolicyPage() {
   const { openLightbox } = useAppModals();
+  const { banners, settings } = useAdminData();
+
+  const snapLeft = banners?.snapshotLeft || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-left.jpg';
+  const snapMid = banners?.snapshotMid || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-mid.png';
+  const snapRight = banners?.snapshotRight || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-right.jpg';
+  const bannerBg = banners?.policyHeroBgImage || banners?.innerHeroBgImage || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/galler-banner.png';
+
+  const polaroidPhotos = [
+    { title: 'Spotlight Couple', image: snapMid, category: 'FEATURED SNAPSHOT' },
+    { title: 'Groom & Bride', image: snapLeft, category: 'FEATURED SNAPSHOT' },
+    { title: 'Wedding Celebration', image: snapRight, category: 'FEATURED SNAPSHOT' },
+  ];
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fffdfa] selection:bg-[#c8102e] selection:text-white">
       <Head>
-        <title>Policy &amp; Terms | Shuvayan Bengali Wedding &amp; Event Management</title>
+        <title>Policy &amp; Service Terms | Shuvayan</title>
         <meta
           name="description"
-          content="Review Shuvayan's clear booking terms, date locking, cancellation flexibility, hygiene standards, and privacy policies."
+          content="Transparent service terms, booking policies, food hygiene guarantees, and privacy protection protocols for Shuvayan event management."
         />
       </Head>
 
-      {/* Main Header */}
+      {/* 1. Header */}
       <Header activePage="policy" />
 
       <main className="flex-1">
-        {/* 1. Hero Banner: Compact 340-350px height with absolute positioned Polaroid collage */}
+        {/* 2. Hero Banner: Compact 340-350px height with absolute positioned Polaroid collage */}
         <section
           id="policy-hero"
           className="relative z-20 h-[320px] sm:h-[340px] lg:h-[350px] overflow-visible bg-[#1a0f0e]"
@@ -33,8 +46,8 @@ export default function PolicyPage() {
           {/* Background image with dark warm wedding backdrop */}
           <div className="absolute inset-0 z-0 overflow-hidden">
             <Image
-              src="/images/galler-banner.png"
-              alt="Policy Wedding Background"
+              src={bannerBg}
+              alt="Policy Background"
               fill
               priority
               className="object-cover object-center brightness-95"
@@ -51,7 +64,7 @@ export default function PolicyPage() {
             {/* Heading: Centered on mobile with balanced typography, left-aligned on sm+ */}
             <div className="pt-20 sm:pt-12 lg:pt-14 text-center sm:text-left w-full sm:w-auto sm:max-w-md md:max-w-xl">
               <h1 className="font-serif-display font-normal text-[26px] sm:text-4xl md:text-5xl lg:text-[58px] xl:text-[65px] text-white leading-[1.15] sm:leading-[1.12] tracking-tight drop-shadow-sm">
-                Policy &amp; Terms
+                {banners?.policyHeroTitle || 'Policy & Terms'}
               </h1>
             </div>
 
@@ -60,12 +73,12 @@ export default function PolicyPage() {
               <div className="relative flex items-center justify-center w-56 sm:w-64 md:w-80 lg:w-[380px] xl:w-[420px]">
                 {/* Left Snapshot: Tilted -14deg */}
                 <div
-                  onClick={() => openLightbox(1)}
+                  onClick={() => openLightbox(1, polaroidPhotos)}
                   className="absolute -left-2 sm:-left-4 md:-left-6 lg:-left-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform -rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
-                      src="/images/banner-left.jpg"
+                      src={snapLeft}
                       alt="Groom & Bride"
                       fill
                       className="object-cover object-top"
@@ -76,15 +89,15 @@ export default function PolicyPage() {
 
                 {/* Center Snapshot: Upright in Front */}
                 <div
-                  onClick={() => openLightbox(0)}
+                  onClick={() => openLightbox(0, polaroidPhotos)}
                   className="relative z-20 w-24 sm:w-30 md:w-38 lg:w-46 xl:w-50 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_18px_35px_rgba(0,0,0,0.7)] transform hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
-                      src="/images/banner-mid.png"
-                      alt="Bengali Bride in Palki"
+                      src={snapMid}
+                      alt="Bengali Bride Topor"
                       fill
-                      className="object-cover object-center"
+                      className="object-cover object-top"
                       referrerPolicy="no-referrer"
                     />
                   </div>
@@ -92,15 +105,15 @@ export default function PolicyPage() {
 
                 {/* Right Snapshot: Tilted +14deg */}
                 <div
-                  onClick={() => openLightbox(2)}
+                  onClick={() => openLightbox(2, polaroidPhotos)}
                   className="absolute -right-2 sm:-right-4 md:-right-6 lg:-right-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
-                      src="/images/banner-right.jpg"
-                      alt="Wedding Couple"
+                      src={snapRight}
+                      alt="Bride Smiling"
                       fill
-                      className="object-cover object-center"
+                      className="object-cover object-top"
                       referrerPolicy="no-referrer"
                     />
                   </div>
@@ -214,13 +227,13 @@ export default function PolicyPage() {
                   Our wedding coordinators are happy to assist you 7 days a week from 10:00 AM to 8:00 PM IST.
                 </p>
                 <div className="text-xs font-semibold text-[#b81414] flex flex-wrap gap-5">
-                  <a href="tel:7439442349" className="hover:underline flex items-center gap-1.5">
+                  <a href={`tel:${settings?.primaryPhone?.replace(/\s+/g, '') || '7439442349'}`} className="hover:underline flex items-center gap-1.5">
                     <Phone className="w-3.5 h-3.5" />
-                    <span>Direct: +91 7439442349</span>
+                    <span>Direct: {settings?.primaryPhone || '+91 7439442349'}</span>
                   </a>
-                  <a href="mailto:enquiry.shuvayan@gmail.com" className="hover:underline flex items-center gap-1.5">
+                  <a href={`mailto:${settings?.contactEmail || 'enquiry.shuvayan@gmail.com'}`} className="hover:underline flex items-center gap-1.5">
                     <Mail className="w-3.5 h-3.5" />
-                    <span>enquiry.shuvayan@gmail.com</span>
+                    <span>{settings?.contactEmail || 'enquiry.shuvayan@gmail.com'}</span>
                   </a>
                 </div>
               </div>

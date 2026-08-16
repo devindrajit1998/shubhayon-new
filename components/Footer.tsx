@@ -3,9 +3,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Phone, Mail } from 'lucide-react';
 import { useAppModals } from '@/context/AppModalContext';
+import { useAdminData } from '@/context/AdminDataContext';
 
 export default function Footer() {
   const { openQuoteModal } = useAppModals();
+  const { settings, services } = useAdminData();
+
+  const phone = settings?.primaryPhone || '7439442349';
+  const email = settings?.contactEmail || 'enquiry.shuvayan@gmail.com';
+  const address = settings?.address || 'Kolkata, West Bengal, India';
+  const fbLink = settings?.facebookUrl || 'https://facebook.com';
+  const instaLink = settings?.instagramUrl || 'https://instagram.com';
 
   const quickLinks = [
     { label: 'Home', href: '/' },
@@ -15,7 +23,7 @@ export default function Footer() {
     { label: 'Policy', href: '/policy' },
   ];
 
-  const serviceLinks = [
+  const defaultServiceLinks = [
     { label: 'Digital Invitation Card', service: 'Digital Invitation Card' },
     { label: 'Priests', service: 'Priests' },
     { label: 'Trey Decoration', service: 'Trey Decoration' },
@@ -27,6 +35,10 @@ export default function Footer() {
     { label: 'Car & Bus', service: 'Car Service' },
   ];
 
+  const serviceLinks = services && services.length > 0
+    ? services.slice(0, 9).map((s) => ({ label: s.title, service: s.title }))
+    : defaultServiceLinks;
+
   return (
     <footer id="main-footer" className="bg-[#0e0a0a] text-white pt-14 pb-10 border-t border-[#221818]">
       <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -35,7 +47,7 @@ export default function Footer() {
           <div className="lg:col-span-4 space-y-4">
             <Link href="/" className="inline-block relative w-48 sm:w-52 h-12 sm:h-14 group">
               <Image
-                src="/images/logo.png"
+                src={settings?.logoUrl || '/images/logo.png'}
                 alt="Shuvayan - Wedding & Event Management"
                 fill
                 className="object-contain object-left transition-transform duration-300 group-hover:scale-105"
@@ -123,23 +135,23 @@ export default function Footer() {
             <div className="space-y-3 text-xs sm:text-sm text-gray-300">
               <div>
                 <a
-                  href="tel:7439442349"
+                  href={`tel:${phone.replace(/\s+/g, '')}`}
                   id="footer-phone-link"
                   className="hover:text-[#f59e0b] transition-colors flex items-center gap-2 font-medium"
                 >
                   <Phone className="w-3.5 h-3.5 text-[#c8102e]" />
-                  <span>7439442349</span>
+                  <span>{phone}</span>
                 </a>
               </div>
 
               <div>
                 <a
-                  href="mailto:enquiry.shuvayan@gmail.com"
+                  href={`mailto:${email}`}
                   id="footer-email-link"
                   className="hover:text-[#f59e0b] transition-colors flex items-center gap-2 break-all"
                 >
                   <Mail className="w-3.5 h-3.5 text-[#c8102e] flex-shrink-0" />
-                  <span>enquiry.shuvayan@gmail.com</span>
+                  <span>{email}</span>
                 </a>
               </div>
             </div>
@@ -148,7 +160,7 @@ export default function Footer() {
             <div className="pt-2">
               <div className="flex items-center space-x-3.5">
                 <a
-                  href="https://facebook.com"
+                  href={fbLink}
                   target="_blank"
                   rel="noreferrer"
                   id="footer-fb-icon"
@@ -171,7 +183,7 @@ export default function Footer() {
                 </a>
 
                 <a
-                  href="https://instagram.com"
+                  href={instaLink}
                   target="_blank"
                   rel="noreferrer"
                   id="footer-insta-icon"

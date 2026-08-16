@@ -14,12 +14,13 @@ import {
   Eye,
   Clock,
   Sparkles,
+  X,
 } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { useAdminData, LeadItem } from '@/context/AdminDataContext';
 
 export default function AdminLeadsPage() {
-  const { leads, addLead, updateLeadStatus, deleteLead } = useAdminData();
+  const { leads, addLead, updateLeadStatus, deleteLead, isLoading } = useAdminData();
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('All');
   const [selectedLead, setSelectedLead] = useState<LeadItem | null>(null);
@@ -176,11 +177,18 @@ export default function AdminLeadsPage() {
                   <th className="py-3.5 px-4 sm:px-6 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#ebdcc8]/50">
-                {filteredLeads.length === 0 ? (
+              <tbody className="divide-y divide-gray-100 text-xs sm:text-sm">
+                {isLoading ? (
+                  <tr>
+                    <td colSpan={6} className="py-16 text-center text-gray-500">
+                      <div className="w-6 h-6 border-2 border-[#c8102e] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                      Connecting to Firebase...
+                    </td>
+                  </tr>
+                ) : filteredLeads.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="py-12 text-center text-gray-500">
-                      No leads match your search criteria.
+                      No leads found in Firebase. Inquiries submitted on the website will appear here in real-time.
                     </td>
                   </tr>
                 ) : (
@@ -270,23 +278,29 @@ export default function AdminLeadsPage() {
 
       {/* Manual Add Lead Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-[#ebdcc8] space-y-4">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-              <h3 className="text-base font-bold font-serif-display text-gray-900">
-                Add New Wedding Inquiry
-              </h3>
+        <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-[#ebdcc8] space-y-6 my-8 animate-fadeIn">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-1 inline-block">
+                  Manual Entry
+                </span>
+                <h3 className="text-xl font-bold font-serif-display text-gray-900">
+                  Add Wedding Inquiry
+                </h3>
+              </div>
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="text-gray-400 hover:text-gray-700 text-lg font-bold"
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-900 flex items-center justify-center transition-colors cursor-pointer"
               >
-                &times;
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            <form onSubmit={handleCreateLead} className="space-y-3.5 text-xs sm:text-sm">
+            <form onSubmit={handleCreateLead} className="space-y-4 text-xs sm:text-sm">
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
                   Client Name *
                 </label>
                 <input
@@ -295,88 +309,90 @@ export default function AdminLeadsPage() {
                   placeholder="e.g. Rupam Bhattacharya"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#c8102e] outline-none"
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
                     Phone Number *
                   </label>
                   <input
                     type="tel"
                     required
-                    placeholder="+91 98300XXXXX"
+                    placeholder="+91 98300 XXXXX"
                     value={newPhone}
                     onChange={(e) => setNewPhone(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#c8102e] outline-none"
+                    className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
                     Event Date
                   </label>
                   <input
                     type="date"
                     value={newEventDate}
                     onChange={(e) => setNewEventDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#c8102e] outline-none"
+                    className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="client@gmail.com"
+                    value={newEmail}
+                    onChange={(e) => setNewEmail(e.target.value)}
+                    className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                    Service / Package
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Royal Bengali Heritage"
+                    value={newService}
+                    onChange={(e) => setNewService(e.target.value)}
+                    className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  placeholder="client@gmail.com"
-                  value={newEmail}
-                  onChange={(e) => setNewEmail(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#c8102e] outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">
-                  Service / Package
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Bridal Makeover, Full Vedic Wedding"
-                  value={newService}
-                  onChange={(e) => setNewService(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#c8102e] outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">
-                  Requirement Notes
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Requirement Notes &amp; Message
                 </label>
                 <textarea
                   rows={3}
-                  placeholder="Client notes, special venue details, etc."
+                  placeholder="Special client preferences, guest count, venue details, etc."
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#c8102e] outline-none"
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
                 />
               </div>
 
-              <div className="flex justify-end gap-2 pt-3 border-t border-gray-100">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-xl"
+                  className="px-5 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-semibold text-white bg-[#c8102e] hover:bg-[#a80b24] rounded-xl shadow-xs"
+                  className="px-6 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-[#c8102e] to-[#9e0a22] hover:from-[#a80b24] hover:to-[#80071a] rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer"
                 >
                   Save Lead
                 </button>
@@ -388,58 +404,74 @@ export default function AdminLeadsPage() {
 
       {/* View Lead Details Modal */}
       {selectedLead && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-[#ebdcc8] space-y-4">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+        <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-[#ebdcc8] space-y-6 my-8 animate-fadeIn">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
               <div>
-                <h3 className="text-base font-bold font-serif-display text-gray-900">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-1 inline-block">
+                  Inquiry Details
+                </span>
+                <h3 className="text-xl font-bold font-serif-display text-gray-900">
                   {selectedLead.name}
                 </h3>
-                <p className="text-xs text-gray-500">Inquiry ID: {selectedLead.id}</p>
               </div>
               <button
                 onClick={() => setSelectedLead(null)}
-                className="text-gray-400 hover:text-gray-700 text-lg font-bold"
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-900 flex items-center justify-center transition-colors cursor-pointer"
               >
-                &times;
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 text-xs">
-              <div>
-                <span className="text-gray-500 font-medium block">Phone</span>
-                <span className="text-gray-900 font-semibold">{selectedLead.phone}</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div className="bg-[#faf7f2] p-3.5 rounded-xl border border-[#ebdcc8]">
+                <span className="text-gray-500 font-bold uppercase tracking-wider block text-[10px] mb-1">
+                  Phone Number
+                </span>
+                <span className="text-gray-900 font-bold text-sm">{selectedLead.phone}</span>
               </div>
-              <div>
-                <span className="text-gray-500 font-medium block">Email</span>
-                <span className="text-gray-900 font-semibold">{selectedLead.email}</span>
-              </div>
-              <div>
-                <span className="text-gray-500 font-medium block">Event Date</span>
-                <span className="text-gray-900 font-semibold">{selectedLead.eventDate}</span>
-              </div>
-              <div>
-                <span className="text-gray-500 font-medium block">Estimated Guests</span>
-                <span className="text-gray-900 font-semibold">
-                  {selectedLead.guestCount || 'N/A'}
+              <div className="bg-[#faf7f2] p-3.5 rounded-xl border border-[#ebdcc8]">
+                <span className="text-gray-500 font-bold uppercase tracking-wider block text-[10px] mb-1">
+                  Email Address
+                </span>
+                <span className="text-gray-900 font-semibold truncate block">
+                  {selectedLead.email || 'N/A'}
                 </span>
               </div>
-              <div className="col-span-2">
-                <span className="text-gray-500 font-medium block">Service(s) Requested</span>
-                <span className="text-gray-900 font-semibold">{selectedLead.service}</span>
+              <div className="bg-[#faf7f2] p-3.5 rounded-xl border border-[#ebdcc8]">
+                <span className="text-gray-500 font-bold uppercase tracking-wider block text-[10px] mb-1">
+                  Event Date
+                </span>
+                <span className="text-gray-900 font-semibold">{selectedLead.eventDate || 'TBD'}</span>
+              </div>
+              <div className="bg-[#faf7f2] p-3.5 rounded-xl border border-[#ebdcc8]">
+                <span className="text-gray-500 font-bold uppercase tracking-wider block text-[10px] mb-1">
+                  Estimated Guests
+                </span>
+                <span className="text-gray-900 font-semibold">
+                  {selectedLead.guestCount || 'Not specified'}
+                </span>
+              </div>
+              <div className="col-span-1 sm:col-span-2 bg-[#faf7f2] p-3.5 rounded-xl border border-[#ebdcc8]">
+                <span className="text-gray-500 font-bold uppercase tracking-wider block text-[10px] mb-1">
+                  Service / Tier Requested
+                </span>
+                <span className="text-gray-900 font-bold">{selectedLead.service}</span>
               </div>
               {selectedLead.message && (
-                <div className="col-span-2 bg-[#faf7f2] p-3 rounded-xl border border-[#ebdcc8]">
-                  <span className="text-gray-500 font-medium block mb-1">Client Notes</span>
-                  <p className="text-gray-800 italic">{selectedLead.message}</p>
+                <div className="col-span-1 sm:col-span-2 bg-[#fcfaf7] p-4 rounded-xl border border-[#ebdcc8]">
+                  <span className="text-gray-500 font-bold uppercase tracking-wider block text-[10px] mb-1">
+                    Client Message &amp; Notes
+                  </span>
+                  <p className="text-gray-800 italic leading-relaxed">{selectedLead.message}</p>
                 </div>
               )}
             </div>
 
-            <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+            <div className="flex items-center justify-between pt-4 border-t border-gray-100">
               <a
                 href={`tel:${selectedLead.phone.replace(/[^0-9+]/g, '')}`}
-                className="inline-flex items-center gap-1.5 bg-[#c8102e] text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-sm"
+                className="inline-flex items-center gap-1.5 bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-xs transition-colors"
               >
                 <Phone className="w-3.5 h-3.5" />
                 <span>Call Client</span>
@@ -447,7 +479,7 @@ export default function AdminLeadsPage() {
 
               <button
                 onClick={() => setSelectedLead(null)}
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold px-4 py-2 rounded-xl"
+                className="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold px-6 py-2.5 rounded-xl transition-colors cursor-pointer"
               >
                 Close
               </button>

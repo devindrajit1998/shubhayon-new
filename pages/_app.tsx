@@ -15,6 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const [selectedService, setSelectedService] = useState<string | undefined>();
   const [selectedPackage, setSelectedPackage] = useState<PackageData | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [lightboxPhotos, setLightboxPhotos] = useState<any[] | undefined>();
 
   const openQuoteModal = (initialService?: string) => {
     setSelectedService(initialService);
@@ -25,7 +26,8 @@ export default function App({ Component, pageProps }: AppProps) {
     setSelectedPackage(pkg);
   };
 
-  const openLightbox = (index: number) => {
+  const openLightbox = (index: number, photos?: any[]) => {
+    setLightboxPhotos(photos);
     setLightboxIndex(index);
   };
 
@@ -62,7 +64,11 @@ export default function App({ Component, pageProps }: AppProps) {
 
         <GalleryLightbox
           activeIndex={lightboxIndex}
-          onClose={() => setLightboxIndex(null)}
+          photos={lightboxPhotos}
+          onClose={() => {
+            setLightboxIndex(null);
+            setLightboxPhotos(undefined);
+          }}
         />
       </AppModalContext.Provider>
     </AdminDataProvider>

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronRight, Menu, X, Phone, Calendar, Sparkles } from 'lucide-react';
 import { useAppModals } from '@/context/AppModalContext';
+import { useAdminData } from '@/context/AdminDataContext';
 
 interface HeaderProps {
   activePage?: string;
@@ -10,6 +11,8 @@ interface HeaderProps {
 
 export default function Header({ activePage = 'home' }: HeaderProps) {
   const { openQuoteModal } = useAppModals();
+  const { settings } = useAdminData();
+  const phone = settings?.primaryPhone || '7439442349';
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -52,7 +55,7 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
     { label: 'Services', href: '/services', id: 'services' },
     { label: 'Packages', href: '/packages', id: 'packages' },
     { label: 'Gallery', href: '/gallery', id: 'gallery' },
-    { label: 'Testimonial', href: '/#testimonials', id: 'testimonials' },
+    { label: 'Policy', href: '/policy', id: 'policy' },
   ];
 
   return (
@@ -70,7 +73,7 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
             <Link href="/" id="brand-logo-link" className="flex items-center space-x-2 group">
               <div className="relative w-36 sm:w-48 md:w-56 h-10 sm:h-12 lg:h-14 transition-transform duration-300 group-hover:scale-105">
                 <Image
-                  src="/images/logo.png"
+                  src={settings?.logoUrl || '/images/logo.png'}
                   alt="Shuvayan - Wedding & Event Management"
                   fill
                   priority
@@ -162,7 +165,7 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
             <div className="flex items-center justify-between pb-5 border-b border-white/10">
               <div className="relative w-36 h-10">
                 <Image
-                  src="/images/logo.png"
+                  src={settings?.logoUrl || '/images/logo.png'}
                   alt="Shuvayan"
                   fill
                   className="object-contain object-left"
@@ -218,11 +221,11 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
             </button>
 
             <a
-              href="tel:7439442349"
+              href={`tel:${phone.replace(/\s+/g, '')}`}
               className="w-full flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 text-white/90 font-medium py-2.5 rounded-md text-xs transition-colors"
             >
               <Phone className="w-3.5 h-3.5 text-[#e5a83b]" />
-              <span>Call Direct: 7439442349</span>
+              <span>Call Direct: {phone}</span>
             </a>
           </div>
         </div>
