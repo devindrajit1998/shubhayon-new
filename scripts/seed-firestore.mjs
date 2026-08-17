@@ -202,6 +202,120 @@ const sampleData = {
     },
   ],
 
+  // 4.5 Catering & Plate Menus
+  menus: [
+    {
+      id: 'menu-royal-bengali',
+      title: 'Royal Zamindari Bhoj',
+      tagline: 'Signature royal feast featuring authentic Kolkata bhetki paturi, chingri malai curry & mutton biryani.',
+      category: 'Royal Wedding Feast',
+      pricePerPlate: '₹1,250',
+      badge: 'Most Popular',
+      minimumGuests: '150',
+      image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80',
+      starters: [
+        'Kolkata Fish Fry with Mustard Kasundi',
+        'Gondhoraj Chicken Reshmi Kebab',
+        'Crispy Babycorn Chilli Tartlets',
+        'Paneer Malai Tikka with Mint Chutney',
+      ],
+      mainCourse: [
+        'Gold Bhetki Machher Paturi in Banana Leaf',
+        'Chingri Machher Malaikari (Gold Prawns)',
+        'Traditional Kolkata Mutton Biryani with Egg & Aloo',
+        'Kochi Panthar Jhol (Special Mutton Curry)',
+        'Chanar Dalna (Homemade Cottage Cheese Curry)',
+      ],
+      riceAndBreads: [
+        'Gobindobhog Rice Basmati Pulao',
+        'Radhabhallavi with Hing Chholar Dal',
+        'Butter Naan & Rumali Roti',
+      ],
+      desserts: [
+        'Hot Baked Nolen Gur Rosogolla',
+        'Classic Kolkata Misti Doi in Clay Pots',
+        'Kesar Malai Sandesh',
+        'Chutney & Papad (Tomato Khejur Aamsotto)',
+      ],
+      beverages: [
+        'Aam Pora Sharbat Welcome Drink',
+        'Live Banarasi Meetha Paan Counter',
+        'Darjeeling Kulhad Tea Counter',
+      ],
+    },
+    {
+      id: 'menu-classic-heritage',
+      title: 'Classic Bengali Heritage Feast',
+      tagline: 'Timeless culinary celebration with authentic fish kaliya, katla roast and traditional mishti.',
+      category: 'Classic Bengali',
+      pricePerPlate: '₹850',
+      badge: 'Classic Choice',
+      minimumGuests: '100',
+      image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
+      starters: [
+        'Fish Finger with Tartar Dip',
+        'Vegetable Chop with Kasundi',
+        'Chicken Pakoda with Green Sauce',
+      ],
+      mainCourse: [
+        'Katla Machher Kalia with Rich Gravy',
+        'Doi Murgi (Yogurt Chicken Curry)',
+        'Dhokar Dalna (Lentil Cakes in Gravy)',
+        'Aloo Posto (Potatoes in Poppy Seeds Paste)',
+      ],
+      riceAndBreads: [
+        'Koraishutir Kochuri (Green Peas Puri)',
+        'Basmati Ghee Bhat',
+        'Chholar Dal with Coconut Chips',
+      ],
+      desserts: [
+        'Chhanar Payesh',
+        'Traditional Gur Sandesh',
+        'Plastic Chutney with Crispy Papad',
+      ],
+      beverages: [
+        'Gandharaj Lemonade Welcome Cooler',
+        'Sweet Meetha Paan & Mukhwas',
+      ],
+    },
+    {
+      id: 'menu-grand-reception',
+      title: 'Grand Reception Gourmet Buffet',
+      tagline: 'Multi-cuisine grand reception feast featuring live barbecue, Italian pasta bar & North Indian gravies.',
+      category: 'Grand Reception',
+      pricePerPlate: '₹1,450',
+      badge: 'Grand Gala',
+      minimumGuests: '200',
+      image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80',
+      starters: [
+        'Live Tandoori Pomfret & Fish Tikka',
+        'Mutton Galouti Kebab on Sheermal',
+        'Crispy Corn Salt & Pepper',
+        'Hara Bhara Kebab with Mint Yogurt',
+      ],
+      mainCourse: [
+        'Royal Awadhi Dum Biryani (Chicken & Mutton)',
+        'Murgh Makhani (Butter Chicken Deluxe)',
+        'Paneer Butter Masala & Dal Makhani',
+        'Live Pasta Station (Penne Arrabiata & Alfredo)',
+      ],
+      riceAndBreads: [
+        'Zafrani Moti Pulao',
+        'Assorted Breads (Garlic Naan, Laccha Paratha, Kulcha)',
+      ],
+      desserts: [
+        'Live Flambéed Gulab Jamun with Rabri',
+        'Nolen Gur Ice Cream Live Sundae Bar',
+        'Assorted Bengali Mini Sandesh Platter',
+      ],
+      beverages: [
+        'Mocktail Counter (Blue Lagoon, Virgin Mojito)',
+        'Artisanal Coffee & Espresso Counter',
+        'Banarasi Fire Paan Counter',
+      ],
+    },
+  ],
+
   // 5. Categories
   categories: ['Weddings', 'Decor & Mandap', 'Portraits', 'Pre-Wedding', 'Candid Moments'],
 

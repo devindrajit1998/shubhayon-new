@@ -1,11 +1,1 @@
-{
-  "version": 4,
-  "routes": {},
-  "dynamicRoutes": {},
-  "notFoundRoutes": [],
-  "preview": {
-    "previewModeId": "2597902e1bd0c0248d69db6e199d3a08",
-    "previewModeSigningKey": "7bf16c861992282d76cfd18360cbc796020ec3b636f749482641271837881c2d",
-    "previewModeEncryptionKey": "98be612af6895336e5233fce61ed09755a0f470af183c86772cee7cd0d833585"
-  }
-}
+{"version":4,"routes":{},"dynamicRoutes":{"/gallery/artist/[id]":{"dataRoute":null,"dataRouteRegex":null,"fallback":null,"fallbackRevalidate":false,"fallbackSourceRoute":"/gallery/artist/[id]","routeRegex":"^\\/gallery\\/artist\\/([^/]+?)(?:\\/)?$","allowHeader":[]}},"notFoundRoutes":[],"preview":{"previewModeId":"36c25719f4ffc122fb81f8869e72103b","previewModeSigningKey":"18b8e0c40372ae5498a22fc1b4e962e9ecdeb202096f00ffee17d91a9591a884","previewModeEncryptionKey":"ad32907a951e35cbb3d08d32b4583d6eb59e732a00ea19226a3ad72e873b5b40"}}

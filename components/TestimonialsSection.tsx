@@ -112,51 +112,85 @@ export default function TestimonialsSection() {
           </div>
         )}
 
-        {/* 4. Real Firebase Testimonials Grid */}
+        {/* 4. Real Firebase Testimonials Grid - Luxury Modern UI */}
         {!isLoading && !error && testimonials.length > 0 && (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {testimonials.map((t, idx) => (
                 <div
                   key={t.id || idx}
-                  className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between relative group hover:-translate-y-1"
+                  className="bg-gradient-to-b from-white via-[#fffefc] to-[#faf6ef] rounded-3xl p-6 sm:p-7 border border-[#eddcc8] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(200,16,46,0.09)] hover:border-[#d99824]/60 transition-all duration-300 flex flex-col justify-between relative group transform hover:-translate-y-1.5 overflow-hidden"
                 >
-                  {/* Top Quote Icon and Star Rating */}
-                  <div className="space-y-3">
+                  {/* Decorative Background Quote Watermark */}
+                  <span className="absolute -top-2 right-4 text-7xl font-serif text-[#ebd6bd]/25 select-none pointer-events-none transition-transform group-hover:scale-110">
+                    &rdquo;
+                  </span>
+
+                  <div className="relative z-10 space-y-4">
+                    {/* Top Row: Stars Badge & Verified Tag */}
                     <div className="flex items-center justify-between">
-                      <div className="w-10 h-10 rounded-2xl bg-amber-50 text-[#d99824] flex items-center justify-center border border-amber-200">
-                        <MessageSquareQuote className="w-5 h-5" />
-                      </div>
-                      <div className="flex items-center gap-1">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star
-                            key={star}
-                            className={`w-4 h-4 ${star <= (t.rating || 5)
-                              ? 'text-amber-400 fill-amber-400'
-                              : 'text-gray-200'
+                      <div className="inline-flex items-center gap-1.5 bg-[#fff8eb] px-3 py-1 rounded-full border border-[#f3ddb6] shadow-2xs">
+                        <div className="flex items-center gap-0.5">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <Star
+                              key={star}
+                              className={`w-3.5 h-3.5 ${
+                                star <= (t.rating || 5)
+                                  ? 'text-amber-400 fill-amber-400'
+                                  : 'text-gray-200'
                               }`}
-                          />
-                        ))}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-[11px] font-bold text-amber-900 ml-0.5">
+                          {t.rating ? `${t.rating}.0` : '5.0'}
+                        </span>
                       </div>
+
+                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50/90 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        <span>Verified Wedding</span>
+                      </span>
                     </div>
 
-                    <p className="text-xs sm:text-sm text-[#4b4646] leading-relaxed italic pt-2">
+                    {/* Quote Feedback Text */}
+                    <p className="text-[13px] sm:text-[14px] text-gray-700 leading-relaxed font-normal italic relative">
                       &ldquo;{t.quote}&rdquo;
                     </p>
                   </div>
 
-                  {/* Author & Event Details */}
-                  <div className="pt-6 mt-6 border-t border-gray-100 flex items-center justify-between">
-                    <div>
-                      <h4 className="font-serif-display text-base font-bold text-gray-900">
-                        {t.name}
-                      </h4>
-                      <p className="text-[11px] text-[#c8102e] font-semibold mt-0.5">
-                        {t.event}
-                      </p>
+                  {/* Author & Couple Profile Footer */}
+                  <div className="relative z-10 pt-5 mt-5 border-t border-[#f0e3d2] flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      {/* Couple Avatar */}
+                      <div className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-[#d99824]/80 ring-offset-2 ring-offset-white shadow-xs bg-amber-50/80 flex-shrink-0 flex items-center justify-center">
+                        {t.avatar ? (
+                          <Image
+                            src={t.avatar}
+                            alt={t.name}
+                            fill
+                            className="object-cover"
+                            referrerPolicy="no-referrer"
+                          />
+                        ) : (
+                          <span className="font-serif-display text-base font-bold text-[#9e0a22]">
+                            {t.name ? t.name.charAt(0).toUpperCase() : 'S'}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="min-w-0">
+                        <h4 className="font-serif-display text-sm sm:text-base font-bold text-gray-900 group-hover:text-[#c8102e] transition-colors truncate">
+                          {t.name}
+                        </h4>
+                        <p className="text-[11px] text-[#8e1c24] font-semibold truncate mt-0.5">
+                          {t.event}
+                        </p>
+                      </div>
                     </div>
+
                     {t.date && (
-                      <span className="text-[10px] text-gray-400 font-medium whitespace-nowrap">
+                      <span className="text-[10px] text-gray-400 font-medium whitespace-nowrap flex-shrink-0 bg-white/70 px-2 py-0.5 rounded-md border border-[#eee2d3]">
                         {t.date}
                       </span>
                     )}

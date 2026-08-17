@@ -17,12 +17,13 @@ import {
   ExternalLink,
   ChevronRight,
   TrendingUp,
+  UtensilsCrossed,
 } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { useAdminData, LeadItem } from '@/context/AdminDataContext';
 
 export default function AdminDashboardPage() {
-  const { leads, services, packages, artists, updateLeadStatus, isLoading, error } = useAdminData();
+  const { leads, services, packages, menus, artists, updateLeadStatus, isLoading, error } = useAdminData();
   const [selectedLead, setSelectedLead] = useState<LeadItem | null>(null);
 
   const newLeads = leads.filter((l) => l.status === 'New');
@@ -100,30 +101,39 @@ export default function AdminDashboardPage() {
             </p>
           </div>
 
-          {/* Card 3: Services & Packages */}
+          {/* Card 3: Services, Packages & Menus */}
           <div className="bg-white rounded-2xl p-5 border border-[#e8dfd3] shadow-xs hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
-                Active Offerings
+                Services &amp; Menus
               </span>
               <div className="w-10 h-10 rounded-xl bg-amber-50 text-[#d99824] flex items-center justify-center">
-                <Briefcase className="w-5 h-5" />
+                <UtensilsCrossed className="w-5 h-5" />
               </div>
             </div>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-gray-900">
-                {services.length + packages.length}
+                {services.length + packages.length + menus.length}
               </span>
               <span className="text-xs text-gray-500">
-                ({services.length} services, {packages.length} pkgs)
+                ({menus.length} menus, {packages.length} pkgs)
               </span>
             </div>
-            <Link
-              href="/admin/services"
-              className="text-xs text-[#c8102e] hover:underline font-semibold mt-2 inline-block"
-            >
-              Manage Catalog &rarr;
-            </Link>
+            <div className="flex items-center gap-3 mt-2 text-xs">
+              <Link
+                href="/admin/menu"
+                className="text-[#c8102e] hover:underline font-semibold"
+              >
+                Menus &rarr;
+              </Link>
+              <span className="text-gray-300">|</span>
+              <Link
+                href="/admin/services"
+                className="text-gray-600 hover:text-gray-900 font-medium"
+              >
+                Services
+              </Link>
+            </div>
           </div>
 
           {/* Card 4: Portfolio Gallery */}

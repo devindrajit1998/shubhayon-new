@@ -21,7 +21,7 @@ import { useAdminData } from '@/context/AdminDataContext';
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const { isAuthenticated, login } = useAdminData();
+  const { isAuthenticated, login, devLogin } = useAdminData();
 
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -178,7 +178,7 @@ export default function AdminLoginPage() {
           )}
 
           {/* Main Action */}
-          <div className="pt-2">
+          <div className="pt-2 space-y-3">
             <button
               type="button"
               onClick={handleLogin}
@@ -199,6 +199,22 @@ export default function AdminLoginPage() {
                 </>
               )}
             </button>
+
+            {process.env.NODE_ENV === 'development' && (
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    devLogin();
+                    router.replace('/admin');
+                  }}
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-xs text-amber-900 bg-amber-50/80 border border-amber-300/80 hover:bg-amber-100 hover:border-amber-400 transition-all cursor-pointer shadow-xs"
+                >
+                  <Sparkles className="w-4 h-4 text-amber-600" />
+                  <span>⚡ Instant Dev Mode Admin Bypass</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

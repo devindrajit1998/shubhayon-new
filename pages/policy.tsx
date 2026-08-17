@@ -13,9 +13,9 @@ export default function PolicyPage() {
   const { openLightbox } = useAppModals();
   const { banners, settings } = useAdminData();
 
-  const snapLeft = banners?.snapshotLeft || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-left.jpg';
-  const snapMid = banners?.snapshotMid || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-mid.png';
-  const snapRight = banners?.snapshotRight || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-right.jpg';
+  const snapLeft = banners?.policySnapshotLeft || banners?.snapshotLeft || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-left.jpg';
+  const snapMid = banners?.policySnapshotMid || banners?.snapshotMid || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-mid.png';
+  const snapRight = banners?.policySnapshotRight || banners?.snapshotRight || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-right.jpg';
   const bannerBg = banners?.policyHeroBgImage || banners?.innerHeroBgImage || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/galler-banner.png';
 
   const polaroidPhotos = [
@@ -138,14 +138,14 @@ export default function PolicyPage() {
         <section className="py-14 sm:py-20 bg-[#faf7f2]">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-10">
-              <p className="text-[#b81414] font-semibold text-xs sm:text-sm tracking-normal mb-1">
+              <p className="text-[#c91103] font-semibold text-sm sm:text-[25px] tracking-normal mb-1">
                 Transparency &amp; Trust
               </p>
-              <h2 className="font-serif-display text-3xl sm:text-4xl font-normal text-[#1f2937] tracking-tight">
+              <h2 className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight">
                 Our Service Standards
               </h2>
               <div className="flex items-center justify-center gap-3 my-3">
-                <span className="w-14 sm:w-16 h-[1.5px] bg-[#b81414]" />
+                <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
                 <span className="relative w-3.5 h-3.5 inline-block">
                   <Image
                     src="/images/heart.svg"
@@ -155,7 +155,7 @@ export default function PolicyPage() {
                     referrerPolicy="no-referrer"
                   />
                 </span>
-                <span className="w-14 sm:w-16 h-[1.5px] bg-[#b81414]" />
+                <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
               </div>
             </div>
 

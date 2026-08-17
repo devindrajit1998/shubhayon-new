@@ -27,37 +27,63 @@ export interface BannerSettings {
   homeHeroSubtitle: string;
   homeHeroTagline: string;
   homeHeroBgImage: string;
+  homeSnapshotLeft?: string;
+  homeSnapshotMid?: string;
+  homeSnapshotRight?: string;
 
   // 2. About Us Page
   aboutHeroTitle?: string;
   aboutHeroSubtitle?: string;
   aboutHeroBgImage?: string;
+  aboutSnapshotLeft?: string;
+  aboutSnapshotMid?: string;
+  aboutSnapshotRight?: string;
 
   // 3. Services Page
   servicesHeroTitle?: string;
   servicesHeroSubtitle?: string;
   servicesHeroBgImage?: string;
+  servicesSnapshotLeft?: string;
+  servicesSnapshotMid?: string;
+  servicesSnapshotRight?: string;
 
   // 4. Packages Page
   packagesHeroTitle?: string;
   packagesHeroSubtitle?: string;
   packagesHeroBgImage?: string;
+  packagesSnapshotLeft?: string;
+  packagesSnapshotMid?: string;
+  packagesSnapshotRight?: string;
 
   // 5. Gallery Page
   galleryHeroTitle?: string;
   galleryHeroSubtitle?: string;
   galleryHeroBgImage?: string;
+  gallerySnapshotLeft?: string;
+  gallerySnapshotMid?: string;
+  gallerySnapshotRight?: string;
 
-  // 6. Policy & Terms Page
+  // 6. Catering Menu Page
+  menuHeroTitle?: string;
+  menuHeroSubtitle?: string;
+  menuHeroBgImage?: string;
+  menuSnapshotLeft?: string;
+  menuSnapshotMid?: string;
+  menuSnapshotRight?: string;
+
+  // 7. Policy & Terms Page
   policyHeroTitle?: string;
   policyHeroSubtitle?: string;
   policyHeroBgImage?: string;
+  policySnapshotLeft?: string;
+  policySnapshotMid?: string;
+  policySnapshotRight?: string;
 
   // Generic Inner Fallback
   innerHeroTitle: string;
   innerHeroBgImage: string;
 
-  // 3-Polaroid Snapshot Cluster
+  // Global Default 3-Polaroid Snapshot Cluster
   snapshotLeft: string;
   snapshotMid: string;
   snapshotRight: string;
@@ -91,27 +117,75 @@ export const emptyBanners: BannerSettings = {
   homeHeroSubtitle: '',
   homeHeroTagline: '',
   homeHeroBgImage: '',
+  homeSnapshotLeft: '',
+  homeSnapshotMid: '',
+  homeSnapshotRight: '',
+
   aboutHeroTitle: '',
   aboutHeroSubtitle: '',
   aboutHeroBgImage: '',
+  aboutSnapshotLeft: '',
+  aboutSnapshotMid: '',
+  aboutSnapshotRight: '',
+
   servicesHeroTitle: '',
   servicesHeroSubtitle: '',
   servicesHeroBgImage: '',
+  servicesSnapshotLeft: '',
+  servicesSnapshotMid: '',
+  servicesSnapshotRight: '',
+
   packagesHeroTitle: '',
   packagesHeroSubtitle: '',
   packagesHeroBgImage: '',
+  packagesSnapshotLeft: '',
+  packagesSnapshotMid: '',
+  packagesSnapshotRight: '',
+
   galleryHeroTitle: '',
   galleryHeroSubtitle: '',
   galleryHeroBgImage: '',
+  gallerySnapshotLeft: '',
+  gallerySnapshotMid: '',
+  gallerySnapshotRight: '',
+
+  menuHeroTitle: '',
+  menuHeroSubtitle: '',
+  menuHeroBgImage: '',
+  menuSnapshotLeft: '',
+  menuSnapshotMid: '',
+  menuSnapshotRight: '',
+
   policyHeroTitle: '',
   policyHeroSubtitle: '',
   policyHeroBgImage: '',
+  policySnapshotLeft: '',
+  policySnapshotMid: '',
+  policySnapshotRight: '',
+
   innerHeroTitle: '',
   innerHeroBgImage: '',
   snapshotLeft: '',
   snapshotMid: '',
   snapshotRight: '',
 };
+
+export interface MenuItem {
+  id: string;
+  title: string;
+  tagline?: string;
+  category: 'Royal Wedding Feast' | 'Classic Bengali' | 'Grand Reception' | 'Signature Buffet' | 'Traditional Special';
+  pricePerPlate: string; // e.g. "₹850" or "850"
+  badge?: string;
+  minimumGuests?: string;
+  starters?: string[];
+  mainCourse?: string[];
+  riceAndBreads?: string[];
+  desserts?: string[];
+  beverages?: string[];
+  items?: string[]; // Fallback list of items
+  image?: string;
+}
 
 export const emptySettings: SiteSettings = {
   siteTitle: '',
@@ -131,6 +205,7 @@ interface AdminDataContextType {
   isAuthenticated: boolean;
   adminUser: { name: string; email: string; role: string } | null;
   login: () => Promise<boolean>;
+  devLogin: () => void;
   logout: () => Promise<void>;
   isLoading: boolean;
   error: string | null;
@@ -153,6 +228,12 @@ interface AdminDataContextType {
   updatePackage: (id: string, updated: Partial<PackageData>) => Promise<void>;
   deletePackage: (id: string) => Promise<void>;
 
+  // Menu Packages
+  menus: MenuItem[];
+  addMenu: (menu: Omit<MenuItem, 'id'>) => Promise<void>;
+  updateMenu: (id: string, updated: Partial<MenuItem>) => Promise<void>;
+  deleteMenu: (id: string) => Promise<void>;
+
   // Gallery & Artists
   categories: string[];
   artists: ArtistProfile[];
@@ -171,6 +252,7 @@ interface AdminDataContextType {
   // Testimonials
   testimonials: TestimonialItem[];
   addTestimonial: (item: Omit<TestimonialItem, 'id'>) => Promise<void>;
+  updateTestimonial: (id: string, updated: Partial<TestimonialItem>) => Promise<void>;
   deleteTestimonial: (id: string) => Promise<void>;
 
   // Settings
@@ -191,6 +273,7 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
   const [leads, setLeads] = useState<LeadItem[]>([]);
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [packages, setPackages] = useState<PackageData[]>([]);
+  const [menus, setMenus] = useState<MenuItem[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [artists, setArtists] = useState<ArtistProfile[]>([]);
   const [banners, setBanners] = useState<BannerSettings>(emptyBanners);
@@ -232,12 +315,24 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Subscribe to real-time Firestore cloud database on mount
+  // Development mode bypass check
+  const isDevMode = process.env.NODE_ENV === 'development';
+  const isDevBypassEnabled = isDevMode && process.env.NEXT_PUBLIC_DEV_ADMIN === 'true';
+
+  // Subscribe to real-time Firestore cloud database and auth state on mount
   useEffect(() => {
     let unsubscribeAuth: (() => void) | undefined;
     
-    // Check auth session using Firebase
-    if (auth) {
+    // In dev mode with bypass enabled, grant immediate admin privileges
+    if (isDevBypassEnabled) {
+      setIsAuthenticated(true);
+      setAdminUser({
+        name: 'Development Administrator',
+        email: 'dev@localhost',
+        role: 'Super Administrator',
+      });
+    } else if (auth) {
+      // Check live auth session using Firebase
       unsubscribeAuth = onAuthStateChanged(auth, (user) => {
         if (user && user.email === 'enquiry.shuvayan@gmail.com') {
           setIsAuthenticated(true);
@@ -266,6 +361,7 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
             const data = docSnap.data();
             setServices(Array.isArray(data.services) ? data.services : []);
             setPackages(Array.isArray(data.packages) ? data.packages : []);
+            setMenus(Array.isArray(data.menus) ? data.menus : []);
             setCategories(Array.isArray(data.categories) ? data.categories : []);
             setArtists(Array.isArray(data.artists) ? data.artists : []);
             setBanners(data.banners && typeof data.banners === 'object' ? data.banners : emptyBanners);
@@ -276,6 +372,7 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
             // Firestore doc does not exist yet; maintain clean empty state
             setServices([]);
             setPackages([]);
+            setMenus([]);
             setCategories([]);
             setArtists([]);
             setBanners(emptyBanners);
@@ -300,10 +397,23 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
       setError(err.message || 'Firestore connection initialization error');
       console.error('Firestore connection initialization failed:', err);
     }
-  }, []);
+  }, [isDevBypassEnabled]);
 
   // Auth methods
+  const devLogin = () => {
+    setIsAuthenticated(true);
+    setAdminUser({
+      name: 'Development Administrator',
+      email: 'dev@localhost',
+      role: 'Super Administrator',
+    });
+  };
+
   const login = async (): Promise<boolean> => {
+    if (isDevBypassEnabled) {
+      devLogin();
+      return true;
+    }
     if (!auth) {
       setError('Auth is not initialized.');
       return false;
@@ -326,6 +436,8 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = async () => {
+    setIsAuthenticated(false);
+    setAdminUser(null);
     if (auth) {
       await signOut(auth);
     }
@@ -402,6 +514,29 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
     await syncToCloud({ packages: updated });
   };
 
+  // Menu Packages CRUD
+  const addMenu = async (menu: Omit<MenuItem, 'id'>) => {
+    const newMenu: MenuItem = {
+      ...menu,
+      id: `menu-${Date.now()}`,
+    };
+    const updated = [...menus, newMenu];
+    setMenus(updated);
+    await syncToCloud({ menus: updated });
+  };
+
+  const updateMenu = async (id: string, updatedMenu: Partial<MenuItem>) => {
+    const updated = menus.map((m) => (m.id === id ? { ...m, ...updatedMenu } : m));
+    setMenus(updated);
+    await syncToCloud({ menus: updated });
+  };
+
+  const deleteMenu = async (id: string) => {
+    const updated = menus.filter((m) => m.id !== id);
+    setMenus(updated);
+    await syncToCloud({ menus: updated });
+  };
+
   // Gallery Categories
   const addCategory = async (category: string) => {
     const trimmed = category.trim();
@@ -476,6 +611,12 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
     await syncToCloud({ testimonials: updated });
   };
 
+  const updateTestimonial = async (id: string, updatedTestimonial: Partial<TestimonialItem>) => {
+    const updated = testimonials.map((t) => (t.id === id ? { ...t, ...updatedTestimonial } : t));
+    setTestimonials(updated);
+    await syncToCloud({ testimonials: updated });
+  };
+
   const deleteTestimonial = async (id: string) => {
     const updated = testimonials.filter((t) => t.id !== id);
     setTestimonials(updated);
@@ -495,6 +636,7 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
         isAuthenticated,
         adminUser,
         login,
+        devLogin,
         logout,
         isLoading,
         error,
@@ -510,6 +652,10 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
         addPackage,
         updatePackage,
         deletePackage,
+        menus,
+        addMenu,
+        updateMenu,
+        deleteMenu,
         categories,
         artists,
         addCategory,
@@ -523,6 +669,7 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
         updateBanners,
         testimonials,
         addTestimonial,
+        updateTestimonial,
         deleteTestimonial,
         settings,
         updateSettings,

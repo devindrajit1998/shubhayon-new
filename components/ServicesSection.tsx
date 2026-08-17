@@ -11,6 +11,8 @@ export interface ServiceItem {
   description: string;
   image: string;
   category: string;
+  thumbnails?: string[];
+  buttonText?: string;
 }
 
 export default function ServicesSection() {

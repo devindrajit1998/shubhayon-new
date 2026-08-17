@@ -14,17 +14,21 @@ import {
   BookOpen,
   ShieldCheck,
   Camera,
+  UtensilsCrossed,
+  Layers3,
 } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import ImageKitUploader from '@/components/admin/ImageKitUploader';
-import { useAdminData } from '@/context/AdminDataContext';
+import { useAdminData, BannerSettings } from '@/context/AdminDataContext';
 
-type PageTab = 'home' | 'services' | 'packages' | 'gallery' | 'about' | 'policy' | 'polaroids';
+type PageTab = 'home' | 'about' | 'services' | 'packages' | 'gallery' | 'menu' | 'policy' | 'polaroids';
+type PolaroidPageTarget = 'global' | 'about' | 'services' | 'packages' | 'gallery' | 'menu' | 'policy';
 
 export default function AdminBannersPage() {
   const { banners, updateBanners } = useAdminData();
-  const [formData, setFormData] = useState(banners);
+  const [formData, setFormData] = useState<BannerSettings>(banners);
   const [activeTab, setActiveTab] = useState<PageTab>('home');
+  const [selectedPolaroidTarget, setSelectedPolaroidTarget] = useState<PolaroidPageTarget>('about');
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
@@ -34,7 +38,7 @@ export default function AdminBannersPage() {
     }
   }, [banners]);
 
-  const handleChange = (field: keyof typeof banners, val: string) => {
+  const handleChange = (field: keyof BannerSettings, val: string) => {
     setFormData((prev) => ({ ...prev, [field]: val }));
     setSaveSuccess(false);
   };
@@ -49,26 +53,132 @@ export default function AdminBannersPage() {
 
   const tabs: { id: PageTab; label: string; icon: any; route: string }[] = [
     { id: 'home', label: 'Homepage', icon: Home, route: '/' },
-    { id: 'services', label: 'Services Page', icon: Briefcase, route: '/services' },
-    { id: 'packages', label: 'Packages Page', icon: Package, route: '/packages' },
-    { id: 'gallery', label: 'Gallery Page', icon: Layers, route: '/gallery' },
-    { id: 'about', label: 'About Us Page', icon: BookOpen, route: '/about' },
-    { id: 'policy', label: 'Policy Page', icon: ShieldCheck, route: '/policy' },
-    { id: 'polaroids', label: '3-Polaroid Cluster', icon: Camera, route: '/about' },
+    { id: 'about', label: 'About Us', icon: BookOpen, route: '/about' },
+    { id: 'services', label: 'Services', icon: Briefcase, route: '/services' },
+    { id: 'packages', label: 'Packages', icon: Package, route: '/packages' },
+    { id: 'gallery', label: 'Gallery', icon: Layers, route: '/gallery' },
+    { id: 'menu', label: 'Catering Menu', icon: UtensilsCrossed, route: '/menu' },
+    { id: 'policy', label: 'Policy & Terms', icon: ShieldCheck, route: '/policy' },
+    { id: 'polaroids', label: '3-Polaroids Studio', icon: Camera, route: '/about' },
   ];
+
+  // Helper component to render the 3-Polaroid cluster preview and uploaders
+  const renderPolaroidClusterEditor = (
+    leftKey: keyof BannerSettings,
+    midKey: keyof BannerSettings,
+    rightKey: keyof BannerSettings,
+    pageTitle: string,
+    pageSubtitle: string
+  ) => {
+    const leftVal = (formData[leftKey] as string) || formData.snapshotLeft || '';
+    const midVal = (formData[midKey] as string) || formData.snapshotMid || '';
+    const rightVal = (formData[rightKey] as string) || formData.snapshotRight || '';
+
+    return (
+      <div className="space-y-6 pt-4 border-t border-[#ebdcc8]">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30">
+              Page-Specific Visuals
+            </span>
+            <span className="text-xs font-bold text-gray-800">3-Polaroid Cluster for {pageTitle}</span>
+          </div>
+          <p className="text-xs text-gray-500 mt-1">
+            {pageSubtitle || `Configure distinct hanging polaroid snapshots for ${pageTitle}. Leave blank to use global defaults.`}
+          </p>
+        </div>
+
+        {/* Visual Live Cluster Preview */}
+        <div className="bg-[#1a0e0d] rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-center border border-[#3b201d] overflow-hidden shadow-inner">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#d99824] mb-6 flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Live {pageTitle} Polaroid Cluster Preview</span>
+          </span>
+
+          <div className="relative flex items-center justify-center w-72 sm:w-80 h-48">
+            {/* Left Snapshot */}
+            <div className="absolute -left-4 w-28 aspect-[3/4] bg-white p-1.5 shadow-2xl transform -rotate-14 rounded-xs transition-transform duration-300">
+              <div className="relative w-full h-full bg-gray-900 overflow-hidden">
+                {leftVal ? (
+                  <Image src={leftVal} alt="Left snapshot" fill className="object-cover object-top" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-white/30 text-[10px]">Left Photo</div>
+                )}
+              </div>
+            </div>
+
+            {/* Center Snapshot */}
+            <div className="relative z-20 w-32 aspect-[3/4] bg-white p-1.5 shadow-2xl rounded-xs transition-transform duration-300">
+              <div className="relative w-full h-full bg-gray-900 overflow-hidden">
+                {midVal ? (
+                  <Image src={midVal} alt="Center snapshot" fill className="object-cover object-center" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-white/30 text-[10px]">Center Photo</div>
+                )}
+              </div>
+            </div>
+
+            {/* Right Snapshot */}
+            <div className="absolute -right-4 w-28 aspect-[3/4] bg-white p-1.5 shadow-2xl transform rotate-14 rounded-xs transition-transform duration-300">
+              <div className="relative w-full h-full bg-gray-900 overflow-hidden">
+                {rightVal ? (
+                  <Image src={rightVal} alt="Right snapshot" fill className="object-cover object-center" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-white/30 text-[10px]">Right Photo</div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 3 Uploaders */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="bg-[#fcfaf7] p-4 rounded-2xl border border-[#ebdcc8]">
+            <ImageKitUploader
+              label="Left Snapshot (Tilted -14°)"
+              folder="/shuvayan_banners"
+              currentImageUrl={formData[leftKey] as string}
+              onUploadSuccess={(url) => handleChange(leftKey, url)}
+              onClear={() => handleChange(leftKey, '')}
+            />
+          </div>
+
+          <div className="bg-[#fcfaf7] p-4 rounded-2xl border border-[#ebdcc8]">
+            <ImageKitUploader
+              label="Center Snapshot (Spotlight)"
+              folder="/shuvayan_banners"
+              currentImageUrl={formData[midKey] as string}
+              onUploadSuccess={(url) => handleChange(midKey, url)}
+              onClear={() => handleChange(midKey, '')}
+            />
+          </div>
+
+          <div className="bg-[#fcfaf7] p-4 rounded-2xl border border-[#ebdcc8]">
+            <ImageKitUploader
+              label="Right Snapshot (Tilted +14°)"
+              folder="/shuvayan_banners"
+              currentImageUrl={formData[rightKey] as string}
+              onUploadSuccess={(url) => handleChange(rightKey, url)}
+              onClear={() => handleChange(rightKey, '')}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <AdminLayout
       title="Banners & Media Manager"
-      subtitle="Customize distinct banner background images, titles, and taglines for every page on your website."
+      subtitle="Customize distinct banner background images, titles, and 3-polaroid hanging snapshot clusters for each page."
       activeNav="banners"
     >
       <form onSubmit={handleSave} className="w-full space-y-6">
-        {/* Top notification and save trigger */}
+        {/* Top Notification Bar */}
         <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#e8dfd3] shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-sm font-bold text-gray-900">Page-Specific Banners &amp; Media</h2>
-            <p className="text-xs text-gray-500">Configure distinct hero backdrops and titles for each page</p>
+            <h2 className="text-sm font-bold text-gray-900">Page-Specific Banners &amp; Polaroid Clusters</h2>
+            <p className="text-xs text-gray-500">Configure distinct hero backdrops, titles, and 3-polaroid snapshots per page</p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -84,7 +194,7 @@ export default function AdminBannersPage() {
               className="inline-flex items-center gap-2 bg-gradient-to-r from-[#c8102e] to-[#9e0a22] hover:from-[#a80b24] hover:to-[#80071a] text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer"
             >
               <Save className="w-4 h-4" />
-              <span>Save All Page Banners</span>
+              <span>Save All Page Settings</span>
             </button>
           </div>
         </div>
@@ -112,13 +222,13 @@ export default function AdminBannersPage() {
           })}
         </div>
 
-        {/* 1. HOMEPAGE BANNER CONTENT */}
+        {/* 1. HOMEPAGE TAB */}
         {activeTab === 'home' && (
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] shadow-xs space-y-6 animate-fadeIn">
             <div className="flex items-center justify-between border-b border-gray-100 pb-4">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-1 inline-block">
-                  Page 1 of 6
+                  Page 1 of 7
                 </span>
                 <h3 className="text-xl font-bold font-serif-display text-gray-900">
                   Homepage Main Hero Banner
@@ -192,217 +302,16 @@ export default function AdminBannersPage() {
           </div>
         )}
 
-        {/* 2. SERVICES PAGE BANNER */}
-        {activeTab === 'services' && (
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] shadow-xs space-y-6 animate-fadeIn">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-1 inline-block">
-                  Page 2 of 6
-                </span>
-                <h3 className="text-xl font-bold font-serif-display text-gray-900">
-                  Services Page Hero Banner
-                </h3>
-                <p className="text-xs text-gray-500">
-                  Appears at the top of the Our Services page (`/services`)
-                </p>
-              </div>
-
-              <Link
-                href="/services"
-                target="_blank"
-                className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl border border-[#e0cbaf] bg-[#faf7f2] hover:bg-[#f3ede1] text-[#784d16] transition-colors"
-              >
-                <ExternalLink className="w-3.5 h-3.5" />
-                <span>Preview Services Page</span>
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
-              <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                  Services Page Main Title
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Our Services"
-                  value={formData.servicesHeroTitle}
-                  onChange={(e) => handleChange('servicesHeroTitle', e.target.value)}
-                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                  Services Tagline / Subtitle
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Traditional Rituals, Decor & Styling"
-                  value={formData.servicesHeroSubtitle}
-                  onChange={(e) => handleChange('servicesHeroSubtitle', e.target.value)}
-                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
-                />
-              </div>
-
-              <div className="sm:col-span-2 bg-[#fcfaf7] p-5 rounded-2xl border border-[#ebdcc8] mt-2">
-                <ImageKitUploader
-                  label="Services Page Hero Background Image"
-                  aspect="banner"
-                  folder="/shuvayan_banners"
-                  currentImageUrl={formData.servicesHeroBgImage}
-                  onUploadSuccess={(url) => handleChange('servicesHeroBgImage', url)}
-                  onClear={() => handleChange('servicesHeroBgImage', '')}
-                />
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 3. PACKAGES PAGE BANNER */}
-        {activeTab === 'packages' && (
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] shadow-xs space-y-6 animate-fadeIn">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-1 inline-block">
-                  Page 3 of 6
-                </span>
-                <h3 className="text-xl font-bold font-serif-display text-gray-900">
-                  Packages Page Hero Banner
-                </h3>
-                <p className="text-xs text-gray-500">
-                  Appears at the top of the Wedding Packages page (`/packages`)
-                </p>
-              </div>
-
-              <Link
-                href="/packages"
-                target="_blank"
-                className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl border border-[#e0cbaf] bg-[#faf7f2] hover:bg-[#f3ede1] text-[#784d16] transition-colors"
-              >
-                <ExternalLink className="w-3.5 h-3.5" />
-                <span>Preview Packages Page</span>
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
-              <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                  Packages Page Main Title
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Best Packages / Curated Wedding Packages"
-                  value={formData.packagesHeroTitle}
-                  onChange={(e) => handleChange('packagesHeroTitle', e.target.value)}
-                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                  Packages Subtitle / Tagline
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Transparent, All-Inclusive Wedding Tiers"
-                  value={formData.packagesHeroSubtitle}
-                  onChange={(e) => handleChange('packagesHeroSubtitle', e.target.value)}
-                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
-                />
-              </div>
-
-              <div className="sm:col-span-2 bg-[#fcfaf7] p-5 rounded-2xl border border-[#ebdcc8] mt-2">
-                <ImageKitUploader
-                  label="Packages Page Hero Background Image"
-                  aspect="banner"
-                  folder="/shuvayan_banners"
-                  currentImageUrl={formData.packagesHeroBgImage}
-                  onUploadSuccess={(url) => handleChange('packagesHeroBgImage', url)}
-                  onClear={() => handleChange('packagesHeroBgImage', '')}
-                />
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 4. GALLERY PAGE BANNER */}
-        {activeTab === 'gallery' && (
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] shadow-xs space-y-6 animate-fadeIn">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-1 inline-block">
-                  Page 4 of 6
-                </span>
-                <h3 className="text-xl font-bold font-serif-display text-gray-900">
-                  Gallery Page Hero Banner
-                </h3>
-                <p className="text-xs text-gray-500">
-                  Appears at the top of the Portfolio Gallery page (`/gallery`)
-                </p>
-              </div>
-
-              <Link
-                href="/gallery"
-                target="_blank"
-                className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl border border-[#e0cbaf] bg-[#faf7f2] hover:bg-[#f3ede1] text-[#784d16] transition-colors"
-              >
-                <ExternalLink className="w-3.5 h-3.5" />
-                <span>Preview Gallery Page</span>
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
-              <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                  Gallery Page Main Title
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Moments that last forever"
-                  value={formData.galleryHeroTitle}
-                  onChange={(e) => handleChange('galleryHeroTitle', e.target.value)}
-                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                  Gallery Subtitle / Tagline
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Real Bengali Brides & Royal Mandap Designs"
-                  value={formData.galleryHeroSubtitle}
-                  onChange={(e) => handleChange('galleryHeroSubtitle', e.target.value)}
-                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
-                />
-              </div>
-
-              <div className="sm:col-span-2 bg-[#fcfaf7] p-5 rounded-2xl border border-[#ebdcc8] mt-2">
-                <ImageKitUploader
-                  label="Gallery Page Hero Background Image"
-                  aspect="banner"
-                  folder="/shuvayan_banners"
-                  currentImageUrl={formData.galleryHeroBgImage}
-                  onUploadSuccess={(url) => handleChange('galleryHeroBgImage', url)}
-                  onClear={() => handleChange('galleryHeroBgImage', '')}
-                />
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 5. ABOUT US PAGE BANNER */}
+        {/* 2. ABOUT US TAB */}
         {activeTab === 'about' && (
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] shadow-xs space-y-6 animate-fadeIn">
             <div className="flex items-center justify-between border-b border-gray-100 pb-4">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-1 inline-block">
-                  Page 5 of 6
+                  Page 2 of 7
                 </span>
                 <h3 className="text-xl font-bold font-serif-display text-gray-900">
-                  About Us Page Hero Banner
+                  About Us Page Hero Banner &amp; Polaroids
                 </h3>
                 <p className="text-xs text-gray-500">
                   Appears at the top of the About Us page (`/about`)
@@ -457,19 +366,332 @@ export default function AdminBannersPage() {
                 />
               </div>
             </div>
+
+            {/* About 3-Polaroid Cluster */}
+            {renderPolaroidClusterEditor(
+              'aboutSnapshotLeft',
+              'aboutSnapshotMid',
+              'aboutSnapshotRight',
+              'About Us Page',
+              'Customize the 3 hanging polaroids that appear over the About Us header.'
+            )}
           </div>
         )}
 
-        {/* 6. POLICY PAGE BANNER */}
+        {/* 3. SERVICES TAB */}
+        {activeTab === 'services' && (
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] shadow-xs space-y-6 animate-fadeIn">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-1 inline-block">
+                  Page 3 of 7
+                </span>
+                <h3 className="text-xl font-bold font-serif-display text-gray-900">
+                  Services Page Hero Banner &amp; Polaroids
+                </h3>
+                <p className="text-xs text-gray-500">
+                  Appears at the top of the Our Services page (`/services`)
+                </p>
+              </div>
+
+              <Link
+                href="/services"
+                target="_blank"
+                className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl border border-[#e0cbaf] bg-[#faf7f2] hover:bg-[#f3ede1] text-[#784d16] transition-colors"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Preview Services Page</span>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Services Page Main Title
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Our Services"
+                  value={formData.servicesHeroTitle}
+                  onChange={(e) => handleChange('servicesHeroTitle', e.target.value)}
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Services Tagline / Subtitle
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Traditional Rituals, Decor & Styling"
+                  value={formData.servicesHeroSubtitle}
+                  onChange={(e) => handleChange('servicesHeroSubtitle', e.target.value)}
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
+                />
+              </div>
+
+              <div className="sm:col-span-2 bg-[#fcfaf7] p-5 rounded-2xl border border-[#ebdcc8] mt-2">
+                <ImageKitUploader
+                  label="Services Page Hero Background Image"
+                  aspect="banner"
+                  folder="/shuvayan_banners"
+                  currentImageUrl={formData.servicesHeroBgImage}
+                  onUploadSuccess={(url) => handleChange('servicesHeroBgImage', url)}
+                  onClear={() => handleChange('servicesHeroBgImage', '')}
+                />
+              </div>
+            </div>
+
+            {/* Services 3-Polaroid Cluster */}
+            {renderPolaroidClusterEditor(
+              'servicesSnapshotLeft',
+              'servicesSnapshotMid',
+              'servicesSnapshotRight',
+              'Services Page',
+              'Customize the 3 hanging polaroids that appear over the Services header.'
+            )}
+          </div>
+        )}
+
+        {/* 4. PACKAGES TAB */}
+        {activeTab === 'packages' && (
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] shadow-xs space-y-6 animate-fadeIn">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-1 inline-block">
+                  Page 4 of 7
+                </span>
+                <h3 className="text-xl font-bold font-serif-display text-gray-900">
+                  Packages Page Hero Banner &amp; Polaroids
+                </h3>
+                <p className="text-xs text-gray-500">
+                  Appears at the top of the Wedding Packages page (`/packages`)
+                </p>
+              </div>
+
+              <Link
+                href="/packages"
+                target="_blank"
+                className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl border border-[#e0cbaf] bg-[#faf7f2] hover:bg-[#f3ede1] text-[#784d16] transition-colors"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Preview Packages Page</span>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Packages Page Main Title
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Curated Wedding Packages"
+                  value={formData.packagesHeroTitle}
+                  onChange={(e) => handleChange('packagesHeroTitle', e.target.value)}
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Packages Subtitle / Tagline
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Transparent, All-Inclusive Wedding Tiers"
+                  value={formData.packagesHeroSubtitle}
+                  onChange={(e) => handleChange('packagesHeroSubtitle', e.target.value)}
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
+                />
+              </div>
+
+              <div className="sm:col-span-2 bg-[#fcfaf7] p-5 rounded-2xl border border-[#ebdcc8] mt-2">
+                <ImageKitUploader
+                  label="Packages Page Hero Background Image"
+                  aspect="banner"
+                  folder="/shuvayan_banners"
+                  currentImageUrl={formData.packagesHeroBgImage}
+                  onUploadSuccess={(url) => handleChange('packagesHeroBgImage', url)}
+                  onClear={() => handleChange('packagesHeroBgImage', '')}
+                />
+              </div>
+            </div>
+
+            {/* Packages 3-Polaroid Cluster */}
+            {renderPolaroidClusterEditor(
+              'packagesSnapshotLeft',
+              'packagesSnapshotMid',
+              'packagesSnapshotRight',
+              'Packages Page',
+              'Customize the 3 hanging polaroids that appear over the Packages header.'
+            )}
+          </div>
+        )}
+
+        {/* 5. GALLERY TAB */}
+        {activeTab === 'gallery' && (
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] shadow-xs space-y-6 animate-fadeIn">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-1 inline-block">
+                  Page 5 of 7
+                </span>
+                <h3 className="text-xl font-bold font-serif-display text-gray-900">
+                  Gallery Page Hero Banner &amp; Polaroids
+                </h3>
+                <p className="text-xs text-gray-500">
+                  Appears at the top of the Portfolio Gallery page (`/gallery`)
+                </p>
+              </div>
+
+              <Link
+                href="/gallery"
+                target="_blank"
+                className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl border border-[#e0cbaf] bg-[#faf7f2] hover:bg-[#f3ede1] text-[#784d16] transition-colors"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Preview Gallery Page</span>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Gallery Page Main Title
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Moments that last forever"
+                  value={formData.galleryHeroTitle}
+                  onChange={(e) => handleChange('galleryHeroTitle', e.target.value)}
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Gallery Subtitle / Tagline
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Real Bengali Brides & Royal Mandap Designs"
+                  value={formData.galleryHeroSubtitle}
+                  onChange={(e) => handleChange('galleryHeroSubtitle', e.target.value)}
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
+                />
+              </div>
+
+              <div className="sm:col-span-2 bg-[#fcfaf7] p-5 rounded-2xl border border-[#ebdcc8] mt-2">
+                <ImageKitUploader
+                  label="Gallery Page Hero Background Image"
+                  aspect="banner"
+                  folder="/shuvayan_banners"
+                  currentImageUrl={formData.galleryHeroBgImage}
+                  onUploadSuccess={(url) => handleChange('galleryHeroBgImage', url)}
+                  onClear={() => handleChange('galleryHeroBgImage', '')}
+                />
+              </div>
+            </div>
+
+            {/* Gallery 3-Polaroid Cluster */}
+            {renderPolaroidClusterEditor(
+              'gallerySnapshotLeft',
+              'gallerySnapshotMid',
+              'gallerySnapshotRight',
+              'Gallery Page',
+              'Customize the 3 hanging polaroids that appear over the Gallery header.'
+            )}
+          </div>
+        )}
+
+        {/* 6. CATERING MENU TAB */}
+        {activeTab === 'menu' && (
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] shadow-xs space-y-6 animate-fadeIn">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-1 inline-block">
+                  Page 6 of 7
+                </span>
+                <h3 className="text-xl font-bold font-serif-display text-gray-900">
+                  Catering Menu Page Hero Banner &amp; Polaroids
+                </h3>
+                <p className="text-xs text-gray-500">
+                  Appears at the top of the Catering Menu page (`/menu`)
+                </p>
+              </div>
+
+              <Link
+                href="/menu"
+                target="_blank"
+                className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl border border-[#e0cbaf] bg-[#faf7f2] hover:bg-[#f3ede1] text-[#784d16] transition-colors"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Preview Menu Page</span>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Menu Page Main Title
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Plate Menus & Feasts"
+                  value={formData.menuHeroTitle || ''}
+                  onChange={(e) => handleChange('menuHeroTitle', e.target.value)}
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Menu Subtitle / Tagline
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Gourmet Bengali Catering"
+                  value={formData.menuHeroSubtitle || ''}
+                  onChange={(e) => handleChange('menuHeroSubtitle', e.target.value)}
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
+                />
+              </div>
+
+              <div className="sm:col-span-2 bg-[#fcfaf7] p-5 rounded-2xl border border-[#ebdcc8] mt-2">
+                <ImageKitUploader
+                  label="Menu Page Hero Background Image"
+                  aspect="banner"
+                  folder="/shuvayan_banners"
+                  currentImageUrl={formData.menuHeroBgImage || ''}
+                  onUploadSuccess={(url) => handleChange('menuHeroBgImage', url)}
+                  onClear={() => handleChange('menuHeroBgImage', '')}
+                />
+              </div>
+            </div>
+
+            {/* Menu 3-Polaroid Cluster */}
+            {renderPolaroidClusterEditor(
+              'menuSnapshotLeft',
+              'menuSnapshotMid',
+              'menuSnapshotRight',
+              'Catering Menu Page',
+              'Customize the 3 hanging polaroids that appear over the Catering Menu header.'
+            )}
+          </div>
+        )}
+
+        {/* 7. POLICY TAB */}
         {activeTab === 'policy' && (
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] shadow-xs space-y-6 animate-fadeIn">
             <div className="flex items-center justify-between border-b border-gray-100 pb-4">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-1 inline-block">
-                  Page 6 of 6
+                  Page 7 of 7
                 </span>
                 <h3 className="text-xl font-bold font-serif-display text-gray-900">
-                  Policy &amp; Terms Page Hero Banner
+                  Policy &amp; Terms Page Hero Banner &amp; Polaroids
                 </h3>
                 <p className="text-xs text-gray-500">
                   Appears at the top of the Booking Policy &amp; Terms page (`/policy`)
@@ -524,119 +746,133 @@ export default function AdminBannersPage() {
                 />
               </div>
             </div>
+
+            {/* Policy 3-Polaroid Cluster */}
+            {renderPolaroidClusterEditor(
+              'policySnapshotLeft',
+              'policySnapshotMid',
+              'policySnapshotRight',
+              'Policy & Terms Page',
+              'Customize the 3 hanging polaroids that appear over the Policy header.'
+            )}
           </div>
         )}
 
-        {/* 7. 3-POLAROID SNAPSHOT CLUSTER */}
+        {/* 8. DEDICATED 3-POLAROID MASTER STUDIO TAB */}
         {activeTab === 'polaroids' && (
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] shadow-xs space-y-6 animate-fadeIn">
             <div className="border-b border-gray-100 pb-3">
               <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-1 inline-block">
-                Hanging Showcase
+                3-Polaroid Master Studio
               </span>
               <h3 className="text-xl font-bold font-serif-display text-gray-900">
-                3-Polaroid Snapshot Cluster (Hangs in Inner Headers)
+                Multi-Page 3-Polaroid Snapshot Manager
               </h3>
               <p className="text-xs text-gray-500">
-                These 3 tilted snapshots hang over the breadcrumb across Gallery, Services, Packages, About, and Policy pages.
+                Customize distinct hanging snapshots for any specific page, or set the global fallback cluster.
               </p>
             </div>
 
-            {/* Live Preview Cluster */}
-            <div className="bg-[#1a0e0d] rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-center border border-[#3b201d] overflow-hidden shadow-inner">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#d99824] mb-6 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Live Polaroid Cluster Preview</span>
-              </span>
-
-              <div className="relative flex items-center justify-center w-72 sm:w-80 h-48">
-                {/* Left Snapshot */}
-                <div className="absolute -left-4 w-28 aspect-[3/4] bg-white p-1.5 shadow-2xl transform -rotate-14 rounded-xs transition-transform duration-300">
-                  <div className="relative w-full h-full bg-gray-900 overflow-hidden">
-                    {formData.snapshotLeft && (
-                      <Image
-                        src={formData.snapshotLeft}
-                        alt="Left snapshot preview"
-                        fill
-                        className="object-cover object-top"
-                      />
-                    )}
-                  </div>
-                </div>
-
-                {/* Center Snapshot */}
-                <div className="relative z-20 w-32 aspect-[3/4] bg-white p-1.5 shadow-2xl rounded-xs transition-transform duration-300">
-                  <div className="relative w-full h-full bg-gray-900 overflow-hidden">
-                    {formData.snapshotMid && (
-                      <Image
-                        src={formData.snapshotMid}
-                        alt="Center snapshot preview"
-                        fill
-                        className="object-cover object-center"
-                      />
-                    )}
-                  </div>
-                </div>
-
-                {/* Right Snapshot */}
-                <div className="absolute -right-4 w-28 aspect-[3/4] bg-white p-1.5 shadow-2xl transform rotate-14 rounded-xs transition-transform duration-300">
-                  <div className="relative w-full h-full bg-gray-900 overflow-hidden">
-                    {formData.snapshotRight && (
-                      <Image
-                        src={formData.snapshotRight}
-                        alt="Right snapshot preview"
-                        fill
-                        className="object-cover object-center"
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
+            {/* Page Target Selector Buttons */}
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              {[
+                { id: 'global' as PolaroidPageTarget, label: '🌐 Global Fallback Default' },
+                { id: 'about' as PolaroidPageTarget, label: '📖 About Us Page' },
+                { id: 'services' as PolaroidPageTarget, label: '💼 Services Page' },
+                { id: 'packages' as PolaroidPageTarget, label: '📦 Packages Page' },
+                { id: 'gallery' as PolaroidPageTarget, label: '🖼️ Gallery Page' },
+                { id: 'menu' as PolaroidPageTarget, label: '🍽️ Catering Menu Page' },
+                { id: 'policy' as PolaroidPageTarget, label: '🛡️ Policy Page' },
+              ].map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setSelectedPolaroidTarget(item.id)}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
+                    selectedPolaroidTarget === item.id
+                      ? 'bg-[#c8102e] text-white border-[#c8102e] shadow-xs'
+                      : 'bg-[#faf7f2] hover:bg-gray-100 text-gray-700 border-[#e8ded1]'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
             </div>
 
-            {/* Form Uploaders for 3 snapshots */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-              <div className="bg-[#fcfaf7] p-4 rounded-2xl border border-[#ebdcc8]">
-                <ImageKitUploader
-                  label="Left Photo (Tilted -14°)"
-                  folder="/shuvayan_banners"
-                  currentImageUrl={formData.snapshotLeft}
-                  onUploadSuccess={(url) => handleChange('snapshotLeft', url)}
-                  onClear={() => handleChange('snapshotLeft', '')}
-                />
-              </div>
+            {/* Active Selected Page Cluster Editor */}
+            {selectedPolaroidTarget === 'global' &&
+              renderPolaroidClusterEditor(
+                'snapshotLeft',
+                'snapshotMid',
+                'snapshotRight',
+                'Global Fallback Default',
+                'Used whenever a page does not have its own specific polaroid snapshots configured.'
+              )}
 
-              <div className="bg-[#fcfaf7] p-4 rounded-2xl border border-[#ebdcc8]">
-                <ImageKitUploader
-                  label="Center Photo (Main Spotlight)"
-                  folder="/shuvayan_banners"
-                  currentImageUrl={formData.snapshotMid}
-                  onUploadSuccess={(url) => handleChange('snapshotMid', url)}
-                  onClear={() => handleChange('snapshotMid', '')}
-                />
-              </div>
+            {selectedPolaroidTarget === 'about' &&
+              renderPolaroidClusterEditor(
+                'aboutSnapshotLeft',
+                'aboutSnapshotMid',
+                'aboutSnapshotRight',
+                'About Us Page',
+                'Hangs over the header of the About Us page (`/about`).'
+              )}
 
-              <div className="bg-[#fcfaf7] p-4 rounded-2xl border border-[#ebdcc8]">
-                <ImageKitUploader
-                  label="Right Photo (Tilted +14°)"
-                  folder="/shuvayan_banners"
-                  currentImageUrl={formData.snapshotRight}
-                  onUploadSuccess={(url) => handleChange('snapshotRight', url)}
-                  onClear={() => handleChange('snapshotRight', '')}
-                />
-              </div>
-            </div>
+            {selectedPolaroidTarget === 'services' &&
+              renderPolaroidClusterEditor(
+                'servicesSnapshotLeft',
+                'servicesSnapshotMid',
+                'servicesSnapshotRight',
+                'Services Page',
+                'Hangs over the header of the Services page (`/services`).'
+              )}
+
+            {selectedPolaroidTarget === 'packages' &&
+              renderPolaroidClusterEditor(
+                'packagesSnapshotLeft',
+                'packagesSnapshotMid',
+                'packagesSnapshotRight',
+                'Packages Page',
+                'Hangs over the header of the Packages page (`/packages`).'
+              )}
+
+            {selectedPolaroidTarget === 'gallery' &&
+              renderPolaroidClusterEditor(
+                'gallerySnapshotLeft',
+                'gallerySnapshotMid',
+                'gallerySnapshotRight',
+                'Gallery Page',
+                'Hangs over the header of the Gallery page (`/gallery`).'
+              )}
+
+            {selectedPolaroidTarget === 'menu' &&
+              renderPolaroidClusterEditor(
+                'menuSnapshotLeft',
+                'menuSnapshotMid',
+                'menuSnapshotRight',
+                'Catering Menu Page',
+                'Hangs over the header of the Catering Menu page (`/menu`).'
+              )}
+
+            {selectedPolaroidTarget === 'policy' &&
+              renderPolaroidClusterEditor(
+                'policySnapshotLeft',
+                'policySnapshotMid',
+                'policySnapshotRight',
+                'Policy & Terms Page',
+                'Hangs over the header of the Policy page (`/policy`).'
+              )}
           </div>
         )}
 
-        {/* Bottom Save */}
+        {/* Bottom Save Action */}
         <div className="flex justify-end pt-4 pb-8">
           <button
             type="submit"
             className="inline-flex items-center gap-2 bg-gradient-to-r from-[#c8102e] to-[#9e0a22] hover:from-[#a80b24] hover:to-[#80071a] text-white text-xs font-bold px-8 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer"
           >
             <Save className="w-4 h-4" />
-            <span>Save All Banner Settings</span>
+            <span>Save All Banner &amp; Polaroid Settings</span>
           </button>
         </div>
       </form>
@@ -654,10 +890,10 @@ export default function AdminBannersPage() {
                 Firebase Cloud Synced
               </span>
               <h3 className="text-xl font-bold font-serif-display text-gray-900">
-                Page Banners Saved Successfully!
+                Settings Saved Successfully!
               </h3>
               <p className="text-xs text-gray-500 mt-2 leading-relaxed">
-                Your distinct background banners, titles, and polaroid snapshots have been updated and are live across all public pages.
+                Your distinct background banners, titles, and per-page 3-polaroid snapshots have been updated and are live across all pages.
               </p>
             </div>
 

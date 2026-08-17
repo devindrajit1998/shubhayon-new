@@ -41,9 +41,9 @@ export default function AboutPage() {
     },
   ];
 
-  const snapLeft = banners?.snapshotLeft || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-left.jpg';
-  const snapMid = banners?.snapshotMid || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-mid.png';
-  const snapRight = banners?.snapshotRight || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-right.jpg';
+  const snapLeft = banners?.aboutSnapshotLeft || banners?.snapshotLeft || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-left.jpg';
+  const snapMid = banners?.aboutSnapshotMid || banners?.snapshotMid || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-mid.png';
+  const snapRight = banners?.aboutSnapshotRight || banners?.snapshotRight || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-right.jpg';
   const bannerBg = banners?.aboutHeroBgImage || banners?.innerHeroBgImage || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/galler-banner.png';
 
   const polaroidPhotos = [
@@ -168,16 +168,16 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               <div className="lg:col-span-6 space-y-6">
                 <div>
-                  <p className="text-[#b81414] font-semibold text-xs sm:text-sm tracking-wide uppercase mb-1.5">
+                  <p className="text-[#c91103] font-semibold text-sm sm:text-[25px] tracking-normal mb-1">
                     Our Story &amp; Philosophy
                   </p>
-                  <h2 className="font-serif-display text-3xl sm:text-4xl lg:text-5xl font-normal text-[#1f2937] tracking-tight">
+                  <h2 className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight">
                     Where Heritage Meets Contemporary Elegance
                   </h2>
 
                   {/* Red line with Heart Divider */}
                   <div className="flex items-center gap-3 my-3">
-                    <span className="w-14 sm:w-16 h-[1.5px] bg-[#b81414]" />
+                    <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
                     <span className="relative w-3.5 h-3.5 inline-block">
                       <Image
                         src="/images/heart.svg"
@@ -187,7 +187,7 @@ export default function AboutPage() {
                         referrerPolicy="no-referrer"
                       />
                     </span>
-                    <span className="w-14 sm:w-16 h-[1.5px] bg-[#b81414]" />
+                    <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
                   </div>
                 </div>
 
@@ -202,7 +202,7 @@ export default function AboutPage() {
                 <div className="pt-2">
                   <button
                     onClick={() => openQuoteModal()}
-                    className="bg-[#b81414] hover:bg-[#991111] text-white font-semibold text-sm px-7 py-3 rounded-md shadow-md hover:shadow-lg transition-all"
+                    className="bg-[#c8102e] hover:bg-[#a80b24] text-white font-semibold text-sm px-7 py-3 rounded-md shadow-md hover:shadow-lg transition-all cursor-pointer"
                   >
                     Plan Your Celebration
                   </button>
@@ -238,14 +238,14 @@ export default function AboutPage() {
         <section className="py-16 sm:py-20 bg-[#faf7f2] border-y border-[#ecdcc8]">
           <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-12">
-              <p className="text-[#b81414] font-semibold text-xs sm:text-sm tracking-normal mb-1">
+              <p className="text-[#c91103] font-semibold text-sm sm:text-[25px] tracking-normal mb-1">
                 Why Choose Us
               </p>
-              <h3 className="font-serif-display text-3xl sm:text-4xl font-normal text-[#1f2937] tracking-tight">
+              <h3 className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight">
                 Our Core Pillars
               </h3>
               <div className="flex items-center justify-center gap-3 my-3">
-                <span className="w-14 sm:w-16 h-[1.5px] bg-[#b81414]" />
+                <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
                 <span className="relative w-3.5 h-3.5 inline-block">
                   <Image
                     src="/images/heart.svg"
@@ -255,7 +255,7 @@ export default function AboutPage() {
                     referrerPolicy="no-referrer"
                   />
                 </span>
-                <span className="w-14 sm:w-16 h-[1.5px] bg-[#b81414]" />
+                <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
               </div>
             </div>
 

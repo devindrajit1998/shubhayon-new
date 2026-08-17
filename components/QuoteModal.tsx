@@ -15,6 +15,8 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [eventDate, setEventDate] = useState('');
+  const [eventType, setEventType] = useState('Bengali Wedding');
+  const [otherEventType, setOtherEventType] = useState('');
   const [eventLocation, setEventLocation] = useState('Kolkata & Suburbs');
   const [guestCount, setGuestCount] = useState('150-300');
   const [customServices, setCustomServices] = useState<string[]>([]);
@@ -40,15 +42,23 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (selectedServices.length === 0) {
+      alert('Please select at least one required service.');
+      return;
+    }
+
     setIsSubmitting(true);
-    
+
+    const finalEventType = eventType === 'Other' ? otherEventType || 'Other Event' : eventType;
+
     const leadPayload = {
       name: name || 'Prospective Client',
       phone: phone,
       email: email || 'N/A',
       eventDate: eventDate || 'TBD',
-      eventType: eventLocation ? `Event in ${eventLocation}` : 'Bengali Wedding',
-      service: selectedServices.length > 0 ? selectedServices.join(', ') : 'Custom Wedding Inquiry',
+      eventType: eventLocation ? `${finalEventType} in ${eventLocation}` : finalEventType,
+      service: selectedServices.join(', '),
       guestCount: guestCount,
       budget: 'Standard',
       message: notes || 'Submitted via Get Quote on website.',
@@ -57,16 +67,9 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
     // 1. Sync to Admin Context & Firebase Firestore directly
     addLead(leadPayload);
 
-    // 2. Also send to /api/leads endpoint
-    try {
-      await fetch('/api/leads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(leadPayload),
-      });
-    } catch (err) {
-      console.warn('API leads submission note:', err);
-    }
+    // Removed /api/leads fetch to prevent double entry
+
+
 
     setTimeout(() => {
       setIsSubmitting(false);
@@ -99,18 +102,18 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
           </button>
 
           <div className="flex items-center gap-3">
-            <div className="relative w-7 h-7 flex-shrink-0">
+            <div className="relative w-28 h-10 flex-shrink-0">
               <Image
-                src="/images/heart.svg"
-                alt="Heart"
+                src="/images/logo.png"
+                alt="Shuvayan Logo"
                 fill
-                className="object-contain"
+                className="object-contain object-left"
                 referrerPolicy="no-referrer"
               />
             </div>
             <div>
               <p className="text-xs font-semibold text-[#f59e0b] uppercase tracking-wider">
-                Shuvayan Wedding &amp; Event Concierge
+                Shuvayan Event Management
               </p>
               <h3 className="font-serif-display text-xl sm:text-2xl font-bold text-white">
                 Request a Custom Quote
@@ -200,12 +203,13 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
 
                 <div>
                   <label className="block text-xs font-semibold text-[#374151] mb-1.5">
-                    Expected Event Date
+                    Expected Event Date *
                   </label>
                   <div className="relative">
                     <Calendar className="w-4 h-4 text-gray-400 absolute left-3 top-3" />
                     <input
                       type="date"
+                      required
                       value={eventDate}
                       onChange={(e) => setEventDate(e.target.value)}
                       className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#c8102e] focus:border-transparent outline-none"
@@ -218,12 +222,13 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-[#374151] mb-1.5">
-                    Event Venue / Location
+                    Event Venue / Location *
                   </label>
                   <div className="relative">
                     <MapPin className="w-4 h-4 text-gray-400 absolute left-3 top-3" />
                     <input
                       type="text"
+                      required
                       placeholder="e.g. South Kolkata / Salt Lake / Howrah"
                       value={eventLocation}
                       onChange={(e) => setEventLocation(e.target.value)}
@@ -249,10 +254,46 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
                 </div>
               </div>
 
+              {/* Event Type */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-[#374151] mb-1.5">
+                    Event Type *
+                  </label>
+                  <select
+                    required
+                    value={eventType}
+                    onChange={(e) => setEventType(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#c8102e] focus:border-transparent outline-none bg-white"
+                  >
+                    <option value="Bengali Wedding">Bengali Wedding</option>
+                    <option value="Annaprashan">Annaprashan</option>
+                    <option value="Anniversary">Anniversary</option>
+                    <option value="Birthday Party">Birthday Party</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                {eventType === 'Other' && (
+                  <div>
+                    <label className="block text-xs font-semibold text-[#374151] mb-1.5">
+                      Please Specify *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Type your event type"
+                      value={otherEventType}
+                      onChange={(e) => setOtherEventType(e.target.value)}
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#c8102e] focus:border-transparent outline-none"
+                    />
+                  </div>
+                )}
+              </div>
+
               {/* Services Required Checkboxes */}
               <div>
                 <label className="block text-xs font-semibold text-[#374151] mb-2">
-                  Select Required Services
+                  Select Required Services *
                 </label>
                 {availableServices.length === 0 ? (
                   <p className="text-xs text-gray-500 bg-gray-50 p-3 rounded-lg border border-gray-200">
@@ -269,18 +310,16 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
                           type="button"
                           key={srv}
                           onClick={() => toggleService(srv)}
-                          className={`flex items-center gap-2 p-2.5 rounded-lg border text-left text-xs transition-colors ${
-                            isChecked
+                          className={`flex items-center gap-2 p-2.5 rounded-lg border text-left text-xs transition-colors ${isChecked
                               ? 'border-[#c8102e] bg-[#fff5f5] text-[#c8102e] font-semibold'
                               : 'border-gray-200 hover:border-gray-300 text-gray-700 bg-gray-50/50'
-                          }`}
+                            }`}
                         >
                           <span
-                            className={`w-4 h-4 rounded flex items-center justify-center border ${
-                              isChecked
+                            className={`w-4 h-4 rounded flex items-center justify-center border ${isChecked
                                 ? 'bg-[#c8102e] border-[#c8102e] text-white'
                                 : 'border-gray-400'
-                            }`}
+                              }`}
                           >
                             {isChecked && <CheckCircle className="w-3.5 h-3.5" />}
                           </span>
@@ -322,9 +361,6 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
                     </>
                   )}
                 </button>
-                <p className="text-[11px] text-gray-500 text-center mt-2">
-                  No obligation &bull; Instant WhatsApp callback &bull; Direct planner consultation
-                </p>
               </div>
             </form>
           )}

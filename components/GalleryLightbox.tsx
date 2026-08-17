@@ -103,9 +103,9 @@ export default function GalleryLightbox({ activeIndex, photos, onClose }: Galler
       {/* Main Image Container */}
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative max-w-4xl max-h-[85vh] w-full h-full flex flex-col items-center justify-center"
+        className="relative max-w-5xl max-h-[92vh] w-full h-full flex flex-col items-center justify-center"
       >
-        <div className="relative w-full h-[65vh] sm:h-[75vh] rounded-2xl overflow-hidden shadow-2xl bg-black/40">
+        <div className="relative w-full h-[78vh] sm:h-[86vh] rounded-2xl overflow-hidden shadow-2xl bg-black/40">
           <Image
             src={currentPhoto.image}
             alt={currentPhoto.title || 'Gallery image'}
@@ -116,20 +116,12 @@ export default function GalleryLightbox({ activeIndex, photos, onClose }: Galler
           />
         </div>
 
-        {/* Caption */}
-        <div className="mt-4 text-center text-white">
-          {currentPhoto.category && (
-            <span className="text-xs uppercase tracking-widest text-[#f59e0b] font-semibold block mb-1">
-              {currentPhoto.category}
-            </span>
-          )}
-          <h4 className="font-serif-display text-lg sm:text-xl font-bold">
-            {currentPhoto.title}
-          </h4>
-          <p className="text-xs text-gray-400 mt-1">
-            {currentIndex + 1} of {total}
-          </p>
-        </div>
+        {/* Subtle Minimalist Index Counter */}
+        {total > 1 && (
+          <div className="mt-2.5 text-center text-xs text-white/50 font-mono tracking-wider">
+            {currentIndex + 1} / {total}
+          </div>
+        )}
       </div>
     </div>
   );

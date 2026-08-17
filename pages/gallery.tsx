@@ -37,9 +37,9 @@ export default function GalleryPage() {
 
   const bannerBg = banners?.galleryHeroBgImage || banners?.innerHeroBgImage || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/galler-banner.png';
   const bannerTitle = banners?.galleryHeroTitle || banners?.innerHeroTitle || 'Moments that last forever';
-  const snapLeft = banners?.snapshotLeft || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-left.jpg';
-  const snapMid = banners?.snapshotMid || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-mid.png';
-  const snapRight = banners?.snapshotRight || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-right.jpg';
+  const snapLeft = banners?.gallerySnapshotLeft || banners?.snapshotLeft || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-left.jpg';
+  const snapMid = banners?.gallerySnapshotMid || banners?.snapshotMid || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-mid.png';
+  const snapRight = banners?.gallerySnapshotRight || banners?.snapshotRight || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-right.jpg';
 
   const polaroidPhotos = [
     { title: 'Spotlight Couple', image: snapMid, category: 'FEATURED SNAPSHOT' },
@@ -162,17 +162,17 @@ export default function GalleryPage() {
         {/* Gallery Content Section */}
         <section className="py-12 sm:py-16 lg:py-20 max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
-          <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
-            <p className="text-[#c8102e] font-semibold text-xs sm:text-sm tracking-normal mb-1">
+          <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
+            <p className="text-[#c91103] font-semibold text-sm sm:text-[25px] tracking-normal mb-1">
               Captured Moments
             </p>
-            <h2 className="font-serif-display text-2xl sm:text-3xl lg:text-4xl font-normal text-[#5a5858] tracking-tight">
+            <h2 className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight">
               Explore Our Portfolio
             </h2>
 
             {/* Red line with Heart Divider */}
-            <div className="flex items-center justify-center gap-3 my-2.5">
-              <span className="w-12 sm:w-14 h-[1.5px] bg-[#c8102e]" />
+            <div className="flex items-center justify-center gap-3 my-3">
+              <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
               <span className="relative w-3.5 h-3.5 inline-block">
                 <Image
                   src="/images/heart.svg"
@@ -182,7 +182,7 @@ export default function GalleryPage() {
                   referrerPolicy="no-referrer"
                 />
               </span>
-              <span className="w-12 sm:w-14 h-[1.5px] bg-[#c8102e]" />
+              <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
             </div>
           </div>
 
@@ -231,16 +231,16 @@ export default function GalleryPage() {
           {/* 4. Real Firebase Categories & Artists */}
           {!isLoading && !error && categories.length > 0 && artists.length > 0 && (
             <div className="space-y-8">
-              {/* Category Filter Tabs Bar */}
-              <div className="flex justify-center">
-                <div className="inline-flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 p-1.5 bg-[#f5ecdd] rounded-lg border border-[#e8d5bf] shadow-inner max-w-full">
+              {/* Category Filter Tabs Bar - Full Width */}
+              <div className="w-full">
+                <div className="w-full flex items-center justify-between gap-1 sm:gap-2 p-1.5 sm:p-2 bg-[#f5ecdd] rounded-xl border border-[#e8d5bf] shadow-xs overflow-x-auto no-scrollbar">
                   {categories.map((cat) => {
                     const isSelected = activeCategory === cat;
                     return (
                       <button
                         key={cat}
                         onClick={() => setSelectedCategory(cat)}
-                        className={`px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                        className={`flex-1 min-w-[120px] py-2 sm:py-2.5 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold text-center whitespace-nowrap transition-all duration-200 cursor-pointer ${
                           isSelected
                             ? 'bg-[#c8102e] text-white shadow-xs'
                             : 'text-[#5a4242] hover:bg-[#ebd9c2] hover:text-[#74161f]'

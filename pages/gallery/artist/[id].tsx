@@ -128,123 +128,97 @@ export default function ArtistDetailPage() {
             </div>
 
             {/* Artist Profile Spotlight Card */}
-            <div className="bg-[#241312]/90 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-[#482824] shadow-2xl flex flex-col md:flex-row items-center md:items-start gap-6 sm:gap-8 text-center md:text-left">
-              {/* Large Round Avatar */}
-              <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden border-4 border-[#d99824] bg-white shadow-xl flex-shrink-0">
-                <Image
-                  src={artist.avatar || '/images/artist-dp.png'}
-                  alt={artist.name}
-                  fill
-                  className={artist.avatar ? 'object-cover object-top' : 'object-contain'}
-                  referrerPolicy="no-referrer"
-                  priority
-                />
+            <div className="bg-[#241312]/90 backdrop-blur-md rounded-3xl p-6 sm:p-10 border border-[#482824] shadow-2xl space-y-4 text-left">
+              {/* Badges */}
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className="text-[11px] font-bold uppercase tracking-wider bg-[#d99824]/20 text-[#f5be58] px-3 py-1 rounded-full border border-[#d99824]/40">
+                  {artist.category}
+                </span>
+                <span className="text-[11px] font-semibold bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full border border-emerald-500/40 flex items-center gap-1">
+                  <Award className="w-3.5 h-3.5" />
+                  <span>{artist.eventsCount}</span>
+                </span>
               </div>
 
-              {/* Artist Info & Actions */}
-              <div className="flex-1 space-y-3">
-                <div className="flex flex-wrap items-center justify-center md:justify-start gap-2.5">
-                  <span className="text-[11px] font-bold uppercase tracking-wider bg-[#d99824]/20 text-[#f5be58] px-3 py-1 rounded-full border border-[#d99824]/40">
-                    {artist.category}
-                  </span>
-                  <span className="text-[11px] font-semibold bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full border border-emerald-500/40 flex items-center gap-1">
-                    <Award className="w-3.5 h-3.5" />
-                    <span>{artist.eventsCount}</span>
-                  </span>
-                </div>
-
+              {/* Artist Name & Role */}
+              <div>
                 <h1 className="font-serif-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
                   {artist.name}
                 </h1>
-                <p className="text-sm sm:text-base text-amber-200 font-medium">
+                <p className="text-base sm:text-lg text-amber-200 font-medium mt-1">
                   {artist.role}
                 </p>
+              </div>
 
-                <p className="text-xs sm:text-sm text-gray-300 max-w-2xl leading-relaxed">
-                  {defaultBio}
-                </p>
+              {/* Bio Description */}
+              <p className="text-xs sm:text-sm text-gray-300 max-w-3xl leading-relaxed">
+                {defaultBio}
+              </p>
 
-                {/* Booking Call-To-Action Buttons */}
-                <div className="flex flex-wrap items-center justify-center md:justify-start gap-3.5 pt-3">
-                  <button
-                    onClick={() => openQuoteModal(`${artist.role} - ${artist.name}`)}
-                    className="inline-flex items-center gap-2 bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs sm:text-sm font-bold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5 cursor-pointer"
-                  >
-                    <Sparkles className="w-4 h-4 text-amber-300" />
-                    <span>Book {artist.name} for Your Wedding</span>
-                  </button>
-
-                  <a
-                    href={`tel:${settings?.primaryPhone?.replace(/\s+/g, '') || '7439442349'}`}
-                    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold px-5 py-3 rounded-xl border border-white/20 transition-colors"
-                  >
-                    <Phone className="w-4 h-4 text-emerald-400" />
-                    <span>Inquire Availability</span>
-                  </a>
-                </div>
+              {/* Inquire Call-To-Action */}
+              <div className="pt-2 flex flex-wrap items-center gap-3.5">
+                <a
+                  href={`tel:${settings?.primaryPhone?.replace(/\s+/g, '') || '7439442349'}`}
+                  className="inline-flex items-center gap-2 bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs sm:text-sm font-bold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5 cursor-pointer"
+                >
+                  <Phone className="w-4 h-4" />
+                  <span>Inquire Availability</span>
+                </a>
               </div>
             </div>
           </div>
         </section>
 
-        {/* 2. Full Work Gallery Showcase Grid */}
-        <section className="py-14 sm:py-20 max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 border-b border-[#ebdcc8] pb-5">
+        {/* 2. Full Work Gallery Showcase Grid - Minimalist & Modern */}
+        <section className="py-12 sm:py-16 max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 mb-8 border-b border-[#ebdcc9] pb-4">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-[#c8102e] mb-1">
-                Portfolio Showcase
-              </p>
-              <h2 className="font-serif-display text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
-                Work Gallery &bull; {artist.photos.length} Captured Works
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#c8102e]">
+                  Portfolio Gallery
+                </span>
+                <span className="text-[10px] font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+                  {artist.photos.length} {artist.photos.length === 1 ? 'Work' : 'Works'}
+                </span>
+              </div>
+              <h2 className="font-serif-display text-2xl sm:text-3xl font-bold text-gray-900">
+                Captured Moments &amp; Highlights
               </h2>
             </div>
-            <p className="text-xs text-gray-500 max-w-md">
-              Click on any photograph to view high-resolution details in full-screen lightbox.
+            <p className="text-xs text-gray-400 font-light">
+              Click any photo to view in high-resolution lightbox
             </p>
           </div>
 
           {artist.photos.length === 0 ? (
-            <div className="py-16 text-center bg-white rounded-3xl border border-dashed border-gray-300 p-8">
-              <Camera className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <h3 className="text-base font-bold text-gray-700">No Portfolio Photos Uploaded Yet</h3>
+            <div className="py-16 text-center bg-white rounded-2xl border border-dashed border-gray-300 p-8 max-w-md mx-auto">
+              <Camera className="w-10 h-10 text-gray-300 mx-auto mb-2" />
+              <h3 className="text-sm font-bold text-gray-700">No Portfolio Works Uploaded Yet</h3>
               <p className="text-xs text-gray-500 mt-1">
                 Photos added from the Admin Portal will appear here dynamically.
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3.5 sm:gap-4">
               {artist.photos.map((photo, idx) => (
                 <div
                   key={idx}
                   onClick={() => openLightbox(idx, artistPhotosList)}
-                  className="group relative aspect-[3/4] bg-white rounded-2xl overflow-hidden border border-[#eedfcb] shadow-sm hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer flex flex-col justify-end"
+                  className="group cursor-pointer relative aspect-square bg-gray-100 rounded-xl overflow-hidden border border-[#eedfcb] shadow-2xs hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                 >
                   <Image
                     src={photo.image}
                     alt={photo.title || artist.name}
                     fill
-                    className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover object-center group-hover:scale-108 transition-transform duration-500"
                     referrerPolicy="no-referrer"
                   />
 
-                  {/* Dark vignette backdrop */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
-
-                  {/* Hover Center Zoom Icon */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-xs text-white flex items-center justify-center shadow-xl transform scale-75 group-hover:scale-100 transition-transform">
-                      <Maximize2 className="w-5 h-5 text-amber-300" />
+                  {/* Subtle Hover Overlay with Zoom Icon */}
+                  <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                    <span className="w-9 h-9 rounded-full bg-white/90 backdrop-blur-xs text-gray-900 flex items-center justify-center shadow-md transform scale-75 group-hover:scale-100 transition-transform">
+                      <Maximize2 className="w-4 h-4 text-gray-800" />
                     </span>
-                  </div>
-
-                  {/* Bottom Caption */}
-                  <div className="relative z-10 p-4 text-white">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#f5be58] block mb-0.5">
-                      {artist.category}
-                    </span>
-                    <h3 className="font-serif-display text-sm sm:text-base font-bold line-clamp-2 leading-snug drop-shadow-xs">
-                      {photo.title || `Work Sample #${idx + 1}`}
-                    </h3>
                   </div>
                 </div>
               ))}

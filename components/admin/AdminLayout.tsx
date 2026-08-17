@@ -21,6 +21,7 @@ import {
   ChevronRight,
   ShieldCheck,
   Sparkles,
+  UtensilsCrossed,
 } from 'lucide-react';
 import { useAdminData } from '@/context/AdminDataContext';
 
@@ -33,6 +34,7 @@ interface AdminLayoutProps {
     | 'leads'
     | 'services'
     | 'packages'
+    | 'menu'
     | 'gallery'
     | 'banners'
     | 'testimonials'
@@ -101,6 +103,13 @@ export default function AdminLayout({
       label: 'Packages Manager',
       href: '/admin/packages',
       icon: Package,
+      badge: null,
+    },
+    {
+      id: 'menu',
+      label: 'Catering & Menu',
+      href: '/admin/menu',
+      icon: UtensilsCrossed,
       badge: null,
     },
     {
