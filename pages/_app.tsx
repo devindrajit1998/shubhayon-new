@@ -7,6 +7,7 @@ import { AdminDataProvider } from '@/context/AdminDataContext';
 import QuoteModal from '@/components/QuoteModal';
 import PackageDetailModal, { PackageData } from '@/components/PackageDetailModal';
 import GalleryLightbox from '@/components/GalleryLightbox';
+import PageDataLoader from '@/components/PageDataLoader';
 
 export { useAppModals };
 
@@ -43,6 +44,9 @@ export default function App({ Component, pageProps }: AppProps) {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="icon" href="/images/heart.svg" />
         </Head>
+
+        {/* Full-screen royal loader to prevent fallback data flicker */}
+        <PageDataLoader />
 
         <Component {...pageProps} />
 

@@ -20,7 +20,7 @@ export default function Footer() {
     { label: 'About Us', href: '/about' },
     { label: 'Services', href: '/services' },
     { label: 'Gallery', href: '/gallery' },
-    { label: 'Policy', href: '/policy' },
+    { label: 'Menu', href: '/menu' },
   ];
 
   const defaultServiceLinks = [
@@ -40,7 +40,7 @@ export default function Footer() {
     : defaultServiceLinks;
 
   return (
-    <footer id="main-footer" className="bg-[#0e0a0a] text-white pt-14 pb-10 border-t border-[#221818]">
+    <footer id="main-footer" className="bg-[#150200] text-white pt-14 pb-10 border-t border-[#221818]">
       <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12 border-b border-white/10">
           {/* Column 1: Brand & Tagline (4 cols on lg) */}
@@ -59,11 +59,6 @@ export default function Footer() {
               We turn your dream into reality with creativity, eligance &amp; flawless execution.
             </p>
 
-            <div className="pt-3">
-              <p className="text-[11px] sm:text-xs text-gray-500">
-                Copyright reserved &copy; shuvayan
-              </p>
-            </div>
           </div>
 
           {/* Column 2: Quick Links (2.5 cols on lg) */}
@@ -76,7 +71,7 @@ export default function Footer() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="group inline-flex items-center gap-2 text-xs sm:text-sm text-gray-300 hover:text-white transition-colors"
+                    className="group inline-flex items-center gap-2 text-xs sm:text-sm text-gray-300 hover:text-[#f59e0b] transition-colors"
                   >
                     <span className="relative w-2 h-2 flex-shrink-0 inline-block">
                       <Image
@@ -87,7 +82,7 @@ export default function Footer() {
                         referrerPolicy="no-referrer"
                       />
                     </span>
-                    <span className="group-hover:translate-x-1 transition-transform">
+                    <span className="transition-transform">
                       {link.label}
                     </span>
                   </Link>
@@ -106,7 +101,7 @@ export default function Footer() {
                 <li key={item.label}>
                   <button
                     onClick={() => openQuoteModal(item.service)}
-                    className="group inline-flex items-center gap-2 text-xs sm:text-sm text-gray-300 hover:text-white transition-colors text-left"
+                    className="group inline-flex items-center gap-2 text-xs sm:text-sm text-gray-300 hover:text-[#f59e0b] transition-colors text-left"
                   >
                     <span className="relative w-2 h-2 flex-shrink-0 inline-block">
                       <Image
@@ -117,7 +112,7 @@ export default function Footer() {
                         referrerPolicy="no-referrer"
                       />
                     </span>
-                    <span className="group-hover:translate-x-1 transition-transform">
+                    <span className="transition-transform">
                       {item.label}
                     </span>
                   </button>
@@ -211,13 +206,9 @@ export default function Footer() {
 
         {/* Bottom subtle note */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 gap-2">
-          <p>Handcrafted with elegance for authentic Bengali weddings &amp; grand celebrations.</p>
+          <p>Copyright reserved &copy; shuvayan</p>
           <div className="flex gap-4 items-center">
             <Link href="/policy" className="hover:text-gray-400">Terms &amp; Policy</Link>
-            <span>&bull;</span>
-            <Link href="/#about" className="hover:text-gray-400">About Shuvayan</Link>
-            <span>&bull;</span>
-            <Link href="/admin/login" className="hover:text-[#d99824] text-gray-400 transition-colors">Admin Portal</Link>
           </div>
         </div>
       </div>

@@ -55,7 +55,7 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
     { label: 'Services', href: '/services', id: 'services' },
     { label: 'Packages', href: '/packages', id: 'packages' },
     { label: 'Gallery', href: '/gallery', id: 'gallery' },
-    { label: 'Policy', href: '/policy', id: 'policy' },
+    { label: 'Menu', href: '/menu', id: 'menu' },
   ];
 
   return (
@@ -71,7 +71,7 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
           <div className="flex items-center justify-between">
             {/* Brand Logo */}
             <Link href="/" id="brand-logo-link" className="flex items-center space-x-2 group">
-              <div className="relative w-36 sm:w-48 md:w-56 h-10 sm:h-12 lg:h-14 transition-transform duration-300 group-hover:scale-105">
+              <div className="relative w-36 sm:w-48 md:w-56 h-10 sm:h-12 lg:h-14 transition-transform duration-300">
                 <Image
                   src={settings?.logoUrl || '/images/logo.png'}
                   alt="Shuvayan - Wedding & Event Management"

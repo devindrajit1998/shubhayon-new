@@ -35,14 +35,14 @@ export default function TestimonialsSection() {
   };
 
   return (
-    <section id="testimonials" className="py-16 sm:py-20 lg:py-24 bg-[#fbf9f6] relative overflow-hidden border-t border-[#f0e5d5]">
+    <section id="testimonials" className="py-10 lg:py-14 bg-[#fbf9f6] relative overflow-hidden border-t border-[#f0e5d5]">
       <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-          <p className="text-[#c8102e] font-semibold text-xs sm:text-sm tracking-normal mb-1">
+        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-12">
+          <p className="text-[#c91103] font-semibold text-sm sm:text-[25px] tracking-normal">
             Cherished Words
           </p>
-          <h2 className="font-serif-display text-2xl sm:text-3xl lg:text-4xl font-normal text-[#5a5858] tracking-tight">
+          <h2 className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight">
             Couple Reviews &amp; Testimonials
           </h2>
 
@@ -60,10 +60,6 @@ export default function TestimonialsSection() {
             </span>
             <span className="w-12 sm:w-14 h-[1.5px] bg-[#c8102e]" />
           </div>
-
-          <p className="text-xs sm:text-sm text-gray-500 max-w-lg mx-auto mt-2">
-            Real memories and authentic testimonials from couples who celebrated their timeless Bengali weddings with Shuvayan.
-          </p>
         </div>
 
         {/* 1. Loading State */}
@@ -135,11 +131,10 @@ export default function TestimonialsSection() {
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star
                             key={star}
-                            className={`w-4 h-4 ${
-                              star <= (t.rating || 5)
-                                ? 'text-amber-400 fill-amber-400'
-                                : 'text-gray-200'
-                            }`}
+                            className={`w-4 h-4 ${star <= (t.rating || 5)
+                              ? 'text-amber-400 fill-amber-400'
+                              : 'text-gray-200'
+                              }`}
                           />
                         ))}
                       </div>
@@ -168,18 +163,6 @@ export default function TestimonialsSection() {
                   </div>
                 </div>
               ))}
-            </div>
-
-            {/* Share Review CTA Footer */}
-            <div className="mt-12 text-center flex items-center justify-center gap-4 flex-wrap">
-              <button
-                type="button"
-                onClick={() => setShowReviewModal(true)}
-                className="inline-flex items-center gap-2 bg-[#fffdfa] hover:bg-white text-[#784d16] border border-[#e0cbaf] text-xs sm:text-sm font-bold px-6 py-3 rounded-2xl shadow-xs hover:shadow-md transition-all cursor-pointer"
-              >
-                <Sparkles className="w-4 h-4 text-[#d99824]" />
-                <span>Leave a Couple Review</span>
-              </button>
             </div>
           </>
         )}
@@ -253,11 +236,10 @@ export default function TestimonialsSection() {
                         className="p-1 hover:scale-110 transition-transform cursor-pointer"
                       >
                         <Star
-                          className={`w-6 h-6 ${
-                            star <= reviewerRating
-                              ? 'text-amber-400 fill-amber-400'
-                              : 'text-gray-300'
-                          }`}
+                          className={`w-6 h-6 ${star <= reviewerRating
+                            ? 'text-amber-400 fill-amber-400'
+                            : 'text-gray-300'
+                            }`}
                         />
                       </button>
                     ))}

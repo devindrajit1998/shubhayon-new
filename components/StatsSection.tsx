@@ -74,10 +74,10 @@ export default function StatsSection() {
 
               {/* Number and Label */}
               <div className="text-left text-white">
-                <div className="font-serif-display text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-none drop-shadow-sm">
+                <div className="font-serif-display text-2xl sm:text-3xl lg:text-[40px] tracking-tight leading-none drop-shadow-sm">
                   {stat.value}
                 </div>
-                <div className="text-xs sm:text-sm font-medium tracking-wide text-white/95 mt-1 leading-tight drop-shadow-sm">
+                <div className="text-xs sm:text-[16px] tracking-wide text-white/95 mt-1 leading-tight drop-shadow-sm">
                   {stat.label}
                 </div>
               </div>

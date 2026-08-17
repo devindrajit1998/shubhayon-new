@@ -80,3 +80,20 @@ summary {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+@keyframes loaderSlide {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.animate-loader-slide {
+  animation: loaderSlide 1.8s infinite ease-in-out;
+}
+

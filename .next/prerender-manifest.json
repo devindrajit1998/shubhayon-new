@@ -1,40 +1,11 @@
 {
   "version": 4,
   "routes": {},
-  "dynamicRoutes": {
-    "/gallery/artist/[id]": {
-      "routeRegex": "^/gallery/artist/([^/]+?)(?:/)?$",
-      "dataRoute": "/_next/data/frqUUcyn_RwQlxWZ7S2WX/gallery/artist/[id].json",
-      "fallback": null,
-      "dataRouteRegex": "^/_next/data/frqUUcyn_RwQlxWZ7S2WX/gallery/artist/([^/]+?)\\.json$",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/packages/[id]": {
-      "routeRegex": "^/packages/([^/]+?)(?:/)?$",
-      "dataRoute": "/_next/data/frqUUcyn_RwQlxWZ7S2WX/packages/[id].json",
-      "fallback": null,
-      "dataRouteRegex": "^/_next/data/frqUUcyn_RwQlxWZ7S2WX/packages/([^/]+?)\\.json$",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    }
-  },
+  "dynamicRoutes": {},
   "notFoundRoutes": [],
   "preview": {
-    "previewModeId": "4297bd844129fce5fdeab6d2015f302f",
-    "previewModeSigningKey": "2c538c41714b8d8f5455fbe6b38d0668348c56e1f56aa5e55984db7ab30c8545",
-    "previewModeEncryptionKey": "0a4c3185044e33409448e1ba4241211d77a99589a94ad3baeaa24b3526b68ed4"
+    "previewModeId": "2597902e1bd0c0248d69db6e199d3a08",
+    "previewModeSigningKey": "7bf16c861992282d76cfd18360cbc796020ec3b636f749482641271837881c2d",
+    "previewModeEncryptionKey": "98be612af6895336e5233fce61ed09755a0f470af183c86772cee7cd0d833585"
   }
 }

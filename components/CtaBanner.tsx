@@ -9,7 +9,7 @@ export default function CtaBanner() {
   return (
     <section
       id="dream-celebration-cta"
-      className="relative py-16 sm:py-20 lg:py-24 overflow-hidden bg-[#fffaef] border-t border-[#faeed4]"
+      className="relative py-10 lg:py-14 overflow-hidden bg-[#fffaef] border-t border-[#faeed4]"
     >
       {/* Background Floral Asset */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -27,7 +27,7 @@ export default function CtaBanner() {
         {/* Script Cursive Intro: "Let's plan your" */}
         <p
           id="cta-script-title"
-          className="font-script text-3xl sm:text-4xl lg:text-5xl text-[#c87a14] drop-shadow-sm mb-1"
+          className="font-script text-3xl sm:text-4xl lg:text-[50px] text-[#c91103] drop-shadow-sm mb-1"
         >
           Let&apos;s plan your
         </p>
@@ -35,7 +35,7 @@ export default function CtaBanner() {
         {/* Main Title: "Dream Celebration ❤️" */}
         <h2
           id="cta-main-title"
-          className="font-serif-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#2a1d1d] tracking-tight mb-4 flex items-center justify-center gap-2.5 flex-wrap"
+          className="font-serif-display text-3xl sm:text-4xl lg:text-[50px]  text-[#787576] tracking-tight mb-4 flex items-center justify-center gap-2.5 flex-wrap"
         >
           <span>Dream Celebration</span>
           <span className="relative w-6 h-6 sm:w-8 sm:h-8 inline-block translate-y-[-2px]">
@@ -52,7 +52,7 @@ export default function CtaBanner() {
         {/* Subtitle Description */}
         <p
           id="cta-description"
-          className="text-sm sm:text-base lg:text-lg text-[#523d3d] font-normal max-w-2xl mx-auto mb-8 leading-relaxed"
+          className="text-sm sm:text-base lg:text-[19px] text-[#080808] font-normal max-w-2xl mx-auto mb-8 leading-relaxed"
         >
           From ideas to execution, we are with you at every step to make it perfect.
         </p>
@@ -62,7 +62,7 @@ export default function CtaBanner() {
           <button
             id="cta-enquire-now-btn"
             onClick={() => openQuoteModal()}
-            className="group inline-flex items-center gap-3.5 bg-[#c8102e] hover:bg-[#a80b24] text-white font-semibold text-sm sm:text-base pl-6 pr-2.5 py-2.5 sm:py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+            className="group inline-flex items-center gap-3.5 bg-[#c91103] hover:bg-[#a80b24] text-white  text-sm sm:text-base pl-6 pr-2.5 py-2.5 sm:py-3 rounded-[5px] shadow-lg hover:shadow-xl transition-all duration-300 transform "
           >
             <span>Enquire Now</span>
             <span className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white transition-colors">

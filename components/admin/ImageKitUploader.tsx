@@ -67,35 +67,31 @@ export default function ImageKitUploader({
       const base64Data = await fileDataPromise;
 
       // 2. Upload via backend API route
-      let finalUrl = base64Data;
-      try {
-        const uploadRes = await fetch('/api/imagekit/upload', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            file: base64Data,
-            fileName: file.name,
-            folder: folder,
-          }),
-        });
+      const uploadRes = await fetch('/api/imagekit/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          file: base64Data,
+          fileName: file.name,
+          folder: folder,
+        }),
+      });
 
-        if (uploadRes.ok) {
-          const uploadData = await uploadRes.json();
-          if (uploadData?.url) {
-            finalUrl = uploadData.url;
-          }
-        }
-      } catch (networkErr) {
-        console.warn('Backend upload skipped, using direct data URI fallback:', networkErr);
+      const uploadData = await uploadRes.json();
+
+      if (!uploadRes.ok) {
+        throw new Error(uploadData?.error || `Upload failed with status ${uploadRes.status}`);
       }
 
-      setUploadedUrl(finalUrl);
-      onUploadSuccess(finalUrl);
+      if (!uploadData?.url) {
+        throw new Error('ImageKit did not return a valid URL. Please retry.');
+      }
+
+      setUploadedUrl(uploadData.url);
+      onUploadSuccess(uploadData.url);
     } catch (err: any) {
-      console.error('File read error:', err);
-      setErrorMsg('Could not read image file. Please choose another image.');
+      console.error('Image upload error:', err);
+      setErrorMsg(err?.message || 'Could not upload image. Please check your ImageKit configuration and retry.');
     } finally {
       setIsUploading(false);
     }

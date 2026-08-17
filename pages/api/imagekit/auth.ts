@@ -7,13 +7,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (!isImageKitConfigured()) {
-    return res.status(200).json({
+    return res.status(503).json({
       configured: false,
-      message: 'ImageKit is not fully configured in environment variables yet.',
-      // Fallback dummy token for UI preview
-      token: `demo-token-${Date.now()}`,
-      expire: Math.floor(Date.now() / 1000) + 1800,
-      signature: 'demo-signature',
+      error: 'ImageKit is not configured. Set NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY, IMAGEKIT_PRIVATE_KEY, and NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT environment variables.',
     });
   }
 

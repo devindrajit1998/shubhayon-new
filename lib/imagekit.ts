@@ -1,9 +1,9 @@
 import ImageKit from 'imagekit';
 
 export const imageKitConfig = {
-  publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY || "public_s5KRlNc2+EJsGqw/EEaBctV//P4=",
-  privateKey: process.env.IMAGEKIT_PRIVATE_KEY || "private_bFBEz2HCbIhdzWJ2CYiAtz5Jkwc=",
-  urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT || "https://ik.imagekit.io/thhqkqsnb",
+  publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY || '',
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY || '',
+  urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT || '',
 };
 
 export const isImageKitConfigured = (): boolean => {

@@ -61,66 +61,100 @@ export default function GalleryPage() {
       <Header activePage="gallery" />
 
       <main className="flex-1">
-        {/* Banner Section */}
+        {/* 1. Hero Banner: Compact 340-350px height with absolute positioned Polaroid collage */}
         <section
           id="gallery-hero"
-          className="relative z-10 bg-[#2b1614] text-white overflow-hidden pt-28 pb-16 sm:pt-36 sm:pb-20 lg:pt-40 lg:pb-24 border-b border-[#3d1f1f]"
+          className="relative z-20 h-[320px] sm:h-[340px] lg:h-[350px] overflow-visible bg-[#1a0f0e]"
         >
-          {/* Background image */}
-          <div className="absolute inset-0 z-0">
+          {/* Background image with dark warm wedding backdrop */}
+          <div className="absolute inset-0 z-0 overflow-hidden">
             <Image
               src={bannerBg}
-              alt="Gallery Banner"
+              alt="Gallery Wedding Background"
               fill
               priority
-              className="object-cover object-center opacity-35 brightness-75"
+              className="object-cover object-center brightness-95"
               referrerPolicy="no-referrer"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#2b1614] via-[#2b1614]/50 to-transparent" />
+            {/* Left dark vignette for headline legibility */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#120606]/95 via-[#190908]/75 to-transparent" />
+            {/* Top dark gradient for header overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/30" />
           </div>
 
-          <div className="relative z-10 max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              {/* Left Column: Heading & Subtitle */}
-              <div className="lg:col-span-8 space-y-4 text-center lg:text-left">
-                <p className="text-xs sm:text-sm font-semibold tracking-widest text-[#d99824] uppercase">
-                  Our Work &amp; Specialists
-                </p>
-                <h1 className="font-serif-display text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white">
-                  {bannerTitle}
-                </h1>
-                <p className="text-xs sm:text-sm md:text-base text-gray-200 max-w-xl font-light leading-relaxed">
-                  Browse through real celebrations curated by our master artisans &amp; specialist teams.
-                </p>
-              </div>
+          {/* Main Container - max-w-[1340px] aligned with Header */}
+          <div className="relative z-10 max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col sm:flex-row items-center justify-between">
+            {/* Heading: Centered on mobile with balanced typography, left-aligned on sm+ */}
+            <div className="pt-20 sm:pt-12 lg:pt-14 text-center sm:text-left w-full sm:w-auto sm:max-w-md md:max-w-xl">
+              <h1 className="font-serif-display font-normal text-[26px] sm:text-4xl md:text-5xl lg:text-[58px] xl:text-[65px] text-white leading-[1.15] sm:leading-[1.12] tracking-tight drop-shadow-sm">
+                {bannerTitle}
+              </h1>
+            </div>
 
-              {/* Right Column: 3-Polaroid Cluster */}
-              <div className="lg:col-span-4 flex justify-center lg:justify-end">
-                <div className="relative w-64 sm:w-72 h-44 sm:h-48">
-                  {polaroidPhotos.map((photo, pIdx) => {
-                    const rotations = ['-rotate-8', 'rotate-0', 'rotate-8'];
-                    const translates = ['-translate-x-6', 'translate-x-0', 'translate-x-6'];
-                    const zIndexes = ['z-10', 'z-20', 'z-30'];
-                    return (
-                      <div
-                        key={pIdx}
-                        onClick={() => openLightbox(pIdx, polaroidPhotos)}
-                        className={`absolute top-0 w-28 sm:w-32 bg-white p-1.5 pb-5 rounded-md shadow-2xl border border-gray-200 cursor-pointer transform hover:scale-110 hover:z-40 transition-all duration-300 ${rotations[pIdx]} ${translates[pIdx]} ${zIndexes[pIdx]}`}
-                      >
-                        <div className="relative w-full aspect-[4/5] overflow-hidden bg-gray-900 rounded-xs">
-                          <Image
-                            src={photo.image}
-                            alt={photo.title}
-                            fill
-                            className="object-cover"
-                            referrerPolicy="no-referrer"
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
+            {/* Polaroid Snapshots: Beautifully centered hanging over the breadcrumb on mobile, right-aligned on sm+ */}
+            <div className="absolute left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 lg:right-8 xl:right-12 top-[168px] sm:top-[115px] lg:top-[120px] z-30">
+              <div className="relative flex items-center justify-center w-56 sm:w-64 md:w-80 lg:w-[380px] xl:w-[420px]">
+                {/* Left Snapshot: Tilted -14deg */}
+                <div
+                  onClick={() => openLightbox(1, polaroidPhotos)}
+                  className="absolute -left-2 sm:-left-4 md:-left-6 lg:-left-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform -rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
+                >
+                  <div className="relative w-full h-full overflow-hidden bg-gray-900">
+                    <Image
+                      src={snapLeft}
+                      alt="Groom & Bride"
+                      fill
+                      className="object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                </div>
+
+                {/* Center / Top Snapshot: Straight with elevated shadow */}
+                <div
+                  onClick={() => openLightbox(0, polaroidPhotos)}
+                  className="relative z-20 w-24 sm:w-30 md:w-40 lg:w-48 xl:w-52 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_12px_30px_rgba(0,0,0,0.65)] hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
+                >
+                  <div className="relative w-full h-full overflow-hidden bg-gray-900">
+                    <Image
+                      src={snapMid}
+                      alt="Spotlight Couple"
+                      fill
+                      className="object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                </div>
+
+                {/* Right Snapshot: Tilted +14deg */}
+                <div
+                  onClick={() => openLightbox(2, polaroidPhotos)}
+                  className="absolute -right-2 sm:-right-4 md:-right-6 lg:-right-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
+                >
+                  <div className="relative w-full h-full overflow-hidden bg-gray-900">
+                    <Image
+                      src={snapRight}
+                      alt="Wedding Celebration"
+                      fill
+                      className="object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 2. Breadcrumb Bar */}
+        <section id="gallery-breadcrumb" className="relative z-10 bg-[#fff5ea] py-3.5 border-b border-[#eedfcb]">
+          <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+            <div className="flex items-center space-x-2 text-xs sm:text-[13px] text-[#554343]">
+              <Link href="/" className="hover:text-[#9e1b21] transition-colors font-medium">
+                Home
+              </Link>
+              <span className="text-[#a89595]">&gt;</span>
+              <span className="text-[#881b21] font-semibold">Gallery</span>
             </div>
           </div>
         </section>

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { doc, setDoc, onSnapshot } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db, auth } from '@/lib/firebase';
+import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
 import { PackageData } from '@/components/PackageDetailModal';
 import { ServiceItem } from '@/components/ServicesSection';
 import { ArtistProfile } from '@/pages/gallery';
@@ -129,8 +130,8 @@ interface AdminDataContextType {
   // Auth
   isAuthenticated: boolean;
   adminUser: { name: string; email: string; role: string } | null;
-  login: (email: string, password: string) => boolean;
-  logout: () => void;
+  login: () => Promise<boolean>;
+  logout: () => Promise<void>;
   isLoading: boolean;
   error: string | null;
 
@@ -196,6 +197,24 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
   const [testimonials, setTestimonials] = useState<TestimonialItem[]>([]);
   const [settings, setSettings] = useState<SiteSettings>(emptySettings);
 
+  // Recursive deep cleaning helper to remove `undefined` properties (Firestore throws if any key/sub-key is undefined)
+  const sanitizeForFirestore = (obj: any): any => {
+    if (obj === null || obj === undefined) return null;
+    if (Array.isArray(obj)) {
+      return obj.map((item) => sanitizeForFirestore(item));
+    }
+    if (typeof obj === 'object' && obj.constructor === Object) {
+      const clean: Record<string, any> = {};
+      for (const [key, value] of Object.entries(obj)) {
+        if (value !== undefined) {
+          clean[key] = sanitizeForFirestore(value);
+        }
+      }
+      return clean;
+    }
+    return obj;
+  };
+
   // Write mutation directly to Firebase Firestore
   const syncToCloud = async (partialData: Record<string, any>) => {
     if (!db) {
@@ -204,7 +223,8 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
     }
     try {
       const docRef = doc(db, 'content', 'site_data');
-      await setDoc(docRef, partialData, { merge: true });
+      const cleanPayload = sanitizeForFirestore(partialData);
+      await setDoc(docRef, cleanPayload, { merge: true });
     } catch (err: any) {
       console.error('Failed to sync to Firebase Firestore:', err);
       setError(err?.message || 'Failed to save changes to Firestore');
@@ -214,16 +234,19 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
 
   // Subscribe to real-time Firestore cloud database on mount
   useEffect(() => {
-    // Check admin session token
-    try {
-      const authSession = localStorage.getItem('shuvayan_admin_session');
-      if (authSession) {
-        const user = JSON.parse(authSession);
-        setIsAuthenticated(true);
-        setAdminUser(user);
-      }
-    } catch (e) {
-      console.warn('Error reading admin session from localStorage', e);
+    let unsubscribeAuth: (() => void) | undefined;
+    
+    // Check auth session using Firebase
+    if (auth) {
+      unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+        if (user && user.email === 'enquiry.shuvayan@gmail.com') {
+          setIsAuthenticated(true);
+          setAdminUser({ name: user.displayName || 'Admin Manager', email: user.email, role: 'Super Administrator' });
+        } else {
+          setIsAuthenticated(false);
+          setAdminUser(null);
+        }
+      });
     }
 
     if (!db) {
@@ -268,7 +291,10 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
         }
       );
 
-      return () => unsubscribe();
+      return () => {
+        unsubscribe();
+        if (unsubscribeAuth) unsubscribeAuth();
+      };
     } catch (err: any) {
       setIsLoading(false);
       setError(err.message || 'Firestore connection initialization error');
@@ -277,25 +303,32 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Auth methods
-  const login = (email: string, password: string): boolean => {
-    if (email === 'admin@shuvayan.com' && password === 'admin@2026') {
-      const user = { name: 'Admin Manager', email, role: 'Super Administrator' };
-      setIsAuthenticated(true);
-      setAdminUser(user);
-      try {
-        localStorage.setItem('shuvayan_admin_session', JSON.stringify(user));
-      } catch (e) {}
-      return true;
+  const login = async (): Promise<boolean> => {
+    if (!auth) {
+      setError('Auth is not initialized.');
+      return false;
     }
-    return false;
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      if (result.user.email === 'enquiry.shuvayan@gmail.com') {
+        return true;
+      } else {
+        await signOut(auth);
+        setError('Unauthorized email address.');
+        return false;
+      }
+    } catch (e: any) {
+      console.error('Login error:', e);
+      setError(e.message || 'Failed to login with Google.');
+      return false;
+    }
   };
 
-  const logout = () => {
-    setIsAuthenticated(false);
-    setAdminUser(null);
-    try {
-      localStorage.removeItem('shuvayan_admin_session');
-    } catch (e) {}
+  const logout = async () => {
+    if (auth) {
+      await signOut(auth);
+    }
   };
 
   // Leads CRUD

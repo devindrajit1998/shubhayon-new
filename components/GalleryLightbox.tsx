@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAdminData } from '@/context/AdminDataContext';
-import { galleryPhotos } from './GallerySection';
 import type { LightboxPhoto } from '@/context/AppModalContext';
 
 interface GalleryLightboxProps {
@@ -34,21 +33,19 @@ export default function GalleryLightbox({ activeIndex, photos, onClose }: Galler
 
   if (activeIndex === null) return null;
 
-  // Derive dynamic photo list from props or Firebase artists
-  const fallbackDynamicPhotos: LightboxPhoto[] = artists?.flatMap((artist) =>
+  // Derive photo list: prefer passed photos prop, then fall back to Firebase artist photos
+  const fallbackDynamicPhotos: LightboxPhoto[] = artists.flatMap((artist) =>
     artist.photos.map((photo, idx) => ({
       id: `${artist.id}-${idx}`,
       title: photo.title || artist.name,
       category: artist.category.toUpperCase(),
       image: photo.image,
     }))
-  ) || [];
+  );
 
   const activePhotoList = photos && photos.length > 0
     ? photos
-    : fallbackDynamicPhotos.length > 0
-    ? fallbackDynamicPhotos
-    : galleryPhotos;
+    : fallbackDynamicPhotos;
 
   const total = activePhotoList.length;
   if (total === 0) return null;

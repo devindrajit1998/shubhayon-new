@@ -19,19 +19,19 @@ export default function PackagesSection() {
   };
 
   return (
-    <section id="packages" className="py-16 sm:py-20 lg:py-24 bg-[#fffdfa]">
+    <section id="packages" className="py-10 lg:py-14 bg-[#fbf5ea]">
       <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-12">
           <p
             id="packages-subheading"
-            className="text-[#c8102e] font-semibold text-sm sm:text-base tracking-normal mb-1.5"
+            className="text-[#c91103] font-semibold text-sm sm:text-[25px] tracking-normal"
           >
-            Affordable &amp; Luxury
+            We Offer
           </p>
           <h2
             id="packages-heading"
-            className="font-serif-display text-3xl sm:text-4xl lg:text-5xl font-normal text-[#5a5858] tracking-tight"
+            className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight"
           >
             Best Packages
           </h2>
@@ -101,19 +101,21 @@ export default function PackagesSection() {
         {/* 4. Real Firebase Packages Grid */}
         {!isLoading && !error && packages.length > 0 && (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-              {packages.map((pkg) => {
-                const borderClass = topBorderColors[pkg.id] || 'border-t-[#b81414]';
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
+              {packages.map((pkg, index) => {
+                // Alternate colors: Red, Gold, Red, Gold...
+                const isEven = index % 2 === 0;
+                const themeColorClass = isEven ? 'border-[#b81414]' : 'border-[#e5a83b]';
 
                 return (
                   <div
                     key={pkg.id}
                     id={`package-card-${pkg.id}`}
-                    className={`relative bg-[#fcfaf7] rounded-lg shadow-xs hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col justify-between border border-[#e8d7c3] border-t-4 ${borderClass} p-6 sm:p-7 text-center`}
+                    className={`relative bg-white flex flex-col justify-between border border-t-[4px] ${themeColorClass} p-5 sm:p-6 text-left`}
                   >
-                    {/* Badge */}
+                    {/* Badge (Optional) */}
                     {pkg.badge && (
-                      <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#b81414] text-white text-[10px] sm:text-xs font-semibold px-3.5 py-1 rounded-full uppercase tracking-wider shadow-xs whitespace-nowrap">
+                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#b81414] text-white text-[10px] font-semibold px-3 py-0.5 rounded-full uppercase tracking-wider whitespace-nowrap">
                         {pkg.badge}
                       </span>
                     )}
@@ -121,20 +123,23 @@ export default function PackagesSection() {
                     {/* Card Content Top */}
                     <div>
                       {/* Package Title */}
-                      <h3 className="font-serif-display text-xl sm:text-2xl font-bold text-[#74161f] tracking-tight mb-2">
+                      <h3 className="font-serif-display text-[22px] font-medium text-[#74161f] tracking-tight mb-1.5">
                         {pkg.title}
                       </h3>
 
                       {/* Tagline */}
-                      <p className="text-xs text-[#523e3e] leading-relaxed mb-6 border-b border-[#ebdcc8] pb-4">
-                        {pkg.tagline}
+                      <p className="text-[13px] text-gray-500 leading-relaxed mb-5">
+                        Perfect for: {pkg.tagline}
                       </p>
 
                       {/* Features List */}
-                      <ul className="space-y-3 text-xs text-[#3a2e2e] text-left mb-6">
+                      <ul className="space-y-2.5 text-[13px] text-gray-600 mb-6">
                         {pkg.features.map((feature, idx) => (
                           <li key={idx} className="flex items-start">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#b81414] mt-1.5 mr-2.5 flex-shrink-0" />
+                            {/* Stylized asterisk/diamond icon for bullet */}
+                            <svg className="w-2.5 h-2.5 text-[#b81414]/70 mt-1 mr-2.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M12 0l2.5 8.5L23 11l-8.5 2.5L12 22l-2.5-8.5L1 11l8.5-2.5z" />
+                            </svg>
                             <span className="leading-snug">{feature}</span>
                           </li>
                         ))}
@@ -142,28 +147,17 @@ export default function PackagesSection() {
                     </div>
 
                     {/* Action Button Bottom */}
-                    <div className="pt-2">
+                    <div className="pt-2 text-center">
                       <button
                         onClick={() => openPackageModal(pkg)}
-                        className="w-full bg-[#b81414] hover:bg-[#991111] text-white font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-md shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer"
+                        className="inline-flex bg-[#b81414] hover:bg-[#991111] text-white font-medium text-xs sm:text-sm py-2 px-6 rounded-md transition-colors cursor-pointer"
                       >
-                        View More Details
+                        Check details
                       </button>
                     </div>
                   </div>
                 );
               })}
-            </div>
-
-            {/* Explore All Packages Link */}
-            <div className="text-center mt-12">
-              <Link
-                href="/packages"
-                id="explore-all-packages-btn"
-                className="inline-flex items-center justify-center bg-[#b81414] hover:bg-[#991111] text-white font-semibold text-xs sm:text-sm px-7 py-2.5 rounded-md shadow-sm hover:shadow-md transition-all duration-200"
-              >
-                Explore All Packages
-              </Link>
             </div>
           </>
         )}

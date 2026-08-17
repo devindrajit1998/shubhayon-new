@@ -24,12 +24,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const safeName = (fileName || `upload_${Date.now()}.jpg`).replace(/[^a-zA-Z0-9._-]/g, '_');
 
     if (!isImageKitConfigured()) {
-      return res.status(200).json({ url: file, mode: 'local' });
+      return res.status(503).json({
+        error: 'ImageKit is not configured. Please set NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY, IMAGEKIT_PRIVATE_KEY, and NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT in your environment variables.',
+      });
     }
 
     const imagekit = getImageKitServerInstance();
     if (!imagekit) {
-      return res.status(200).json({ url: file, mode: 'fallback' });
+      return res.status(503).json({ error: 'Could not initialize ImageKit server instance.' });
     }
 
     try {
@@ -47,16 +49,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         thumbnailUrl: result.thumbnailUrl,
       });
     } catch (sdkErr: any) {
-      console.warn('ImageKit direct upload warning, using local data fallback:', sdkErr.message);
-      // Return safe data fallback so admin is never blocked
-      return res.status(200).json({ url: file, fallback: true });
+      console.error('ImageKit SDK upload failed:', sdkErr.message);
+      return res.status(500).json({
+        error: `ImageKit upload failed: ${sdkErr.message || 'Unknown error'}. Please check your ImageKit credentials and retry.`,
+      });
     }
   } catch (error: any) {
     console.error('ImageKit upload handler error:', error);
-    // If request body has file, return it rather than returning 500
-    if (req.body?.file) {
-      return res.status(200).json({ url: req.body.file, fallback: true });
-    }
     return res.status(500).json({ error: error.message || 'ImageKit upload failed' });
   }
 }

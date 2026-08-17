@@ -41,7 +41,7 @@ export default function HeroSection() {
           <div className="mb-1 sm:mb-2">
             <span
               id="hero-script-intro"
-              className="font-script text-3xl sm:text-4xl lg:text-5xl text-[#dca142] drop-shadow tracking-wide block"
+              className="font-script text-3xl sm:text-4xl lg:text-[65px] text-[#dca142] drop-shadow tracking-wide block"
             >
               {heroSubtitle}
             </span>
@@ -50,7 +50,7 @@ export default function HeroSection() {
           {/* Main Title */}
           <h1
             id="hero-main-heading"
-            className="font-serif-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.14] mb-4 sm:mb-5 drop-shadow-md"
+            className="font-serif-display text-4xl sm:text-5xl lg:text-[75px] text-white tracking-tight leading-[1.14] mb-4 sm:mb-5 drop-shadow-md"
           >
             {heroTitle.includes('Unforgettable') ? (
               <>
@@ -78,7 +78,7 @@ export default function HeroSection() {
           {/* Subheading / Description */}
           <p
             id="hero-description"
-            className="text-sm sm:text-base lg:text-lg text-white/90 font-normal leading-relaxed mb-8 max-w-lg drop-shadow"
+            className="text-sm sm:text-base lg:text-[25px] text-white/90 font-normal leading-relaxed mb-8 drop-shadow"
           >
             {heroTagline}
           </p>
@@ -88,7 +88,7 @@ export default function HeroSection() {
             <button
               id="hero-get-quote-btn"
               onClick={() => openQuoteModal()}
-              className="group inline-flex items-center gap-3 bg-[#fffaf2] hover:bg-white text-[#991b1b] font-semibold text-sm sm:text-base px-5 py-2.5 rounded-md shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+              className="group inline-flex items-center gap-3 bg-[#fff2d8] text-[#c91103] font-semibold text-sm sm:text-base px-5 py-2.5 rounded-md shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
             >
               <span>Get Quote</span>
               <span className="w-5 h-5 rounded-full border border-[#991b1b] flex items-center justify-center transition-transform group-hover:translate-x-0.5">

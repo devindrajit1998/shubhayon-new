@@ -18,19 +18,19 @@ export default function ServicesSection() {
   const { services, isLoading, error } = useAdminData();
 
   return (
-    <section id="services" className="py-16 sm:py-20 lg:py-24 bg-white">
+    <section id="services" className="py-10 lg:py-14 bg-white">
       <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-12">
           <p
             id="services-subheading"
-            className="text-[#c8102e] font-semibold text-sm sm:text-base tracking-normal mb-1.5"
+            className="text-[#c91103] font-semibold text-sm sm:text-[25px] tracking-normal "
           >
             What we do
           </p>
           <h2
             id="services-heading"
-            className="font-serif-display text-3xl sm:text-4xl lg:text-5xl font-normal text-[#5a5858] tracking-tight"
+            className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight"
           >
             Our Premium Services
           </h2>
@@ -105,7 +105,7 @@ export default function ServicesSection() {
                   className="group bg-[#fffdfa] rounded-2xl overflow-hidden border border-[#d8b590] shadow-sm hover:shadow-xl hover:border-[#c59c70] transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer flex flex-col"
                 >
                   {/* Card Image Container */}
-                  <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#241715]">
+                  <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#fbf8f0]">
                     {service.image ? (
                       <Image
                         src={service.image}
@@ -122,27 +122,16 @@ export default function ServicesSection() {
                   </div>
 
                   {/* Card Body */}
-                  <div className="p-5 flex-1 flex flex-col justify-start text-center bg-[#fffdfa]">
-                    <h3 className="font-serif-display text-lg sm:text-xl font-bold text-[#7a1d24] group-hover:text-[#a01822] transition-colors mb-2">
+                  <div className="p-5 flex-1 flex flex-col justify-start text-center bg-[#fbf8f0]">
+                    <h3 className="font-serif-display text-lg sm:text-[22px] font-medium text-[#5f011b] group-hover:text-[#a01822] transition-colors mb-2">
                       {service.title}
                     </h3>
-                    <p className="text-xs sm:text-[13px] text-[#4b5563] leading-relaxed">
+                    <p className="text-xs sm:text-[15px] text-[#030303] leading-relaxed">
                       {service.description}
                     </p>
                   </div>
                 </div>
               ))}
-            </div>
-
-            {/* Explore All Services Link */}
-            <div className="text-center mt-10">
-              <Link
-                href="/services"
-                id="explore-all-services-btn"
-                className="inline-flex items-center justify-center bg-[#b81414] hover:bg-[#991111] text-white font-semibold text-xs sm:text-sm px-7 py-2.5 rounded-md shadow-sm hover:shadow-md transition-all duration-200"
-              >
-                Explore All Services
-              </Link>
             </div>
           </>
         )}
