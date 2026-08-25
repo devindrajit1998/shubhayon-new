@@ -5,8 +5,8 @@
   "devFiles": [],
   "ampDevFiles": [],
   "lowPriorityFiles": [
-    "static/dergLf_itRREkb9wGeMec/_buildManifest.js",
-    "static/dergLf_itRREkb9wGeMec/_ssgManifest.js"
+    "static/Mcsu7-_RHoaubFxIQibPD/_buildManifest.js",
+    "static/Mcsu7-_RHoaubFxIQibPD/_ssgManifest.js"
   ],
   "rootMainFiles": [],
   "rootMainFilesTree": {},
@@ -19,14 +19,14 @@
       "static/chunks/361-6fc23360024ad52a.js",
       "static/chunks/3-e032d4e7c44784fb.js",
       "static/css/dd5d352a082118c1.css",
-      "static/chunks/pages/index-1aa91d38ea9655f1.js"
+      "static/chunks/pages/index-6b791b29cc45bca1.js"
     ],
     "/_app": [
       "static/chunks/webpack-e1d9f372a837599d.js",
       "static/chunks/framework-12d80f244b7df9fe.js",
       "static/chunks/main-db8199ccfed525ec.js",
-      "static/css/fc6a204d465ff420.css",
-      "static/chunks/pages/_app-ca37cde3390180e7.js"
+      "static/css/36b0f64fc29c81ea.css",
+      "static/chunks/pages/_app-7e558a632af18afd.js"
     ],
     "/_error": [
       "static/chunks/webpack-e1d9f372a837599d.js",
@@ -99,7 +99,7 @@
       "static/chunks/main-db8199ccfed525ec.js",
       "static/chunks/230-149465347cb3e206.js",
       "static/chunks/865-5e0bacf5c638ca5a.js",
-      "static/chunks/pages/admin/packages-b9b2a7b29f9943c0.js"
+      "static/chunks/pages/admin/packages-c77069ebc85559c6.js"
     ],
     "/admin/services": [
       "static/chunks/webpack-e1d9f372a837599d.js",
@@ -150,7 +150,7 @@
       "static/chunks/main-db8199ccfed525ec.js",
       "static/chunks/230-149465347cb3e206.js",
       "static/chunks/3-e032d4e7c44784fb.js",
-      "static/chunks/pages/menu-9d7bc1e891aa350f.js"
+      "static/chunks/pages/menu-bd61aa198fc8d9af.js"
     ],
     "/packages": [
       "static/chunks/webpack-e1d9f372a837599d.js",
@@ -158,7 +158,7 @@
       "static/chunks/main-db8199ccfed525ec.js",
       "static/chunks/230-149465347cb3e206.js",
       "static/chunks/3-e032d4e7c44784fb.js",
-      "static/chunks/pages/packages-7667d59a9934fecd.js"
+      "static/chunks/pages/packages-b9a4a4634e593bd4.js"
     ],
     "/packages/[id]": [
       "static/chunks/webpack-e1d9f372a837599d.js",
@@ -166,7 +166,7 @@
       "static/chunks/main-db8199ccfed525ec.js",
       "static/chunks/230-149465347cb3e206.js",
       "static/chunks/3-e032d4e7c44784fb.js",
-      "static/chunks/pages/packages/[id]-9e4f9bf4b1b07ccf.js"
+      "static/chunks/pages/packages/[id]-7d9fb2bc324b9bbd.js"
     ],
     "/policy": [
       "static/chunks/webpack-e1d9f372a837599d.js",

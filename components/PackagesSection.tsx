@@ -25,7 +25,7 @@ export default function PackagesSection() {
         <div className="text-center max-w-2xl mx-auto mb-5 sm:mb-7">
           <p
             id="packages-subheading"
-            className="text-[#c91103] font-light text-[18px] tracking-normal leading-tight mb-0 sm:mb-0.5"
+            className="text-[#c91103] font-light text-sm sm:text-[25px] tracking-normal leading-tight mb-0 sm:mb-0.5"
           >
             We Offer
           </p>
@@ -136,7 +136,10 @@ export default function PackagesSection() {
 
                       {/* Features List */}
                       <ul className="space-y-2.5 text-[14px] text-gray-700 mb-6">
-                        {pkg.features.map((feature, idx) => (
+                        {(pkg.inclusionCategories && pkg.inclusionCategories.length > 0
+                          ? pkg.inclusionCategories.flatMap((c) => c.topics.map((t) => t.title)).slice(0, 5)
+                          : pkg.features.slice(0, 5)
+                        ).map((feature, idx) => (
                           <li key={idx} className="flex items-start">
                             {/* Stylized asterisk/diamond icon for bullet */}
                             <svg className="w-2.5 h-2.5 text-[#c8102e]/70 mt-1.5 mr-2.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
@@ -150,12 +153,12 @@ export default function PackagesSection() {
 
                     {/* Action Button Bottom */}
                     <div className="pt-2 text-center">
-                      <button
-                        onClick={() => openPackageModal(pkg)}
+                      <Link
+                        href={`/packages#package-full-card-${pkg.id}`}
                         className="inline-flex items-center justify-center bg-[#c8102e] hover:bg-[#a80b24] text-white font-light text-[18px] py-2 px-7 rounded-lg shadow-sm hover:shadow transition-all cursor-pointer"
                       >
                         Check details
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 );

@@ -2,13 +2,25 @@ import React from 'react';
 import Image from 'next/image';
 import { X, Check, Sparkles, ArrowRight, ShieldCheck, Clock } from 'lucide-react';
 
+export interface InclusionTopic {
+  title: string;
+  description?: string;
+}
+
+export interface InclusionCategory {
+  categoryName: string;
+  topics: InclusionTopic[];
+}
+
 export interface PackageData {
   id: string;
   title: string;
   tagline?: string;
   features: string[];
   fullFeatures?: string[];
-  priceRange: string;
+  inclusionCategories?: InclusionCategory[];
+  exclusions?: string[];
+  priceRange?: string;
   idealFor?: string;
   idealGuests?: string;
   badge?: string;
@@ -68,13 +80,13 @@ export default function PackageDetailModal({
             <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-700">
               <Sparkles className="w-4 h-4 text-[#d48817] flex-shrink-0" />
               <span>
-                <strong>Capacity:</strong> {packageData.idealFor}
+                <strong>Capacity:</strong> {packageData.idealFor || packageData.idealGuests || 'Customizable'}
               </span>
             </div>
             <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-700">
               <ShieldCheck className="w-4 h-4 text-green-600 flex-shrink-0" />
               <span>
-                <strong>Est. Investment:</strong> {packageData.priceRange}
+                <strong>Execution:</strong> 100% Bespoke &amp; Managed
               </span>
             </div>
           </div>
@@ -84,23 +96,70 @@ export default function PackageDetailModal({
             <h4 className="font-serif-display text-base font-bold text-[#1f2937] mb-3">
               Included In This Package:
             </h4>
-            <ul className="space-y-3">
-              {(packageData.fullFeatures || packageData.features || []).map((feat, idx) => (
-                <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-[#374151]">
-                  <span className="relative w-4 h-4 flex-shrink-0 mt-0.5 inline-block">
-                    <Image
-                      src="/images/bullet.svg"
-                      alt="Bullet"
-                      fill
-                      className="object-cover"
-                      referrerPolicy="no-referrer"
-                    />
-                  </span>
-                  <span className="leading-snug">{feat}</span>
-                </li>
-              ))}
-            </ul>
+            {packageData.inclusionCategories && packageData.inclusionCategories.length > 0 ? (
+              <div className="space-y-5">
+                {packageData.inclusionCategories.map((category, catIdx) => (
+                  <div key={catIdx} className="space-y-3 bg-[#fcfaf7] p-4 rounded-xl border border-[#ebdcc8]">
+                    <h5 className="text-xs font-bold uppercase tracking-wider text-[#74161f] flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-[#c8102e]" />
+                      <span>{category.categoryName} INCLUSIONS</span>
+                    </h5>
+                    <div className="space-y-2.5 pl-1">
+                      {category.topics.map((t, topIdx) => (
+                        <div key={topIdx} className="flex items-start gap-2.5 text-xs text-[#374151]">
+                          <Check className="w-4 h-4 text-[#c8102e] flex-shrink-0 mt-0.5" />
+                          <div>
+                            <span className="font-semibold text-gray-900 leading-snug">
+                              {topIdx + 1}. {t.title}:
+                            </span>
+                            {t.description && (
+                              <p className="text-[11px] text-gray-600 leading-relaxed mt-0.5">
+                                {t.description}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <ul className="space-y-2.5">
+                {(packageData.fullFeatures || packageData.features || []).map((feat, idx) => (
+                  <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-[#374151]">
+                    <span className="relative w-4 h-4 flex-shrink-0 mt-0.5 inline-block">
+                      <Image
+                        src="/images/bullet.svg"
+                        alt="Bullet"
+                        fill
+                        className="object-cover"
+                        referrerPolicy="no-referrer"
+                      />
+                    </span>
+                    <span className="leading-snug">{feat}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
+
+          {/* Exclusions List (if present) */}
+          {packageData.exclusions && packageData.exclusions.length > 0 && (
+            <div className="bg-red-50/60 rounded-xl p-4 border border-red-200/60">
+              <h4 className="font-serif-display text-sm font-bold text-red-900 mb-2.5">
+                Exclusions:
+              </h4>
+              <ul className="space-y-2">
+                {packageData.exclusions.map((ex, idx) => (
+                  <li key={idx} className="flex items-start gap-2.5 text-xs text-red-800">
+                    <X className="w-3.5 h-3.5 text-red-500 flex-shrink-0 mt-0.5" />
+                    <span className="leading-snug">{ex}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {/* Customization Guarantee */}
           <div className="p-4 bg-amber-50/70 border border-amber-200/60 rounded-lg text-xs text-amber-900 leading-relaxed">

@@ -203,7 +203,7 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
 
                 <div>
                   <label className="block text-xs font-semibold text-[#374151] mb-1.5">
-                    Expected Event Date *
+                    Event Date *
                   </label>
                   <div className="relative">
                     <Calendar className="w-4 h-4 text-gray-400 absolute left-3 top-3" />
@@ -311,14 +311,14 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
                           key={srv}
                           onClick={() => toggleService(srv)}
                           className={`flex items-center gap-2 p-2.5 rounded-lg border text-left text-xs transition-colors ${isChecked
-                              ? 'border-[#c8102e] bg-[#fff5f5] text-[#c8102e] font-semibold'
-                              : 'border-gray-200 hover:border-gray-300 text-gray-700 bg-gray-50/50'
+                            ? 'border-[#c8102e] bg-[#fff5f5] text-[#c8102e] font-semibold'
+                            : 'border-gray-200 hover:border-gray-300 text-gray-700 bg-gray-50/50'
                             }`}
                         >
                           <span
                             className={`w-4 h-4 rounded flex items-center justify-center border ${isChecked
-                                ? 'bg-[#c8102e] border-[#c8102e] text-white'
-                                : 'border-gray-400'
+                              ? 'bg-[#c8102e] border-[#c8102e] text-white'
+                              : 'border-gray-400'
                               }`}
                           >
                             {isChecked && <CheckCircle className="w-3.5 h-3.5" />}

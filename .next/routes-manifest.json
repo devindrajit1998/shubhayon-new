@@ -146,16 +146,16 @@
       "routeKeys": {
         "nxtPid": "nxtPid"
       },
-      "dataRouteRegex": "^/_next/data/dergLf_itRREkb9wGeMec/gallery/artist/([^/]+?)\\.json$",
-      "namedDataRouteRegex": "^/_next/data/dergLf_itRREkb9wGeMec/gallery/artist/(?<nxtPid>[^/]+?)\\.json$"
+      "dataRouteRegex": "^/_next/data/Mcsu7\\-_RHoaubFxIQibPD/gallery/artist/([^/]+?)\\.json$",
+      "namedDataRouteRegex": "^/_next/data/Mcsu7\\-_RHoaubFxIQibPD/gallery/artist/(?<nxtPid>[^/]+?)\\.json$"
     },
     {
       "page": "/packages/[id]",
       "routeKeys": {
         "nxtPid": "nxtPid"
       },
-      "dataRouteRegex": "^/_next/data/dergLf_itRREkb9wGeMec/packages/([^/]+?)\\.json$",
-      "namedDataRouteRegex": "^/_next/data/dergLf_itRREkb9wGeMec/packages/(?<nxtPid>[^/]+?)\\.json$"
+      "dataRouteRegex": "^/_next/data/Mcsu7\\-_RHoaubFxIQibPD/packages/([^/]+?)\\.json$",
+      "namedDataRouteRegex": "^/_next/data/Mcsu7\\-_RHoaubFxIQibPD/packages/(?<nxtPid>[^/]+?)\\.json$"
     }
   ],
   "rsc": {

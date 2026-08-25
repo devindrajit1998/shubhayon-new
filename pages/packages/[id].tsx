@@ -126,16 +126,16 @@ export default function PackageDetailsPage() {
                 {/* Meta Highlights */}
                 <div className="flex flex-wrap gap-4 pt-2 text-xs sm:text-sm text-amber-100">
                   <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xs px-3.5 py-1.5 rounded-lg border border-white/10">
-                    <IndianRupee className="w-4 h-4 text-amber-300" />
-                    <span>{pkg.priceRange}</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xs px-3.5 py-1.5 rounded-lg border border-white/10">
                     <Users className="w-4 h-4 text-amber-300" />
-                    <span>{pkg.idealFor}</span>
+                    <span>{pkg.idealGuests || pkg.idealFor || 'Customizable Capacity'}</span>
                   </div>
                   <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xs px-3.5 py-1.5 rounded-lg border border-white/10">
                     <ShieldCheck className="w-4 h-4 text-amber-300" />
                     <span>100% Customized Execution</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xs px-3.5 py-1.5 rounded-lg border border-white/10">
+                    <Sparkles className="w-4 h-4 text-amber-300" />
+                    <span>Dedicated Wedding Specialist</span>
                   </div>
                 </div>
               </div>
@@ -185,19 +185,77 @@ export default function PackageDetailsPage() {
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {(pkg.fullFeatures || pkg.features || []).map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-start gap-3 bg-[#fcfaf7] p-3.5 rounded-xl border border-[#ebdcc8]"
-                    >
-                      <CheckCircle2 className="w-5 h-5 text-[#c8102e] flex-shrink-0 mt-0.5" />
-                      <span className="text-xs sm:text-sm text-gray-800 leading-snug font-medium">
-                        {item}
-                      </span>
+                {pkg.inclusionCategories && pkg.inclusionCategories.length > 0 ? (
+                  <div className="space-y-8">
+                    {pkg.inclusionCategories.map((category, catIdx) => (
+                      <div key={catIdx} className="space-y-4 border-b border-gray-100 last:border-b-0 pb-6 last:pb-0">
+                        <h3 className="font-serif-display text-lg font-bold text-[#74161f] flex items-center gap-2">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#c8102e]" />
+                          <span>{category.categoryName} INCLUSIONS</span>
+                        </h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          {category.topics.map((topic, topIdx) => (
+                            <div
+                              key={topIdx}
+                              className="bg-[#fcfaf7] p-4 rounded-xl border border-[#ebdcc8] space-y-1"
+                            >
+                              <div className="flex items-start gap-2.5">
+                                <CheckCircle2 className="w-4 h-4 text-[#c8102e] flex-shrink-0 mt-0.5" />
+                                <span className="text-xs sm:text-sm text-gray-900 font-bold leading-snug">
+                                  {topIdx + 1}. {topic.title}:
+                                </span>
+                              </div>
+                              {topic.description && (
+                                <p className="text-xs text-gray-600 leading-relaxed pl-6">
+                                  {topic.description}
+                                </p>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {(pkg.fullFeatures || pkg.features || []).map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-start gap-3 bg-[#fcfaf7] p-3.5 rounded-xl border border-[#ebdcc8]"
+                      >
+                        <CheckCircle2 className="w-5 h-5 text-[#c8102e] flex-shrink-0 mt-0.5" />
+                        <span className="text-xs sm:text-sm text-gray-800 leading-snug font-medium">
+                          {item}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Exclusions Box (if configured) */}
+                {pkg.exclusions && pkg.exclusions.length > 0 && (
+                  <div className="pt-6 border-t border-gray-100 space-y-4">
+                    <div>
+                      <h3 className="font-serif-display text-xl font-bold text-gray-900">
+                        Exclusions
+                      </h3>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        These services are not included in the standard tier.
+                      </p>
                     </div>
-                  ))}
-                </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                      {pkg.exclusions.map((ex, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-start gap-3 bg-red-50/40 p-3 rounded-xl border border-red-200/50 text-red-900 text-xs sm:text-sm"
+                        >
+                          <span className="text-red-400 font-bold text-base leading-none">&times;</span>
+                          <span className="leading-snug">{ex}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Other Packages Strip */}
@@ -253,12 +311,12 @@ export default function PackageDetailsPage() {
                     <span className="font-bold text-white">{pkg.title}</span>
                   </div>
                   <div className="flex justify-between text-xs">
-                    <span className="text-gray-300">Estimated Range:</span>
-                    <span className="font-bold text-amber-300">{pkg.priceRange}</span>
+                    <span className="text-gray-300">Guest Scope:</span>
+                    <span className="font-bold text-white">{pkg.idealGuests || pkg.idealFor || 'Bespoke'}</span>
                   </div>
                   <div className="flex justify-between text-xs">
-                    <span className="text-gray-300">Guest Scope:</span>
-                    <span className="font-bold text-white">{pkg.idealFor}</span>
+                    <span className="text-gray-300">Quotation:</span>
+                    <span className="font-bold text-amber-300">Customized to Scope</span>
                   </div>
                 </div>
 
