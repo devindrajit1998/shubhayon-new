@@ -9,6 +9,7 @@ export interface ServiceItem {
   id: string;
   title: string;
   description: string;
+  longDescription?: string;
   image: string;
   category: string;
   thumbnails?: string[];
@@ -23,23 +24,23 @@ export default function ServicesSection() {
     <section id="services" className="py-10 lg:py-14 bg-white">
       <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-12">
+        <div className="text-center max-w-2xl mx-auto mb-5 sm:mb-7">
           <p
             id="services-subheading"
-            className="text-[#c91103] font-semibold text-sm sm:text-[25px] tracking-normal "
+            className="text-[#c91103] font-light text-sm sm:text-[25px] tracking-normal leading-tight mb-0 sm:mb-0.5"
           >
             What we do
           </p>
           <h2
             id="services-heading"
-            className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight"
+            className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight leading-tight"
           >
             Our Premium Services
           </h2>
 
           {/* Red line with Heart Divider */}
-          <div className="flex items-center justify-center gap-3 my-3">
-            <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
+          <div className="flex items-center justify-center gap-3 mt-2 sm:mt-2.5 mb-0">
+            <span className="w-14 sm:w-16 h-[1px] bg-[#c8102e]" />
             <span className="relative w-3.5 h-3.5 inline-block">
               <Image
                 src="/images/heart.svg"
@@ -49,7 +50,7 @@ export default function ServicesSection() {
                 referrerPolicy="no-referrer"
               />
             </span>
-            <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
+            <span className="w-14 sm:w-16 h-[1px] bg-[#c8102e]" />
           </div>
         </div>
 
@@ -104,7 +105,7 @@ export default function ServicesSection() {
                   key={service.id}
                   id={`service-card-${service.id}`}
                   onClick={() => openQuoteModal(service.title)}
-                  className="group bg-[#fffdfa] rounded-2xl overflow-hidden border border-[#d8b590] shadow-sm hover:shadow-xl hover:border-[#c59c70] transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer flex flex-col"
+                  className="group bg-[#fffdfa] rounded-2xl overflow-hidden border border-[#e39306] shadow-sm cursor-pointer flex flex-col"
                 >
                   {/* Card Image Container */}
                   <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#fbf8f0]">
@@ -113,7 +114,7 @@ export default function ServicesSection() {
                         src={service.image}
                         alt={service.title}
                         fill
-                        className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                        className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
                         referrerPolicy="no-referrer"
                       />
                     ) : (
@@ -124,11 +125,11 @@ export default function ServicesSection() {
                   </div>
 
                   {/* Card Body */}
-                  <div className="p-5 flex-1 flex flex-col justify-start text-center bg-[#fbf8f0]">
-                    <h3 className="font-serif-display text-lg sm:text-[22px] font-medium text-[#5f011b] group-hover:text-[#a01822] transition-colors mb-2">
+                  <div className="px-2.5 sm:px-3 pt-3 sm:pt-3.5 pb-4 flex-1 flex flex-col justify-start text-center bg-[#fbf8f0]">
+                    <h3 className="font-serif-display text-[17px] sm:text-[19px] lg:text-[20px] font-medium text-[#5f011b] mb-1 leading-snug tracking-tight">
                       {service.title}
                     </h3>
-                    <p className="text-xs sm:text-[15px] text-[#030303] leading-relaxed">
+                    <p className="text-[15px] text-[#333333] leading-[1.2]">
                       {service.description}
                     </p>
                   </div>

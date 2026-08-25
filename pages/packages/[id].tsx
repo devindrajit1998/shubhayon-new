@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import CtaBanner from '@/components/CtaBanner';
 import { useAppModals } from '@/context/AppModalContext';
 import { useAdminData } from '@/context/AdminDataContext';
 import { CheckCircle2, Sparkles, Users, IndianRupee, ShieldCheck, ArrowLeft, ChevronRight } from 'lucide-react';
@@ -151,8 +150,7 @@ export default function PackageDetailsPage() {
                     return (
                       <div
                         key={pIdx}
-                        onClick={() => openLightbox(pIdx, polaroidPhotos)}
-                        className={`absolute top-0 w-28 sm:w-32 bg-white p-1.5 pb-5 rounded-md shadow-2xl border border-gray-200 cursor-pointer transform hover:scale-110 hover:z-40 transition-all duration-300 ${rotations[pIdx]} ${translates[pIdx]} ${zIndexes[pIdx]}`}
+                        className={`absolute top-0 w-28 sm:w-32 bg-white p-1.5 pb-5 rounded-md shadow-2xl border border-gray-200 transform hover:scale-110 hover:z-40 transition-all duration-300 ${rotations[pIdx]} ${translates[pIdx]} ${zIndexes[pIdx]}`}
                       >
                         <div className="relative w-full aspect-[4/5] overflow-hidden bg-gray-900 rounded-xs">
                           <Image
@@ -279,9 +277,6 @@ export default function PackageDetailsPage() {
             </div>
           </div>
         </section>
-
-        {/* Bottom CTA Banner */}
-        <CtaBanner />
       </main>
 
       {/* Footer */}

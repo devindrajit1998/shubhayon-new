@@ -31,7 +31,7 @@ export default function HeroSection() {
 
         {/* Subtle shadow overlay on left side for text readability */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/40 to-transparent sm:w-3/4" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/30" />
+        {/* <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/30" /> */}
       </div>
 
       {/* Hero Content Container */}
@@ -41,7 +41,7 @@ export default function HeroSection() {
           <div className="mb-1 sm:mb-2">
             <span
               id="hero-script-intro"
-              className="font-script text-3xl sm:text-4xl lg:text-[65px] text-[#dca142] drop-shadow tracking-wide block"
+              className="font-script text-4xl sm:text-5xl lg:text-[68px] text-[#e0a240] drop-shadow tracking-wide block italic font-normal"
             >
               {heroSubtitle}
             </span>
@@ -50,35 +50,25 @@ export default function HeroSection() {
           {/* Main Title */}
           <h1
             id="hero-main-heading"
-            className="font-serif-display text-4xl sm:text-5xl lg:text-[75px] text-white tracking-tight leading-[1.14] mb-4 sm:mb-5 drop-shadow-md"
+            className="font-serif-display text-4xl sm:text-6xl lg:text-[76px] text-white tracking-tight leading-[1.12] mb-4 sm:mb-5 drop-shadow-md font-medium"
           >
-            {heroTitle.includes('Unforgettable') ? (
-              <>
-                {heroTitle.replace(/Unforgettable/i, '').trim() || 'Every moment'}
-                <span className="block mt-1">
-                  Un<span className="text-[#c8102e]">f</span>orge<span className="text-[#c8102e]">t</span>able
-                  <span className="inline-block ml-2 align-middle -translate-y-1">
-                    <span className="relative inline-block w-4 h-4 sm:w-5 sm:h-5">
-                      <Image
-                        src="/images/heart.svg"
-                        alt="Heart"
-                        fill
-                        className="object-contain"
-                        referrerPolicy="no-referrer"
-                      />
-                    </span>
-                  </span>
-                </span>
-              </>
-            ) : (
-              heroTitle
-            )}
+            <span className="block">
+              {heroTitle.match(/unforg/i)
+                ? (heroTitle.replace(/unforg[a-z]*/i, '').trim() || 'Every moment')
+                : (heroTitle || 'Every moment')}
+            </span>
+            <span className="block mt-1">
+              Un<span className="text-[#c8102e]">f</span>org<span className="text-[#c8102e]">e</span>tabl<span className="text-[#c8102e]">e</span>
+              <span className="inline-block ml-2 sm:ml-3 transform rotate-12 -translate-y-0.5 sm:-translate-y-1">
+                <Heart className="w-5 h-5 sm:w-7 sm:h-7 lg:w-8 lg:h-8 fill-[#c8102e] text-[#c8102e]" />
+              </span>
+            </span>
           </h1>
 
           {/* Subheading / Description */}
           <p
             id="hero-description"
-            className="text-sm sm:text-base lg:text-[25px] text-white/90 font-normal leading-relaxed mb-8 drop-shadow"
+            className="text-[17px] sm:text-lg lg:text-[22px] text-white/95 font-light leading-[1.35] mb-8 drop-shadow max-w-xl"
           >
             {heroTagline}
           </p>
@@ -88,11 +78,11 @@ export default function HeroSection() {
             <button
               id="hero-get-quote-btn"
               onClick={() => openQuoteModal()}
-              className="group inline-flex items-center gap-3 bg-[#fff2d8] text-[#c91103] font-semibold text-sm sm:text-base px-5 py-2.5 rounded-md shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+              className="inline-flex items-center gap-3 bg-[#fdf0d5] hover:bg-[#fae6be] text-[#c8102e] font-semibold text-base sm:text-lg px-6 sm:px-7 py-2.5 sm:py-3 rounded-md shadow-md transition-colors duration-200"
             >
               <span>Get Quote</span>
-              <span className="w-5 h-5 rounded-full border border-[#991b1b] flex items-center justify-center transition-transform group-hover:translate-x-0.5">
-                <ChevronRight className="w-3.5 h-3.5 text-[#991b1b] stroke-[2.5]" />
+              <span className="w-6 h-6 rounded-full border border-[#c8102e] flex items-center justify-center">
+                <ChevronRight className="w-4 h-4 text-[#c8102e] stroke-[2.5]" />
               </span>
             </button>
           </div>

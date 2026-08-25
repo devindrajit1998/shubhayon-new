@@ -39,7 +39,7 @@ export default function StatsSection() {
   return (
     <section
       id="stats-section"
-      className="relative py-8 sm:py-10 lg:py-12 overflow-hidden"
+      className="relative py-4 sm:py-5 lg:py-6 overflow-hidden"
     >
       {/* Background Graphic Floral Image */}
       <div className="absolute inset-0 z-0 pointer-events-none">

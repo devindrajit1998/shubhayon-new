@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import CtaBanner from '@/components/CtaBanner';
 import { useAppModals } from '@/context/AppModalContext';
 import { useAdminData, MenuItem } from '@/context/AdminDataContext';
 import {
@@ -21,19 +20,9 @@ import {
   Filter,
 } from 'lucide-react';
 
-const CATEGORIES = [
-  'All Menus',
-  'Royal Wedding Feast',
-  'Classic Bengali',
-  'Grand Reception',
-  'Signature Buffet',
-  'Traditional Special',
-];
-
 export default function MenuPage() {
   const { openQuoteModal, openLightbox } = useAppModals();
   const { menus, banners, isLoading, error } = useAdminData();
-  const [selectedCategory, setSelectedCategory] = useState('All Menus');
   const [selectedDetailMenu, setSelectedDetailMenu] = useState<MenuItem | null>(null);
 
   const snapLeft = banners?.menuSnapshotLeft || banners?.snapshotLeft || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/banner-left.jpg';
@@ -46,11 +35,6 @@ export default function MenuPage() {
     { title: 'Groom & Bride', image: snapLeft, category: 'FEATURED SNAPSHOT' },
     { title: 'Wedding Celebration', image: snapRight, category: 'FEATURED SNAPSHOT' },
   ];
-
-  const filteredMenus = menus.filter((m) => {
-    if (selectedCategory === 'All Menus') return true;
-    return m.category === selectedCategory;
-  });
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fffdfa] selection:bg-[#c8102e] selection:text-white">
@@ -102,8 +86,7 @@ export default function MenuPage() {
               <div className="relative flex items-center justify-center w-56 sm:w-64 md:w-80 lg:w-[380px] xl:w-[420px]">
                 {/* Left Snapshot */}
                 <div
-                  onClick={() => openLightbox(1, polaroidPhotos)}
-                  className="absolute -left-2 sm:-left-4 md:-left-6 lg:-left-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform -rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
+                  className="absolute -left-2 sm:-left-4 md:-left-6 lg:-left-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform -rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
@@ -118,8 +101,7 @@ export default function MenuPage() {
 
                 {/* Center / Top Snapshot */}
                 <div
-                  onClick={() => openLightbox(0, polaroidPhotos)}
-                  className="relative z-20 w-24 sm:w-30 md:w-40 lg:w-48 xl:w-52 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_12px_30px_rgba(0,0,0,0.65)] hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
+                  className="relative z-20 w-24 sm:w-30 md:w-40 lg:w-48 xl:w-52 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_12px_30px_rgba(0,0,0,0.65)] hover:scale-105 transition-all duration-300 ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
@@ -134,8 +116,7 @@ export default function MenuPage() {
 
                 {/* Right Snapshot */}
                 <div
-                  onClick={() => openLightbox(2, polaroidPhotos)}
-                  className="absolute -right-2 sm:-right-4 md:-right-6 lg:-right-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
+                  className="absolute -right-2 sm:-right-4 md:-right-6 lg:-right-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
@@ -168,17 +149,17 @@ export default function MenuPage() {
         {/* MAIN MENU CONTENT SECTION */}
         <section className="py-10 lg:py-14 max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Introduction */}
-          <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
-            <p className="text-[#c91103] font-semibold text-sm sm:text-[25px] tracking-normal mb-1">
+          <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-8">
+            <p className="text-[#c91103] font-light text-sm sm:text-[25px] tracking-normal leading-tight mb-0 sm:mb-0.5">
               Authentic Bengali Heritage
             </p>
-            <h2 className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight">
+            <h2 className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight leading-tight">
               Curated Wedding Menus
             </h2>
 
             {/* Red line with Heart Divider */}
-            <div className="flex items-center justify-center gap-3 my-3">
-              <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
+            <div className="flex items-center justify-center gap-3 mt-2 sm:mt-2.5 mb-0">
+              <span className="w-14 sm:w-16 h-[1px] bg-[#c8102e]" />
               <span className="relative w-3.5 h-3.5 inline-block">
                 <Image
                   src="/images/heart.svg"
@@ -188,31 +169,12 @@ export default function MenuPage() {
                   referrerPolicy="no-referrer"
                 />
               </span>
-              <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
+              <span className="w-14 sm:w-16 h-[1px] bg-[#c8102e]" />
             </div>
 
-            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed max-w-2xl mx-auto pt-1">
+            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed max-w-2xl mx-auto pt-1 mb-8 sm:mb-10">
               Every dish is prepared using time-honored Bengali recipes, pure ghee, and fresh catches from local markets. Select from our signature packages or customize each item according to your guest preferences.
             </p>
-          </div>
-
-          {/* Category Filter Pills */}
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-10">
-            {CATEGORIES.map((cat) => {
-              const isActive = selectedCategory === cat;
-              return (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer ${isActive
-                      ? 'bg-[#c8102e] text-white shadow-md'
-                      : 'bg-white text-gray-700 hover:bg-[#faf4ec] border border-[#e5d8c3]'
-                    }`}
-                >
-                  {cat}
-                </button>
-              );
-            })}
           </div>
 
           {/* Loading Skeleton */}
@@ -229,7 +191,7 @@ export default function MenuPage() {
           )}
 
           {/* Empty State */}
-          {!isLoading && !error && filteredMenus.length === 0 && (
+          {!isLoading && !error && menus.length === 0 && (
             <div className="bg-white border border-dashed border-[#d8b590] rounded-3xl p-16 text-center max-w-lg mx-auto">
               <UtensilsCrossed className="w-12 h-12 text-[#c8102e] mx-auto mb-3" />
               <h3 className="font-serif-display text-xl font-bold text-gray-800 mb-1">
@@ -248,9 +210,9 @@ export default function MenuPage() {
           )}
 
           {/* Menu Cards Grid - Minimalist Luxury Layout */}
-          {!isLoading && !error && filteredMenus.length > 0 && (
+          {!isLoading && !error && menus.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
-              {filteredMenus.map((menu) => {
+              {menus.map((menu) => {
                 const startersList = menu.starters || [];
                 const mainCourseList = menu.mainCourse || [];
                 const riceBreadsList = menu.riceAndBreads || [];
@@ -276,17 +238,14 @@ export default function MenuPage() {
                     <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
                       {/* Top Meta Bar */}
                       <div>
-                        <div className="flex items-center justify-between gap-2 mb-2.5">
-                          <span className="text-[11px] font-bold uppercase tracking-wider text-[#965516] bg-[#fbf3e6] px-2.5 py-0.5 rounded-full border border-[#edd7be]">
-                            {menu.category}
-                          </span>
-                          {menu.badge && (
+                        {menu.badge && (
+                          <div className="flex items-center justify-end mb-2.5">
                             <span className="text-[10px] font-bold bg-[#c8102e] text-white px-2.5 py-0.5 rounded-full shadow-xs flex items-center gap-1">
                               <Sparkles className="w-3 h-3 text-amber-300" />
                               <span>{menu.badge}</span>
                             </span>
-                          )}
-                        </div>
+                          </div>
+                        )}
 
                         {/* Title & Tagline */}
                         <h3 className="font-serif-display text-xl sm:text-2xl font-bold text-gray-900 group-hover:text-[#c8102e] transition-colors leading-snug">
@@ -400,16 +359,13 @@ export default function MenuPage() {
                   {/* Modal Header */}
                   <div className="bg-gradient-to-r from-[#1c0d0c] to-[#2d1615] p-5 sm:p-6 text-white flex items-center justify-between flex-shrink-0">
                     <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[10px] uppercase font-bold tracking-wider bg-amber-400/20 text-amber-300 px-2.5 py-0.5 rounded-full border border-amber-400/30">
-                          {selectedDetailMenu.category}
-                        </span>
-                        {selectedDetailMenu.badge && (
+                      {selectedDetailMenu.badge && (
+                        <div className="mb-1">
                           <span className="text-[10px] font-bold bg-[#c8102e] text-white px-2.5 py-0.5 rounded-full">
                             {selectedDetailMenu.badge}
                           </span>
-                        )}
-                      </div>
+                        </div>
+                      )}
                       <h3 className="font-serif-display text-2xl font-bold text-white">
                         {selectedDetailMenu.title}
                       </h3>
@@ -595,9 +551,6 @@ export default function MenuPage() {
             </div>
           </div>
         </section>
-
-        {/* CTA Banner */}
-        <CtaBanner />
       </main>
 
       {/* Footer */}

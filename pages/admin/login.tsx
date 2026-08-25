@@ -38,10 +38,12 @@ export default function AdminLoginPage() {
     setErrorMessage('');
     setIsLoading(true);
 
-    const success = await login();
+    const result = await login();
     setIsLoading(false);
-    if (success) {
+    if (result.success) {
       router.replace('/admin');
+    } else if (result.error) {
+      setErrorMessage(result.error);
     }
   };
 

@@ -92,17 +92,17 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
         className="relative bg-white rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden border border-[#e5d8c3] my-8"
       >
         {/* Header with decorative background */}
-        <div className="bg-gradient-to-r from-[#1c1212] via-[#2d1b1b] to-[#1c1212] p-6 text-white relative">
+        <div className="bg-gradient-to-r from-[#1c1212] via-[#2d1b1b] to-[#1c1212] px-4 py-4 sm:px-6 sm:py-5 text-white relative">
           <button
             onClick={resetAndClose}
-            className="absolute top-4 right-4 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors"
+            className="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 z-10 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 sm:p-2 rounded-full transition-colors"
             aria-label="Close quote modal"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
 
-          <div className="flex items-center gap-3">
-            <div className="relative w-28 h-10 flex-shrink-0">
+          <div className="flex items-center gap-2.5 sm:gap-3.5 pr-8 sm:pr-10">
+            <div className="relative w-20 sm:w-28 h-8 sm:h-10 flex-shrink-0">
               <Image
                 src="/images/logo.png"
                 alt="Shuvayan Logo"
@@ -111,11 +111,11 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
                 referrerPolicy="no-referrer"
               />
             </div>
-            <div>
-              <p className="text-xs font-semibold text-[#f59e0b] uppercase tracking-wider">
+            <div className="border-l border-white/20 pl-2.5 sm:pl-3.5">
+              <p className="text-[10px] sm:text-xs font-semibold text-[#f59e0b] uppercase tracking-wider leading-none mb-1">
                 Shuvayan Event Management
               </p>
-              <h3 className="font-serif-display text-xl sm:text-2xl font-bold text-white">
+              <h3 className="font-serif-display text-[16px] sm:text-2xl font-bold text-white leading-tight">
                 Request a Custom Quote
               </h3>
             </div>
@@ -123,7 +123,7 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 sm:p-8 max-h-[75vh] overflow-y-auto">
+        <div className="p-4 sm:p-8 max-h-[75vh] overflow-y-auto">
           {isSubmitted ? (
             <div className="text-center py-10 space-y-4">
               <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">

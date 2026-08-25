@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import CtaBanner from '@/components/CtaBanner';
 import { useAppModals } from '@/context/AppModalContext';
 import { useAdminData } from '@/context/AdminDataContext';
 import { ShieldCheck, Clock, FileText, CheckCircle2, Phone, Mail, Lock } from 'lucide-react';
@@ -73,8 +72,7 @@ export default function PolicyPage() {
               <div className="relative flex items-center justify-center w-56 sm:w-64 md:w-80 lg:w-[380px] xl:w-[420px]">
                 {/* Left Snapshot: Tilted -14deg */}
                 <div
-                  onClick={() => openLightbox(1, polaroidPhotos)}
-                  className="absolute -left-2 sm:-left-4 md:-left-6 lg:-left-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform -rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
+                  className="absolute -left-2 sm:-left-4 md:-left-6 lg:-left-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform -rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
@@ -89,8 +87,7 @@ export default function PolicyPage() {
 
                 {/* Center Snapshot: Upright in Front */}
                 <div
-                  onClick={() => openLightbox(0, polaroidPhotos)}
-                  className="relative z-20 w-24 sm:w-30 md:w-38 lg:w-46 xl:w-50 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_18px_35px_rgba(0,0,0,0.7)] transform hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
+                  className="relative z-20 w-24 sm:w-30 md:w-38 lg:w-46 xl:w-50 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_18px_35px_rgba(0,0,0,0.7)] transform hover:scale-105 transition-all duration-300 ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
@@ -105,8 +102,7 @@ export default function PolicyPage() {
 
                 {/* Right Snapshot: Tilted +14deg */}
                 <div
-                  onClick={() => openLightbox(2, polaroidPhotos)}
-                  className="absolute -right-2 sm:-right-4 md:-right-6 lg:-right-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
+                  className="absolute -right-2 sm:-right-4 md:-right-6 lg:-right-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
@@ -137,15 +133,15 @@ export default function PolicyPage() {
         {/* 3. Main Policy Content */}
         <section className="py-14 sm:py-20 bg-[#faf7f2]">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto mb-10">
-              <p className="text-[#c91103] font-semibold text-sm sm:text-[25px] tracking-normal mb-1">
+            <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-7">
+              <p className="text-[#c91103] font-light text-sm sm:text-[25px] tracking-normal leading-tight mb-0 sm:mb-0.5">
                 Transparency &amp; Trust
               </p>
-              <h2 className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight">
+              <h2 className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight leading-tight">
                 Our Service Standards
               </h2>
-              <div className="flex items-center justify-center gap-3 my-3">
-                <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
+              <div className="flex items-center justify-center gap-3 mt-2 sm:mt-2.5 mb-0">
+                <span className="w-14 sm:w-16 h-[1px] bg-[#c8102e]" />
                 <span className="relative w-3.5 h-3.5 inline-block">
                   <Image
                     src="/images/heart.svg"
@@ -155,7 +151,7 @@ export default function PolicyPage() {
                     referrerPolicy="no-referrer"
                   />
                 </span>
-                <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
+                <span className="w-14 sm:w-16 h-[1px] bg-[#c8102e]" />
               </div>
             </div>
 
@@ -163,7 +159,7 @@ export default function PolicyPage() {
             <div className="space-y-6 bg-white p-6 sm:p-10 rounded-2xl border border-[#ecdcc8] shadow-sm">
               {/* 1. Date Reservation & Booking */}
               <div className="space-y-3 pb-6 border-b border-gray-100">
-                <div className="flex items-center gap-3 text-[#b81414]">
+                <div className="flex items-center gap-3 text-[#c8102e]">
                   <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
                   <h3 className="font-serif-display text-lg sm:text-xl font-bold text-[#74161f]">
                     1. Date Reservation &amp; Payment Schedule
@@ -181,7 +177,7 @@ export default function PolicyPage() {
 
               {/* 2. Rescheduling Flexibility */}
               <div className="space-y-3 pb-6 border-b border-gray-100">
-                <div className="flex items-center gap-3 text-[#b81414]">
+                <div className="flex items-center gap-3 text-[#c8102e]">
                   <Clock className="w-5 h-5 flex-shrink-0" />
                   <h3 className="font-serif-display text-lg sm:text-xl font-bold text-[#74161f]">
                     2. Rescheduling &amp; Date Changes
@@ -194,7 +190,7 @@ export default function PolicyPage() {
 
               {/* 3. Hygiene Standards */}
               <div className="space-y-3 pb-6 border-b border-gray-100">
-                <div className="flex items-center gap-3 text-[#b81414]">
+                <div className="flex items-center gap-3 text-[#c8102e]">
                   <ShieldCheck className="w-5 h-5 flex-shrink-0" />
                   <h3 className="font-serif-display text-lg sm:text-xl font-bold text-[#74161f]">
                     3. Food Quality &amp; Hygiene Standards
@@ -207,7 +203,7 @@ export default function PolicyPage() {
 
               {/* 4. Privacy Guarantee */}
               <div className="space-y-3 pb-6 border-b border-gray-100">
-                <div className="flex items-center gap-3 text-[#b81414]">
+                <div className="flex items-center gap-3 text-[#c8102e]">
                   <Lock className="w-5 h-5 flex-shrink-0" />
                   <h3 className="font-serif-display text-lg sm:text-xl font-bold text-[#74161f]">
                     4. Privacy &amp; Media Protection
@@ -226,7 +222,7 @@ export default function PolicyPage() {
                 <p className="text-xs text-[#666666] mb-3">
                   Our wedding coordinators are happy to assist you 7 days a week from 10:00 AM to 8:00 PM IST.
                 </p>
-                <div className="text-xs font-semibold text-[#b81414] flex flex-wrap gap-5">
+                <div className="text-xs font-semibold text-[#c8102e] flex flex-wrap gap-5">
                   <a href={`tel:${settings?.primaryPhone?.replace(/\s+/g, '') || '7439442349'}`} className="hover:underline flex items-center gap-1.5">
                     <Phone className="w-3.5 h-3.5" />
                     <span>Direct: {settings?.primaryPhone || '+91 7439442349'}</span>
@@ -240,12 +236,9 @@ export default function PolicyPage() {
             </div>
           </div>
         </section>
-
-        {/* 4. Bottom CTA */}
-        <CtaBanner />
       </main>
 
-      {/* 5. Footer */}
+      {/* Footer */}
       <Footer />
     </div>
   );

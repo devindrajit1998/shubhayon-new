@@ -174,7 +174,7 @@ export interface MenuItem {
   id: string;
   title: string;
   tagline?: string;
-  category: 'Royal Wedding Feast' | 'Classic Bengali' | 'Grand Reception' | 'Signature Buffet' | 'Traditional Special';
+  category?: string;
   pricePerPlate: string; // e.g. "₹850" or "850"
   badge?: string;
   minimumGuests?: string;
@@ -204,7 +204,7 @@ interface AdminDataContextType {
   // Auth
   isAuthenticated: boolean;
   adminUser: { name: string; email: string; role: string } | null;
-  login: () => Promise<boolean>;
+  login: () => Promise<{ success: boolean; error?: string }>;
   devLogin: () => void;
   logout: () => Promise<void>;
   isLoading: boolean;
@@ -409,29 +409,50 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const login = async (): Promise<boolean> => {
+  const login = async (): Promise<{ success: boolean; error?: string }> => {
     if (isDevBypassEnabled) {
       devLogin();
-      return true;
+      return { success: true };
     }
     if (!auth) {
-      setError('Auth is not initialized.');
-      return false;
+      return { success: false, error: 'Firebase Authentication is not initialized.' };
     }
     try {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
-      if (result.user.email === 'enquiry.shuvayan@gmail.com') {
-        return true;
+
+      const authorizedEmails = [
+        'enquiry.shuvayan@gmail.com',
+        ...(process.env.NEXT_PUBLIC_AUTHORIZED_ADMIN_EMAILS
+          ? process.env.NEXT_PUBLIC_AUTHORIZED_ADMIN_EMAILS.split(',')
+          : []),
+      ].map((e) => e.trim().toLowerCase());
+
+      const userEmail = (result.user.email || '').toLowerCase();
+
+      if (authorizedEmails.includes(userEmail)) {
+        setIsAuthenticated(true);
+        setAdminUser({
+          name: result.user.displayName || 'Admin Manager',
+          email: result.user.email || 'enquiry.shuvayan@gmail.com',
+          role: 'Super Administrator',
+        });
+        return { success: true };
       } else {
         await signOut(auth);
-        setError('Unauthorized email address.');
-        return false;
+        setIsAuthenticated(false);
+        setAdminUser(null);
+        return {
+          success: false,
+          error: `Access Denied: The Google account (${result.user.email}) is not authorized to access the Shuvayan Administrative Portal.`,
+        };
       }
     } catch (e: any) {
       console.error('Login error:', e);
-      setError(e.message || 'Failed to login with Google.');
-      return false;
+      if (e.code === 'auth/popup-closed-by-user') {
+        return { success: false, error: 'Sign-in window was closed before completing.' };
+      }
+      return { success: false, error: e.message || 'Failed to login with Google.' };
     }
   };
 

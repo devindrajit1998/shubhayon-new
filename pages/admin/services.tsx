@@ -150,6 +150,7 @@ export default function AdminServicesPage() {
   const [formTitle, setFormTitle] = useState('');
   const [formCategory, setFormCategory] = useState('Decoration');
   const [formDesc, setFormDesc] = useState('');
+  const [formLongDesc, setFormLongDesc] = useState('');
   const [formButtonText, setFormButtonText] = useState('');
   const [formImage, setFormImage] = useState('');
   const [formThumb1, setFormThumb1] = useState('');
@@ -169,6 +170,7 @@ export default function AdminServicesPage() {
     setFormTitle('');
     setFormCategory('Decoration');
     setFormDesc('');
+    setFormLongDesc('');
     setFormButtonText('');
     setFormImage('');
     setFormThumb1('');
@@ -184,6 +186,7 @@ export default function AdminServicesPage() {
     setFormTitle(service.title);
     setFormCategory(service.category || 'Decoration');
     setFormDesc(service.description || '');
+    setFormLongDesc(service.longDescription || '');
     setFormButtonText(service.buttonText || '');
     setFormImage(service.image || '');
     setFormThumb1(service.thumbnails?.[0] || '');
@@ -208,6 +211,7 @@ export default function AdminServicesPage() {
       title: formTitle,
       category: formCategory,
       description: formDesc,
+      longDescription: formLongDesc,
       buttonText: formButtonText,
       image: formImage || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/Service-thumb-01.jpg',
       thumbnails,
@@ -231,6 +235,7 @@ export default function AdminServicesPage() {
       title: formTitle,
       category: formCategory,
       description: formDesc || 'Expert service tailored to traditional Bengali wedding celebrations.',
+      longDescription: formLongDesc,
       buttonText: formButtonText,
       image: formImage || 'https://ik.imagekit.io/thhqkqsnb/shuvayan_assets/Service-thumb-01.jpg',
       thumbnails,
@@ -496,19 +501,36 @@ export default function AdminServicesPage() {
                 </div>
               </div>
 
-              {/* Description */}
+              {/* Short Description (Homepage Cards) */}
               <div>
                 <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                  Service Description *
+                  Short Summary (Homepage Cards) *
                 </label>
                 <textarea
-                  rows={3}
+                  rows={2}
                   required
                   placeholder="Traditional experienced bengali priests & vedic priests..."
                   value={formDesc}
                   onChange={(e) => setFormDesc(e.target.value)}
                   className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
                 />
+              </div>
+
+              {/* Detailed Description (Services Page) */}
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Detailed Description (Services Page - Optional / Multi-line)
+                </label>
+                <textarea
+                  rows={4}
+                  placeholder="Enter a comprehensive description, rituals covered, inclusions, special arrangements for the services page..."
+                  value={formLongDesc}
+                  onChange={(e) => setFormLongDesc(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
+                />
+                <span className="text-[11px] text-gray-400 mt-1 block">
+                  If left empty, the short summary will be shown on the Services page automatically.
+                </span>
               </div>
 
               {/* Main Showcase Image Uploader */}

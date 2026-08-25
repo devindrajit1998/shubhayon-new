@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import CtaBanner from '@/components/CtaBanner';
 import { useAppModals } from '@/context/AppModalContext';
 import { useAdminData } from '@/context/AdminDataContext';
 import { Sparkles, Camera, Award, ChevronRight, Maximize2 } from 'lucide-react';
@@ -96,8 +95,7 @@ export default function GalleryPage() {
               <div className="relative flex items-center justify-center w-56 sm:w-64 md:w-80 lg:w-[380px] xl:w-[420px]">
                 {/* Left Snapshot: Tilted -14deg */}
                 <div
-                  onClick={() => openLightbox(1, polaroidPhotos)}
-                  className="absolute -left-2 sm:-left-4 md:-left-6 lg:-left-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform -rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
+                  className="absolute -left-2 sm:-left-4 md:-left-6 lg:-left-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform -rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
@@ -112,8 +110,7 @@ export default function GalleryPage() {
 
                 {/* Center / Top Snapshot: Straight with elevated shadow */}
                 <div
-                  onClick={() => openLightbox(0, polaroidPhotos)}
-                  className="relative z-20 w-24 sm:w-30 md:w-40 lg:w-48 xl:w-52 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_12px_30px_rgba(0,0,0,0.65)] hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
+                  className="relative z-20 w-24 sm:w-30 md:w-40 lg:w-48 xl:w-52 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_12px_30px_rgba(0,0,0,0.65)] hover:scale-105 transition-all duration-300 ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
@@ -128,8 +125,7 @@ export default function GalleryPage() {
 
                 {/* Right Snapshot: Tilted +14deg */}
                 <div
-                  onClick={() => openLightbox(2, polaroidPhotos)}
-                  className="absolute -right-2 sm:-right-4 md:-right-6 lg:-right-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 cursor-pointer ring-1 ring-black/10 rounded-xs"
+                  className="absolute -right-2 sm:-right-4 md:-right-6 lg:-right-10 w-20 sm:w-26 md:w-34 lg:w-40 xl:w-44 aspect-[3/4] bg-white p-[3px] sm:p-[4px] shadow-[0_10px_25px_rgba(0,0,0,0.55)] transform rotate-14 hover:rotate-0 hover:z-30 hover:scale-105 transition-all duration-300 ring-1 ring-black/10 rounded-xs"
                 >
                   <div className="relative w-full h-full overflow-hidden bg-gray-900">
                     <Image
@@ -162,17 +158,17 @@ export default function GalleryPage() {
         {/* Gallery Content Section */}
         <section className="py-12 sm:py-16 lg:py-20 max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
-          <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-            <p className="text-[#c91103] font-semibold text-sm sm:text-[25px] tracking-normal mb-1">
+          <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
+            <p className="text-[#c91103] font-light text-sm sm:text-[25px] tracking-normal leading-tight mb-0 sm:mb-0.5">
               Captured Moments
             </p>
-            <h2 className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight">
+            <h2 className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight leading-tight">
               Explore Our Portfolio
             </h2>
 
             {/* Red line with Heart Divider */}
-            <div className="flex items-center justify-center gap-3 my-3">
-              <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
+            <div className="flex items-center justify-center gap-3 mt-2 sm:mt-2.5 mb-0">
+              <span className="w-14 sm:w-16 h-[1px] bg-[#c8102e]" />
               <span className="relative w-3.5 h-3.5 inline-block">
                 <Image
                   src="/images/heart.svg"
@@ -182,7 +178,7 @@ export default function GalleryPage() {
                   referrerPolicy="no-referrer"
                 />
               </span>
-              <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
+              <span className="w-14 sm:w-16 h-[1px] bg-[#c8102e]" />
             </div>
           </div>
 
@@ -340,9 +336,6 @@ export default function GalleryPage() {
             </div>
           )}
         </section>
-
-        {/* Bottom CTA Banner */}
-        <CtaBanner />
       </main>
 
       {/* Footer */}

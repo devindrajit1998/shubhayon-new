@@ -36,23 +36,23 @@ export default function GallerySection() {
     <section id="gallery" className="py-10 lg:py-14 bg-white relative overflow-hidden">
       <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-12">
+        <div className="text-center max-w-2xl mx-auto mb-5 sm:mb-7">
           <p
             id="gallery-subheading"
-            className="text-[#c91103] font-semibold text-sm sm:text-[25px] tracking-normal"
+            className="text-[#c91103] font-light text-sm sm:text-[25px] tracking-normal leading-tight mb-0 sm:mb-0.5"
           >
             Our Work
           </p>
           <h2
             id="gallery-heading"
-            className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight"
+            className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight leading-tight"
           >
             Moments we create
           </h2>
 
           {/* Red line with Heart Divider */}
-          <div className="flex items-center justify-center gap-3 my-3">
-            <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
+          <div className="flex items-center justify-center gap-3 mt-2 sm:mt-2.5 mb-0">
+            <span className="w-14 sm:w-16 h-[1px] bg-[#c8102e]" />
             <span className="relative w-3.5 h-3.5 inline-block">
               <Image
                 src="/images/heart.svg"
@@ -62,7 +62,7 @@ export default function GallerySection() {
                 referrerPolicy="no-referrer"
               />
             </span>
-            <span className="w-14 sm:w-16 h-[1.5px] bg-[#c8102e]" />
+            <span className="w-14 sm:w-16 h-[1px] bg-[#c8102e]" />
           </div>
         </div>
 
@@ -195,7 +195,7 @@ export default function GallerySection() {
               <Link
                 href="/gallery"
                 id="view-full-gallery-btn"
-                className="inline-flex items-center justify-center bg-[#c8102e] hover:bg-[#a80b24] text-white font-semibold text-sm sm:text-base px-8 py-3 rounded-md shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5"
+                className="inline-flex items-center justify-center bg-[#c8102e] hover:bg-[#a80b24] text-white font-medium text-base sm:text-[18px] px-8 sm:px-9 py-3 sm:py-3.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
               >
                 View full Gallery
               </Link>

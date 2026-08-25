@@ -19,26 +19,16 @@ import AdminLayout from '@/components/admin/AdminLayout';
 import { useAdminData, MenuItem } from '@/context/AdminDataContext';
 import ImageKitUploader from '@/components/admin/ImageKitUploader';
 
-const CATEGORIES: MenuItem['category'][] = [
-  'Royal Wedding Feast',
-  'Classic Bengali',
-  'Grand Reception',
-  'Signature Buffet',
-  'Traditional Special',
-];
-
 export default function AdminMenuPage() {
   const { menus, addMenu, updateMenu, deleteMenu, isLoading } = useAdminData();
   const [editingMenu, setEditingMenu] = useState<MenuItem | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [uploadKey, setUploadKey] = useState(0);
 
   // Form State
   const [formTitle, setFormTitle] = useState('');
   const [formTagline, setFormTagline] = useState('');
-  const [formCategory, setFormCategory] = useState<MenuItem['category']>('Royal Wedding Feast');
   const [formPrice, setFormPrice] = useState('');
   const [formBadge, setFormBadge] = useState('');
   const [formMinGuests, setFormMinGuests] = useState('100');
@@ -50,19 +40,17 @@ export default function AdminMenuPage() {
   const [formBeverages, setFormBeverages] = useState('');
 
   const filteredMenus = menus.filter((m) => {
-    const matchesSearch =
+    return (
       m.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (m.tagline && m.tagline.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (m.pricePerPlate && m.pricePerPlate.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesCategory = selectedCategory === 'All' || m.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+      (m.pricePerPlate && m.pricePerPlate.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
   });
 
   const openEditModal = (menu: MenuItem) => {
     setEditingMenu(menu);
     setFormTitle(menu.title);
     setFormTagline(menu.tagline || '');
-    setFormCategory(menu.category || 'Royal Wedding Feast');
     setFormPrice(menu.pricePerPlate || '');
     setFormBadge(menu.badge || '');
     setFormMinGuests(menu.minimumGuests || '100');
@@ -88,7 +76,6 @@ export default function AdminMenuPage() {
     updateMenu(editingMenu.id, {
       title: formTitle,
       tagline: formTagline || undefined,
-      category: formCategory,
       pricePerPlate: formPrice,
       badge: formBadge || undefined,
       minimumGuests: formMinGuests,
@@ -110,7 +97,6 @@ export default function AdminMenuPage() {
     addMenu({
       title: formTitle,
       tagline: formTagline || 'Authentic gourmet Bengali catering crafted with heritage recipes.',
-      category: formCategory,
       pricePerPlate: formPrice,
       badge: formBadge || undefined,
       minimumGuests: formMinGuests || '100',
@@ -125,7 +111,6 @@ export default function AdminMenuPage() {
     // Reset Form
     setFormTitle('');
     setFormTagline('');
-    setFormCategory('Royal Wedding Feast');
     setFormPrice('');
     setFormBadge('');
     setFormMinGuests('100');
@@ -148,7 +133,7 @@ export default function AdminMenuPage() {
         {/* Top Control Bar */}
         <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#e8dfd3] shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto flex-1">
-            <div className="relative w-full sm:w-72">
+            <div className="relative w-full sm:w-80">
               <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-3" />
               <input
                 type="text"
@@ -158,26 +143,15 @@ export default function AdminMenuPage() {
                 className="w-full pl-10 pr-4 py-2 bg-[#faf7f2] border border-[#e0d3c1] rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#c8102e]"
               />
             </div>
-
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="py-2 px-3 bg-[#faf7f2] border border-[#e0d3c1] rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#c8102e]"
-            >
-              <option value="All">All Categories ({menus.length})</option>
-              {CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
+            <span className="text-xs text-gray-500 hidden sm:inline">
+              {menus.length} Total Menus in Firebase
+            </span>
           </div>
 
           <button
             onClick={() => {
               setFormTitle('');
               setFormTagline('');
-              setFormCategory('Royal Wedding Feast');
               setFormPrice('');
               setFormBadge('');
               setFormMinGuests('100');
@@ -218,7 +192,7 @@ export default function AdminMenuPage() {
             <p className="text-xs text-gray-500 mb-4">
               {menus.length === 0
                 ? 'Your Firebase database does not have any plate catering packages yet. Click below to add one.'
-                : 'No menus match your current search or category filter.'}
+                : 'No menus match your current search.'}
             </p>
             {menus.length === 0 && (
               <button
@@ -251,19 +225,15 @@ export default function AdminMenuPage() {
                     {/* Card Header & Badge */}
                     <div className="p-5 pb-4 border-b border-[#f2ede6] relative bg-gradient-to-b from-[#faf6f0] to-white">
                       <div className="flex items-start justify-between gap-3 mb-2">
-                        <span className="text-[11px] font-bold uppercase tracking-wider text-[#b36a19] bg-[#fff1de] px-2.5 py-0.5 rounded-md border border-[#f5dfc4]">
-                          {menu.category}
-                        </span>
+                        <h3 className="font-serif-display text-xl font-bold text-gray-900 mb-1 flex-1">
+                          {menu.title}
+                        </h3>
                         {menu.badge && (
-                          <span className="text-[10px] font-bold bg-[#c8102e] text-white px-2 py-0.5 rounded-full shadow-xs">
+                          <span className="text-[10px] font-bold bg-[#c8102e] text-white px-2 py-0.5 rounded-full shadow-xs flex-shrink-0">
                             {menu.badge}
                           </span>
                         )}
                       </div>
-
-                      <h3 className="font-serif-display text-xl font-bold text-gray-900 mb-1">
-                        {menu.title}
-                      </h3>
                       {menu.tagline && (
                         <p className="text-xs text-gray-500 line-clamp-1">{menu.tagline}</p>
                       )}
@@ -306,30 +276,30 @@ export default function AdminMenuPage() {
                       {menu.desserts && menu.desserts.length > 0 && (
                         <div>
                           <p className="font-bold text-gray-700 flex items-center gap-1.5 mb-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#059669]" />
-                            <span>Desserts ({menu.desserts.length}):</span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#d97706]" />
+                            <span>Desserts &amp; Sweets ({menu.desserts.length}):</span>
                           </p>
-                          <p className="text-gray-600 line-clamp-1 pl-3">
+                          <p className="text-gray-600 line-clamp-2 pl-3">
                             {menu.desserts.join(' • ')}
                           </p>
                         </div>
                       )}
 
                       <div className="pt-2 flex items-center justify-between text-[11px] text-gray-500 border-t border-gray-100">
-                        <span>Total Items: <strong>{totalItems} Delicacies</strong></span>
-                        <span>Min Guests: <strong>{menu.minimumGuests || '100'}</strong></span>
+                        <span>{totalItems} total items in menu</span>
+                        <span>Min {menu.minimumGuests || '100'} guests</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Actions Footer */}
-                  <div className="p-4 bg-[#faf8f5] border-t border-[#f0e8dc] flex items-center justify-between gap-2">
+                  {/* Card Actions Footer */}
+                  <div className="p-4 bg-[#faf7f2] border-t border-[#ebdcc9] flex items-center justify-between gap-2">
                     <button
                       onClick={() => openEditModal(menu)}
-                      className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-bold text-gray-700 bg-white border border-[#d8cbba] hover:bg-gray-50 hover:text-[#c8102e] shadow-2xs transition-colors cursor-pointer"
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 py-2 rounded-xl text-xs font-semibold shadow-2xs transition-colors cursor-pointer"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
-                      <span>Edit Menu</span>
+                      <span>Edit</span>
                     </button>
 
                     <button
@@ -338,8 +308,8 @@ export default function AdminMenuPage() {
                           deleteMenu(menu.id);
                         }
                       }}
-                      className="p-2 rounded-lg text-red-600 hover:bg-red-50 border border-transparent hover:border-red-200 transition-colors cursor-pointer"
-                      title="Delete menu tier"
+                      className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
+                      title="Delete"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -362,14 +332,9 @@ export default function AdminMenuPage() {
                   <UtensilsCrossed className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-serif-display text-lg font-bold text-white tracking-wide">
-                      {editingMenu ? `Edit Plate Menu` : 'Create New Plate Menu'}
-                    </h3>
-                    <span className="text-[10px] uppercase font-bold tracking-wider bg-amber-400/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-400/30">
-                      {editingMenu ? editingMenu.category : formCategory}
-                    </span>
-                  </div>
+                  <h3 className="font-serif-display text-lg font-bold text-white tracking-wide">
+                    {editingMenu ? `Edit Plate Menu` : 'Create New Plate Menu'}
+                  </h3>
                   <p className="text-xs text-gray-300 font-light mt-0.5">
                     {editingMenu ? `Updating "${editingMenu.title}"` : 'Configure catering tier, course inclusions, and plate pricing.'}
                   </p>
@@ -430,24 +395,7 @@ export default function AdminMenuPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
-                      Category *
-                    </label>
-                    <select
-                      value={formCategory}
-                      onChange={(e) => setFormCategory(e.target.value as MenuItem['category'])}
-                      className="w-full px-3.5 py-2.5 bg-[#faf7f2] border border-[#d8cbba] rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all"
-                    >
-                      {CATEGORIES.map((c) => (
-                        <option key={c} value={c}>
-                          {c}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
                       Highlight Badge (Optional)

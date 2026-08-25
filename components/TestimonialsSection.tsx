@@ -38,17 +38,17 @@ export default function TestimonialsSection() {
     <section id="testimonials" className="py-10 lg:py-14 bg-[#fbf9f6] relative overflow-hidden border-t border-[#f0e5d5]">
       <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-12">
-          <p className="text-[#c91103] font-semibold text-sm sm:text-[25px] tracking-normal">
+        <div className="text-center max-w-2xl mx-auto mb-5 sm:mb-7">
+          <p className="text-[#c91103] font-light text-sm sm:text-[25px] tracking-normal leading-tight mb-0 sm:mb-0.5">
             Cherished Words
           </p>
-          <h2 className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight">
+          <h2 className="font-serif-display text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#787576] tracking-tight leading-tight">
             Couple Reviews &amp; Testimonials
           </h2>
 
           {/* Red line with Heart Divider */}
-          <div className="flex items-center justify-center gap-3 my-2.5">
-            <span className="w-12 sm:w-14 h-[1.5px] bg-[#c8102e]" />
+          <div className="flex items-center justify-center gap-3 mt-2 sm:mt-2.5 mb-0">
+            <span className="w-12 sm:w-14 h-[1px] bg-[#c8102e]" />
             <span className="relative w-3.5 h-3.5 inline-block">
               <Image
                 src="/images/heart.svg"
@@ -58,7 +58,7 @@ export default function TestimonialsSection() {
                 referrerPolicy="no-referrer"
               />
             </span>
-            <span className="w-12 sm:w-14 h-[1.5px] bg-[#c8102e]" />
+            <span className="w-12 sm:w-14 h-[1px] bg-[#c8102e]" />
           </div>
         </div>
 

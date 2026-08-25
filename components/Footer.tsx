@@ -45,12 +45,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12 border-b border-white/10">
           {/* Column 1: Brand & Tagline (4 cols on lg) */}
           <div className="lg:col-span-4 space-y-4">
-            <Link href="/" className="inline-block relative w-48 sm:w-52 h-12 sm:h-14 group">
+            <Link href="/" className="inline-block relative w-48 sm:w-52 h-12 sm:h-14">
               <Image
                 src={settings?.logoUrl || '/images/logo.png'}
                 alt="Shuvayan - Wedding & Event Management"
                 fill
-                className="object-contain object-left transition-transform duration-300 group-hover:scale-105"
+                className="object-contain object-left"
                 referrerPolicy="no-referrer"
               />
             </Link>
@@ -163,7 +163,7 @@ export default function Footer() {
                   aria-label="Facebook"
                 >
                   <span
-                    className="block w-6 h-6 bg-white group-hover:bg-[#b81414] transition-colors duration-200"
+                    className="block w-6 h-6 bg-white group-hover:bg-[#c8102e] transition-colors duration-200"
                     style={{
                       maskImage: "url('/images/Social-FB.png')",
                       WebkitMaskImage: "url('/images/Social-FB.png')",
@@ -186,7 +186,7 @@ export default function Footer() {
                   aria-label="Instagram"
                 >
                   <span
-                    className="block w-6 h-6 bg-white group-hover:bg-[#b81414] transition-colors duration-200"
+                    className="block w-6 h-6 bg-white group-hover:bg-[#c8102e] transition-colors duration-200"
                     style={{
                       maskImage: "url('/images/Social-INSTA.png')",
                       WebkitMaskImage: "url('/images/Social-INSTA.png')",

@@ -62,7 +62,7 @@ export default function CtaBanner() {
           <button
             id="cta-enquire-now-btn"
             onClick={() => openQuoteModal()}
-            className="group inline-flex items-center gap-3.5 bg-[#c91103] hover:bg-[#a80b24] text-white  text-sm sm:text-base pl-6 pr-2.5 py-2.5 sm:py-3 rounded-[5px] shadow-lg hover:shadow-xl transition-all duration-300 transform "
+            className="group inline-flex items-center gap-3.5 bg-[#c8102e] hover:bg-[#a80b24] text-white text-sm sm:text-base pl-6 pr-2.5 py-2.5 sm:py-3 rounded-md shadow-lg hover:shadow-xl transition-all duration-200"
           >
             <span>Enquire Now</span>
             <span className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white transition-colors">

@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import CtaBanner from '@/components/CtaBanner';
 import { useAppModals } from '@/context/AppModalContext';
 import { useAdminData } from '@/context/AdminDataContext';
 import {
@@ -275,12 +274,9 @@ export default function ArtistDetailPage() {
             </div>
           )}
         </section>
-
-        {/* 3. Bottom CTA */}
-        <CtaBanner />
       </main>
 
-      {/* 4. Footer */}
+      {/* Footer */}
       <Footer />
     </div>
   );
