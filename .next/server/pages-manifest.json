@@ -24,4 +24,6 @@
   "/_error": "pages/_error.js",
   "/api/imagekit/upload": "pages/api/imagekit/upload.js",
   "/gallery/artist/[id]": "pages/gallery/artist/[id].js",
-  "/packages
+  "/packages/[id]": "pages/packages/[id].js",
+  "/404": "pages/404.html"
+}
