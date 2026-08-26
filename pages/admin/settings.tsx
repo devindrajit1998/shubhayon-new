@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import ImageKitUploader from '@/components/admin/ImageKitUploader';
+import RichTextEditor from '@/components/admin/RichTextEditor';
 import { useAdminData } from '@/context/AdminDataContext';
 
 export default function AdminSettingsPage() {
@@ -309,6 +310,49 @@ export default function AdminSettingsPage() {
                 Keys: NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* 4. Policy Page Rich Content Editor (CKEditor / WYSIWYG) */}
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] shadow-xs space-y-6">
+          <div className="border-b border-gray-100 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="p-2 rounded-xl bg-[#fff5ea] text-[#c8102e] border border-[#eedfcb]">
+                <Sparkles className="w-4 h-4" />
+              </span>
+              <div>
+                <h3 className="text-lg font-bold font-serif-display text-gray-900">
+                  Policy &amp; Terms Page Content Editor
+                </h3>
+                <p className="text-xs text-gray-500">
+                  Rich formatting editor (CKEditor style) to customize booking terms, milestone schedules, food hygiene, and notices.
+                </p>
+              </div>
+            </div>
+
+            <Link
+              href="/policy"
+              target="_blank"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-[#c8102e] hover:underline"
+            >
+              <span>Preview Policy Page</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider">
+              Policy Body Content (WYSIWYG Rich Editor)
+            </label>
+            <RichTextEditor
+              value={formData.policyHtmlContent || ''}
+              onChange={(html) => handleChange('policyHtmlContent', html)}
+              placeholder="Format policy clauses, bullet points, headers, notice callouts, or payment milestones..."
+              minHeight="380px"
+            />
+            <p className="text-[11px] text-gray-500">
+              Supports Headings (H1, H2, H3), bold/italic styling, numbered lists, bullet lists, custom notice alert callouts, and links.
+            </p>
           </div>
         </div>
 

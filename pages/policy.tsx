@@ -131,9 +131,9 @@ export default function PolicyPage() {
         </div>
 
         {/* 3. Main Policy Content */}
-        <section className="py-14 sm:py-20 bg-[#faf7f2]">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-7">
+        <section className="py-10 sm:py-14 lg:py-16 bg-[#faf7f2]">
+          <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
               <p className="text-[#c91103] font-light text-sm sm:text-[25px] tracking-normal leading-tight mb-0 sm:mb-0.5">
                 Transparency &amp; Trust
               </p>
@@ -155,85 +155,114 @@ export default function PolicyPage() {
               </div>
             </div>
 
-            {/* Policy Accordion / Cards */}
-            <div className="space-y-6 bg-white p-6 sm:p-10 rounded-2xl border border-[#ecdcc8] shadow-sm">
-              {/* 1. Date Reservation & Booking */}
-              <div className="space-y-3 pb-6 border-b border-gray-100">
-                <div className="flex items-center gap-3 text-[#c8102e]">
-                  <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
-                  <h3 className="font-serif-display text-lg sm:text-xl font-bold text-[#74161f]">
-                    1. Date Reservation &amp; Payment Schedule
-                  </h3>
-                </div>
-                <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed pl-8">
-                  To lock auspicious Bengali wedding dates (Lagna dates) for our Priests, photographers, stylists, and floral decor teams, a transparent milestone-based structure is observed:
-                </p>
-                <ul className="text-xs sm:text-sm text-[#4b5563] space-y-2 pl-8 list-disc list-inside">
-                  <li><strong>25% Advance Token:</strong> Required upon date locking and formal contract signing.</li>
-                  <li><strong>50% Intermediate Payment:</strong> Upon finalized theme decor approval, menu tasting, and artist scheduling (30 days prior).</li>
-                  <li><strong>25% Final Settlement:</strong> Upon successful completion of reception day events.</li>
-                </ul>
-              </div>
+            {/* Policy Accordion / Cards or Dynamic Rich HTML Content */}
+            {settings?.policyHtmlContent && settings.policyHtmlContent.trim() ? (
+              <div className="bg-white p-6 sm:p-10 rounded-2xl border border-[#ecdcc8] shadow-sm space-y-6">
+                <div
+                  className="prose prose-red max-w-none text-xs sm:text-sm text-[#4b5563] leading-relaxed space-y-4 font-sans"
+                  dangerouslySetInnerHTML={{ __html: settings.policyHtmlContent }}
+                />
 
-              {/* 2. Rescheduling Flexibility */}
-              <div className="space-y-3 pb-6 border-b border-gray-100">
-                <div className="flex items-center gap-3 text-[#c8102e]">
-                  <Clock className="w-5 h-5 flex-shrink-0" />
-                  <h3 className="font-serif-display text-lg sm:text-xl font-bold text-[#74161f]">
-                    2. Rescheduling &amp; Date Changes
-                  </h3>
+                {/* Contact Desk */}
+                <div className="pt-2 bg-[#faf7f2] p-5 rounded-xl border border-[#ecdcc8]">
+                  <h4 className="font-serif-display text-base font-bold text-[#74161f] mb-1.5">
+                    Have Questions Regarding Terms?
+                  </h4>
+                  <p className="text-xs text-[#666666] mb-3">
+                    Our wedding coordinators are happy to assist you 7 days a week from 10:00 AM to 8:00 PM IST.
+                  </p>
+                  <div className="text-xs font-semibold text-[#c8102e] flex flex-wrap gap-5">
+                    <a href={`tel:${settings?.primaryPhone?.replace(/\s+/g, '') || '7439442349'}`} className="hover:underline flex items-center gap-1.5">
+                      <Phone className="w-3.5 h-3.5" />
+                      <span>Direct: {settings?.primaryPhone || '+91 7439442349'}</span>
+                    </a>
+                    <a href={`mailto:${settings?.contactEmail || 'enquiry.shuvayan@gmail.com'}`} className="hover:underline flex items-center gap-1.5">
+                      <Mail className="w-3.5 h-3.5" />
+                      <span>{settings?.contactEmail || 'enquiry.shuvayan@gmail.com'}</span>
+                    </a>
+                  </div>
                 </div>
-                <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed pl-8">
-                  We understand unforeseen family circumstances can arise. You may reschedule your celebration up to 45 days prior to the original date with zero postponement penalty, subject to slot availability.
-                </p>
               </div>
+            ) : (
+              <div className="space-y-6 bg-white p-6 sm:p-10 rounded-2xl border border-[#ecdcc8] shadow-sm">
+                {/* 1. Date Reservation & Booking */}
+                <div className="space-y-3 pb-6 border-b border-gray-100">
+                  <div className="flex items-center gap-3 text-[#c8102e]">
+                    <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
+                    <h3 className="font-serif-display text-lg sm:text-xl font-bold text-[#74161f]">
+                      1. Date Reservation &amp; Payment Schedule
+                    </h3>
+                  </div>
+                  <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed pl-8">
+                    To lock auspicious Bengali wedding dates (Lagna dates) for our Priests, photographers, stylists, and floral decor teams, a transparent milestone-based structure is observed:
+                  </p>
+                  <ul className="text-xs sm:text-sm text-[#4b5563] space-y-2 pl-8 list-disc list-inside">
+                    <li><strong>25% Advance Token:</strong> Required upon date locking and formal contract signing.</li>
+                    <li><strong>50% Intermediate Payment:</strong> Upon finalized theme decor approval, menu tasting, and artist scheduling (30 days prior).</li>
+                    <li><strong>25% Final Settlement:</strong> Upon successful completion of reception day events.</li>
+                  </ul>
+                </div>
 
-              {/* 3. Hygiene Standards */}
-              <div className="space-y-3 pb-6 border-b border-gray-100">
-                <div className="flex items-center gap-3 text-[#c8102e]">
-                  <ShieldCheck className="w-5 h-5 flex-shrink-0" />
-                  <h3 className="font-serif-display text-lg sm:text-xl font-bold text-[#74161f]">
-                    3. Food Quality &amp; Hygiene Standards
-                  </h3>
+                {/* 2. Rescheduling Flexibility */}
+                <div className="space-y-3 pb-6 border-b border-gray-100">
+                  <div className="flex items-center gap-3 text-[#c8102e]">
+                    <Clock className="w-5 h-5 flex-shrink-0" />
+                    <h3 className="font-serif-display text-lg sm:text-xl font-bold text-[#74161f]">
+                      2. Rescheduling &amp; Date Changes
+                    </h3>
+                  </div>
+                  <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed pl-8">
+                    We understand unforeseen family circumstances can arise. You may reschedule your celebration up to 45 days prior to the original date with zero postponement penalty, subject to slot availability.
+                  </p>
                 </div>
-                <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed pl-8">
-                  All catering operations adhere to rigorous FSSAI hygiene standards. We exclusively source fresh, live fish (Chingri, Katla, Bhetki) and grade-A certified ghee and spices from vetted traditional suppliers.
-                </p>
-              </div>
 
-              {/* 4. Privacy Guarantee */}
-              <div className="space-y-3 pb-6 border-b border-gray-100">
-                <div className="flex items-center gap-3 text-[#c8102e]">
-                  <Lock className="w-5 h-5 flex-shrink-0" />
-                  <h3 className="font-serif-display text-lg sm:text-xl font-bold text-[#74161f]">
-                    4. Privacy &amp; Media Protection
-                  </h3>
+                {/* 3. Hygiene Standards */}
+                <div className="space-y-3 pb-6 border-b border-gray-100">
+                  <div className="flex items-center gap-3 text-[#c8102e]">
+                    <ShieldCheck className="w-5 h-5 flex-shrink-0" />
+                    <h3 className="font-serif-display text-lg sm:text-xl font-bold text-[#74161f]">
+                      3. Food Quality &amp; Hygiene Standards
+                    </h3>
+                  </div>
+                  <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed pl-8">
+                    All catering operations adhere to rigorous FSSAI hygiene standards. We exclusively source fresh, live fish (Chingri, Katla, Bhetki) and grade-A certified ghee and spices from vetted traditional suppliers.
+                  </p>
                 </div>
-                <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed pl-8">
-                  All client photographs, raw film footage, and family guest lists are stored under strict confidentiality and never shared with third-party advertising networks.
-                </p>
-              </div>
 
-              {/* 5. Contact Desk */}
-              <div className="pt-2 bg-[#faf7f2] p-5 rounded-xl border border-[#ecdcc8]">
-                <h4 className="font-serif-display text-base font-bold text-[#74161f] mb-1.5">
-                  Have Questions Regarding Terms?
-                </h4>
-                <p className="text-xs text-[#666666] mb-3">
-                  Our wedding coordinators are happy to assist you 7 days a week from 10:00 AM to 8:00 PM IST.
-                </p>
-                <div className="text-xs font-semibold text-[#c8102e] flex flex-wrap gap-5">
-                  <a href={`tel:${settings?.primaryPhone?.replace(/\s+/g, '') || '7439442349'}`} className="hover:underline flex items-center gap-1.5">
-                    <Phone className="w-3.5 h-3.5" />
-                    <span>Direct: {settings?.primaryPhone || '+91 7439442349'}</span>
-                  </a>
-                  <a href={`mailto:${settings?.contactEmail || 'enquiry.shuvayan@gmail.com'}`} className="hover:underline flex items-center gap-1.5">
-                    <Mail className="w-3.5 h-3.5" />
-                    <span>{settings?.contactEmail || 'enquiry.shuvayan@gmail.com'}</span>
-                  </a>
+                {/* 4. Privacy Guarantee */}
+                <div className="space-y-3 pb-6 border-b border-gray-100">
+                  <div className="flex items-center gap-3 text-[#c8102e]">
+                    <Lock className="w-5 h-5 flex-shrink-0" />
+                    <h3 className="font-serif-display text-lg sm:text-xl font-bold text-[#74161f]">
+                      4. Privacy &amp; Media Protection
+                    </h3>
+                  </div>
+                  <p className="text-xs sm:text-sm text-[#4b5563] leading-relaxed pl-8">
+                    All client photographs, raw film footage, and family guest lists are stored under strict confidentiality and never shared with third-party advertising networks.
+                  </p>
+                </div>
+
+                {/* 5. Contact Desk */}
+                <div className="pt-2 bg-[#faf7f2] p-5 rounded-xl border border-[#ecdcc8]">
+                  <h4 className="font-serif-display text-base font-bold text-[#74161f] mb-1.5">
+                    Have Questions Regarding Terms?
+                  </h4>
+                  <p className="text-xs text-[#666666] mb-3">
+                    Our wedding coordinators are happy to assist you 7 days a week from 10:00 AM to 8:00 PM IST.
+                  </p>
+                  <div className="text-xs font-semibold text-[#c8102e] flex flex-wrap gap-5">
+                    <a href={`tel:${settings?.primaryPhone?.replace(/\s+/g, '') || '7439442349'}`} className="hover:underline flex items-center gap-1.5">
+                      <Phone className="w-3.5 h-3.5" />
+                      <span>Direct: {settings?.primaryPhone || '+91 7439442349'}</span>
+                    </a>
+                    <a href={`mailto:${settings?.contactEmail || 'enquiry.shuvayan@gmail.com'}`} className="hover:underline flex items-center gap-1.5">
+                      <Mail className="w-3.5 h-3.5" />
+                      <span>{settings?.contactEmail || 'enquiry.shuvayan@gmail.com'}</span>
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </section>
       </main>

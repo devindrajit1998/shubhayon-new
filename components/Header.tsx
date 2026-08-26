@@ -157,65 +157,65 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
             }`}
         />
 
-        {/* Off-Canvas Panel */}
+        {/* Off-Canvas Panel - Scrollable for Landscape & Short Viewports */}
         <div
           id="mobile-drawer-panel"
-          className={`absolute top-0 right-0 bottom-0 w-80 max-w-[85vw] bg-gradient-to-b from-[#520912] via-[#40060e] to-[#2b040a] border-l border-[#781522] shadow-2xl flex flex-col justify-between p-6 transition-transform duration-300 ease-out z-10 ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-            }`}
+          className={`absolute top-0 right-0 bottom-0 w-80 max-w-[85vw] h-full bg-gradient-to-b from-[#520912] via-[#40060e] to-[#2b040a] border-l border-[#781522] shadow-2xl flex flex-col overflow-y-auto p-5 sm:p-6 transition-transform duration-300 ease-out z-10 overscroll-contain ${
+            mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
         >
           {/* Top Row: Logo & Close Button */}
-          <div>
-            <div className="flex items-center justify-between pb-5 border-b border-white/10">
-              <div className="relative w-36 h-10">
-                <Image
-                  src={settings?.logoUrl || '/images/logo.png'}
-                  alt="Shuvayan"
-                  fill
-                  className="object-contain object-left"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-              <button
-                id="mobile-drawer-close-btn"
-                onClick={() => setMobileMenuOpen(false)}
-                className="p-2 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-colors"
-                aria-label="Close menu"
-              >
-                <X className="w-6 h-6" />
-              </button>
+          <div className="flex items-center justify-between pb-4 border-b border-white/10 flex-shrink-0">
+            <div className="relative w-32 sm:w-36 h-9 sm:h-10">
+              <Image
+                src={settings?.logoUrl || '/images/logo.png'}
+                alt="Shuvayan"
+                fill
+                className="object-contain object-left"
+                referrerPolicy="no-referrer"
+              />
             </div>
-
-            {/* Navigation Links */}
-            <nav className="flex flex-col space-y-1.5 pt-6">
-              {navItems.map((item) => {
-                const isActive = activePage === item.id;
-                return (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`text-base font-medium py-2.5 px-3.5 rounded-lg transition-colors flex items-center justify-between ${isActive
-                      ? 'text-[#e5a83b] bg-white/5 font-semibold'
-                      : 'text-white/85 hover:text-white hover:bg-white/5'
-                      }`}
-                  >
-                    <span>{item.label}</span>
-                    {isActive && <ChevronRight className="w-4 h-4 text-[#e5a83b]" />}
-                  </Link>
-                );
-              })}
-            </nav>
+            <button
+              id="mobile-drawer-close-btn"
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-1.5 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-colors"
+              aria-label="Close menu"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
 
+          {/* Navigation Links (Scrollable middle section) */}
+          <nav className="flex flex-col space-y-1 py-4 flex-1">
+            {navItems.map((item) => {
+              const isActive = activePage === item.id;
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`text-sm sm:text-base font-medium py-2 px-3 rounded-lg transition-colors flex items-center justify-between ${
+                    isActive
+                      ? 'text-[#e5a83b] bg-white/10 font-semibold'
+                      : 'text-white/85 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  {isActive && <ChevronRight className="w-4 h-4 text-[#e5a83b]" />}
+                </Link>
+              );
+            })}
+          </nav>
+
           {/* Bottom Actions: Quote CTA & Direct Call */}
-          <div className="pt-6 border-t border-white/10 space-y-3">
+          <div className="pt-4 border-t border-white/10 space-y-2.5 flex-shrink-0 mt-auto">
             <button
               id="mobile-drawer-quote-btn"
               onClick={() => {
                 setMobileMenuOpen(false);
                 openQuoteModal();
               }}
-              className="w-full flex items-center justify-center gap-2.5 bg-[#c8102e] hover:bg-[#a80b24] text-white font-semibold py-3 rounded-md text-sm shadow-md transition-colors"
+              className="w-full flex items-center justify-center gap-2 bg-[#c8102e] hover:bg-[#a80b24] text-white font-semibold py-2.5 sm:py-3 rounded-md text-xs sm:text-sm shadow-md transition-colors cursor-pointer"
             >
               <span>Get Free Quote</span>
               <span className="w-4 h-4 rounded-full border border-white/80 flex items-center justify-center">
@@ -225,7 +225,7 @@ export default function Header({ activePage = 'home' }: HeaderProps) {
 
             <a
               href={`tel:${phone.replace(/\s+/g, '')}`}
-              className="w-full flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 text-white/90 font-medium py-2.5 rounded-md text-xs transition-colors"
+              className="w-full flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 text-white/90 font-medium py-2 sm:py-2.5 rounded-md text-xs transition-colors"
             >
               <Phone className="w-3.5 h-3.5 text-[#e5a83b]" />
               <span>Call Direct: {phone}</span>

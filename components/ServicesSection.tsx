@@ -126,7 +126,7 @@ export default function ServicesSection() {
 
                   {/* Card Body */}
                   <div className="px-2.5 sm:px-3 pt-3 sm:pt-3.5 pb-4 flex-1 flex flex-col justify-start text-center bg-[#fbf8f0]">
-                    <h3 className="font-serif-display text-[17px] sm:text-[19px] lg:text-[20px] font-medium text-[#5f011b] mb-1 leading-snug tracking-tight">
+                    <h3 className="font-serif-display text-[17px] sm:text-[19px] lg:text-[20px] font-medium text-[#c8102e] mb-1 leading-snug tracking-tight">
                       {service.title}
                     </h3>
                     <p className="text-[15px] text-[#333333] leading-[1.2]">

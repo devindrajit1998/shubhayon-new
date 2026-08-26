@@ -43,7 +43,7 @@ function PackageCardRow({
               </span>
             </div>
 
-            <h2 className="font-serif-display text-2xl sm:text-3xl lg:text-[34px] leading-tight text-[#74161f] font-medium">
+            <h2 className="font-serif-display text-2xl sm:text-3xl lg:text-[34px] leading-tight text-[#c8102e] font-medium">
               {pkg.title}
             </h2>
           </div>

@@ -63,8 +63,8 @@ export default function Footer() {
 
           {/* Column 2: Quick Links (2.5 cols on lg) */}
           <div className="lg:col-span-2">
-            <h3 className="font-serif-display text-base sm:text-lg font-bold text-white mb-4 tracking-wide">
-              Quick Links
+            <h3 className="font-serif-display text-2xl sm:text-[27px] font-normal text-white mb-5 tracking-tight leading-tight">
+              <span className="border-b-[1.5px] border-[#c8102e] pb-1">Quic</span>k Links
             </h3>
             <ul className="space-y-2.5">
               {quickLinks.map((link) => (
@@ -93,8 +93,8 @@ export default function Footer() {
 
           {/* Column 3: Our Services (3.5 cols on lg) */}
           <div className="lg:col-span-3">
-            <h3 className="font-serif-display text-base sm:text-lg font-bold text-white mb-4 tracking-wide">
-              Our Services
+            <h3 className="font-serif-display text-2xl sm:text-[27px] font-normal text-white mb-5 tracking-tight leading-tight">
+              <span className="border-b-[1.5px] border-[#c8102e] pb-1">Our</span> Services
             </h3>
             <ul className="space-y-2.5">
               {serviceLinks.map((item) => (
@@ -123,8 +123,8 @@ export default function Footer() {
 
           {/* Column 4: Contact Us (2.5 cols on lg) */}
           <div className="lg:col-span-3 space-y-4">
-            <h3 className="font-serif-display text-base sm:text-lg font-bold text-white mb-4 tracking-wide">
-              Contact Us
+            <h3 className="font-serif-display text-2xl sm:text-[27px] font-normal text-white mb-5 tracking-tight leading-tight">
+              <span className="border-b-[1.5px] border-[#c8102e] pb-1">Cont</span>act Us
             </h3>
 
             <div className="space-y-3 text-xs sm:text-sm text-gray-300">

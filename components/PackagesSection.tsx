@@ -125,7 +125,7 @@ export default function PackagesSection() {
                     {/* Card Content Top */}
                     <div>
                       {/* Package Title */}
-                      <h3 className="font-serif-display text-[22px] font-medium text-[#74161f] tracking-tight mb-1.5">
+                      <h3 className="font-serif-display text-[22px] font-medium text-[#c8102e] tracking-tight mb-1.5">
                         {pkg.title}
                       </h3>
 

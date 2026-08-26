@@ -110,6 +110,7 @@ export interface SiteSettings {
   facebookUrl: string;
   instagramUrl: string;
   youtubeUrl: string;
+  policyHtmlContent?: string;
 }
 
 export const emptyBanners: BannerSettings = {
