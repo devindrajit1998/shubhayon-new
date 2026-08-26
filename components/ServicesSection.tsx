@@ -101,11 +101,11 @@ export default function ServicesSection() {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
               {services.map((service) => (
-                <div
+                <Link
                   key={service.id}
                   id={`service-card-${service.id}`}
-                  onClick={() => openQuoteModal(service.title)}
-                  className="group bg-[#fffdfa] rounded-2xl overflow-hidden border border-[#e39306] shadow-sm cursor-pointer flex flex-col"
+                  href={`/services#service-detail-${service.id}`}
+                  className="group bg-[#fffdfa] rounded-2xl overflow-hidden border border-[#e39306] shadow-sm cursor-pointer flex flex-col hover:shadow-md transition-all duration-300 block"
                 >
                   {/* Card Image Container */}
                   <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#fbf8f0]">
@@ -126,14 +126,14 @@ export default function ServicesSection() {
 
                   {/* Card Body */}
                   <div className="px-2.5 sm:px-3 pt-3 sm:pt-3.5 pb-4 flex-1 flex flex-col justify-start text-center bg-[#fbf8f0]">
-                    <h3 className="font-serif-display text-[17px] sm:text-[19px] lg:text-[20px] font-medium text-[#c8102e] mb-1 leading-snug tracking-tight">
+                    <h3 className="font-serif-display text-[17px] sm:text-[19px] lg:text-[20px] font-medium text-[#c8102e] mb-1 leading-snug tracking-tight group-hover:text-[#a80b24] transition-colors">
                       {service.title}
                     </h3>
                     <p className="text-[15px] text-[#333333] leading-[1.2]">
                       {service.description}
                     </p>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </>

@@ -99,8 +99,8 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {serviceLinks.map((item) => (
                 <li key={item.label}>
-                  <button
-                    onClick={() => openQuoteModal(item.service)}
+                  <Link
+                    href="/services"
                     className="group inline-flex items-center gap-2 text-xs sm:text-sm text-gray-300 hover:text-[#f59e0b] transition-colors text-left"
                   >
                     <span className="relative w-2 h-2 flex-shrink-0 inline-block">
@@ -115,7 +115,7 @@ export default function Footer() {
                     <span className="transition-transform">
                       {item.label}
                     </span>
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>
