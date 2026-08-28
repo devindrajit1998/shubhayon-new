@@ -557,7 +557,7 @@ export default function AdminGalleryPage() {
                 <ImageKitUploader
                   key={uploadKey}
                   label="Upload New Photo"
-                  folder={`/shuvayan_gallery/${activePhotoArtist.category}`}
+                  folder={`/shuvayan_gallery/${(activePhotoArtist.category || 'general').replace(/[^a-zA-Z0-9_-]/g, '_')}`}
                   currentImageUrl={newPhotoImage}
                   onUploadSuccess={(url) => setNewPhotoImage(url)}
                   onClear={() => setNewPhotoImage('')}

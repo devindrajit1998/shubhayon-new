@@ -34,11 +34,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(503).json({ error: 'Could not initialize ImageKit server instance.' });
     }
 
+    // Sanitize folder path: ensure it starts with / and contains only valid characters
+    let safeFolder = '/shuvayan_assets';
+    if (folder && typeof folder === 'string') {
+      const cleaned = folder
+        .trim()
+        .replace(/\\/g, '/')
+        .replace(/\/+/g, '/')
+        .replace(/[^a-zA-Z0-9_\-\/]/g, '_');
+      safeFolder = cleaned.startsWith('/') ? cleaned : `/${cleaned}`;
+    }
+
     try {
       const result = await imagekit.upload({
         file: file,
         fileName: safeName,
-        folder: folder || '/shuvayan_assets',
+        folder: safeFolder,
         useUniqueFileName: true,
       });
 

@@ -26,15 +26,24 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
 
   const availableServices = services.map((s) => s.title);
 
-  const selectedServices = initialService
-    ? Array.from(new Set([initialService, ...customServices]))
-    : customServices;
+  // Sync initialService when modal opens or initialService changes
+  useEffect(() => {
+    if (isOpen) {
+      if (initialService) {
+        setCustomServices([initialService]);
+      } else {
+        setCustomServices([]);
+      }
+    }
+  }, [isOpen, initialService]);
+
+  const selectedServices = customServices;
 
   if (!isOpen) return null;
 
   const toggleService = (srv: string) => {
-    if (selectedServices.includes(srv)) {
-      setCustomServices(selectedServices.filter((s) => s !== srv));
+    if (selectedServices.some((s) => s.trim().toLowerCase() === srv.trim().toLowerCase())) {
+      setCustomServices(selectedServices.filter((s) => s.trim().toLowerCase() !== srv.trim().toLowerCase()));
     } else {
       setCustomServices([...selectedServices, srv]);
     }
@@ -303,7 +312,7 @@ export default function QuoteModal({ isOpen, onClose, initialService }: QuoteMod
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {availableServices.map((srv) => {
                       const isChecked = selectedServices.some(
-                        (s) => s.toLowerCase().includes(srv.toLowerCase().slice(0, 5))
+                        (s) => s.trim().toLowerCase() === srv.trim().toLowerCase()
                       );
                       return (
                         <button
