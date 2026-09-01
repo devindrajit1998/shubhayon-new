@@ -16,21 +16,32 @@ import {
   Camera,
   UtensilsCrossed,
   Layers3,
+  Trash2,
+  Plus,
+  ChevronLeft,
+  ChevronRight,
+  Download,
 } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import ImageKitUploader from '@/components/admin/ImageKitUploader';
-import { useAdminData, BannerSettings } from '@/context/AdminDataContext';
+import { useAdminData, BannerSettings, HomeSliderItem } from '@/context/AdminDataContext';
 
-type PageTab = 'home' | 'about' | 'services' | 'packages' | 'gallery' | 'menu' | 'policy' | 'polaroids';
+type PageTab = 'home' | 'slider' | 'about' | 'services' | 'packages' | 'gallery' | 'menu' | 'policy' | 'polaroids';
 type PolaroidPageTarget = 'global' | 'about' | 'services' | 'packages' | 'gallery' | 'menu' | 'policy';
 
 export default function AdminBannersPage() {
-  const { banners, updateBanners } = useAdminData();
+  const { banners, artists, updateBanners } = useAdminData();
   const [formData, setFormData] = useState<BannerSettings>(banners);
   const [activeTab, setActiveTab] = useState<PageTab>('home');
   const [selectedPolaroidTarget, setSelectedPolaroidTarget] = useState<PolaroidPageTarget>('about');
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+
+  // Dedicated Homepage Slider Quick Form State
+  const [sliderImage, setSliderImage] = useState('');
+  const [sliderTitle, setSliderTitle] = useState('');
+  const [sliderCategory, setSliderCategory] = useState('VENUE DECORATION');
+  const [sliderUploadKey, setSliderUploadKey] = useState(0);
 
   useEffect(() => {
     if (banners) {
@@ -38,7 +49,7 @@ export default function AdminBannersPage() {
     }
   }, [banners]);
 
-  const handleChange = (field: keyof BannerSettings, val: string) => {
+  const handleChange = (field: keyof BannerSettings, val: any) => {
     setFormData((prev) => ({ ...prev, [field]: val }));
     setSaveSuccess(false);
   };
@@ -51,8 +62,69 @@ export default function AdminBannersPage() {
     setTimeout(() => setSaveSuccess(false), 4000);
   };
 
+  const handleAddSliderPhoto = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!sliderImage) return;
+
+    const newItem: HomeSliderItem = {
+      id: `slider-${Date.now()}`,
+      image: sliderImage,
+      title: sliderTitle.trim() || 'Signature Showcase',
+      category: sliderCategory.trim() || 'VENUE DECORATION',
+    };
+
+    const updatedSlider = [...(formData.homeSliderPhotos || []), newItem];
+    const newFormData = { ...formData, homeSliderPhotos: updatedSlider };
+    setFormData(newFormData);
+    updateBanners(newFormData);
+
+    setSliderImage('');
+    setSliderTitle('');
+    setSliderUploadKey((k) => k + 1);
+    setSaveSuccess(true);
+    setTimeout(() => setSaveSuccess(false), 3000);
+  };
+
+  const handleRemoveSliderPhoto = (id: string) => {
+    const updatedSlider = (formData.homeSliderPhotos || []).filter((p) => p.id !== id);
+    const newFormData = { ...formData, homeSliderPhotos: updatedSlider };
+    setFormData(newFormData);
+    updateBanners(newFormData);
+  };
+
+  const handleMoveSliderPhoto = (index: number, direction: 'left' | 'right') => {
+    const current = [...(formData.homeSliderPhotos || [])];
+    const targetIdx = direction === 'left' ? index - 1 : index + 1;
+    if (targetIdx < 0 || targetIdx >= current.length) return;
+
+    const [moved] = current.splice(index, 1);
+    current.splice(targetIdx, 0, moved);
+
+    const newFormData = { ...formData, homeSliderPhotos: current };
+    setFormData(newFormData);
+    updateBanners(newFormData);
+  };
+
+  const handleImportShowcasePhotos = () => {
+    const imported: HomeSliderItem[] = artists.flatMap((artist) =>
+      artist.photos.map((p, idx) => ({
+        id: `imported-${artist.id}-${idx}`,
+        image: p.image,
+        title: p.title || `${artist.name} Showcase`,
+        category: artist.category.toUpperCase(),
+      }))
+    );
+
+    const newFormData = { ...formData, homeSliderPhotos: imported };
+    setFormData(newFormData);
+    updateBanners(newFormData);
+    setSaveSuccess(true);
+    setTimeout(() => setSaveSuccess(false), 3000);
+  };
+
   const tabs: { id: PageTab; label: string; icon: any; route: string }[] = [
-    { id: 'home', label: 'Homepage', icon: Home, route: '/' },
+    { id: 'home', label: 'Homepage Hero', icon: Home, route: '/' },
+    { id: 'slider', label: 'Moments Slider', icon: Sparkles, route: '/#gallery' },
     { id: 'about', label: 'About Us', icon: BookOpen, route: '/about' },
     { id: 'services', label: 'Services', icon: Briefcase, route: '/services' },
     { id: 'packages', label: 'Packages', icon: Package, route: '/packages' },
@@ -298,6 +370,243 @@ export default function AdminBannersPage() {
                   onClear={() => handleChange('homeHeroBgImage', '')}
                 />
               </div>
+            </div>
+
+            {/* Quick Link to Homepage Moments Slider */}
+            <div className="bg-[#fff8ee] border border-[#f2d7b6] p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-[#c8102e] text-white flex items-center justify-center flex-shrink-0 shadow-sm">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-gray-900">Homepage &quot;Moments we create&quot; Slider</h4>
+                  <p className="text-xs text-gray-600">
+                    Currently has <strong>{formData.homeSliderPhotos?.length || 0} custom photos</strong> uploaded.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab('slider')}
+                className="bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-xs transition-colors cursor-pointer self-start sm:self-auto flex items-center gap-1.5"
+              >
+                <span>Manage Slider Photos</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* 1.5 DEDICATED HOMEPAGE SLIDER TAB */}
+        {activeTab === 'slider' && (
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#e8dfd3] shadow-xs space-y-6 animate-fadeIn">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100 pb-4">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#d99824] bg-[#d99824]/10 px-2.5 py-0.5 rounded-full border border-[#d99824]/30 mb-1 inline-block">
+                  Dedicated Homepage Carousel
+                </span>
+                <h3 className="text-xl font-bold font-serif-display text-gray-900">
+                  Homepage &quot;Moments we create&quot; Slider Photos
+                </h3>
+                <p className="text-xs text-gray-500">
+                  Directly upload and arrange photos that appear in the high-impact carousel on the homepage (`/`)
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleImportShowcasePhotos}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl border border-[#d4be9f] bg-[#fbf8f3] hover:bg-[#f3ede1] text-[#784d16] transition-colors cursor-pointer"
+                  title="Import all artist showcase photos into the homepage slider"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Import Artist Showcase</span>
+                </button>
+
+                <Link
+                  href="/#gallery"
+                  target="_blank"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl border border-[#c8102e] bg-[#c8102e] hover:bg-[#a80b24] text-white transition-colors"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Preview Slider Live</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Quick Upload Box */}
+            <div className="bg-[#fcfaf7] p-5 sm:p-6 rounded-2xl border border-[#ebdcc8] space-y-4">
+              <div className="flex items-center justify-between border-b border-[#ebdcc8] pb-3">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-[#74161f] flex items-center gap-2">
+                  <Plus className="w-4 h-4 text-[#c8102e]" />
+                  <span>Upload New Photo to Homepage Slider</span>
+                </h4>
+                <span className="text-[11px] text-gray-500">Fast 1-Click Upload via ImageKit</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-end">
+                <div className="sm:col-span-4">
+                  <ImageKitUploader
+                    key={sliderUploadKey}
+                    label="Select / Upload Photo"
+                    folder="/shuvayan_slider"
+                    currentImageUrl={sliderImage}
+                    onUploadSuccess={(url) => setSliderImage(url)}
+                    onClear={() => setSliderImage('')}
+                  />
+                </div>
+
+                <div className="sm:col-span-4 space-y-1.5">
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider">
+                    Photo Title / Showcase Name
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Royal Palace Mandap Decor"
+                    value={sliderTitle}
+                    onChange={(e) => setSliderTitle(e.target.value)}
+                    className="w-full px-3.5 py-2.5 bg-white border border-[#d8c5b0] rounded-xl text-xs sm:text-sm text-gray-900 focus:ring-2 focus:ring-[#c8102e] outline-none"
+                  />
+                </div>
+
+                <div className="sm:col-span-2 space-y-1.5">
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider">
+                    Category Tag
+                  </label>
+                  <select
+                    value={sliderCategory}
+                    onChange={(e) => setSliderCategory(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-white border border-[#d8c5b0] rounded-xl text-xs text-gray-900 focus:ring-2 focus:ring-[#c8102e] outline-none"
+                  >
+                    <option value="VENUE DECORATION">VENUE DECORATION</option>
+                    <option value="BRIDAL MAKEOVER">BRIDAL MAKEOVER</option>
+                    <option value="PHOTOGRAPHY & CINEMA">PHOTOGRAPHY & CINEMA</option>
+                    <option value="RECEPTION GALA">RECEPTION GALA</option>
+                    <option value="AUTHENTIC CATERING">AUTHENTIC CATERING</option>
+                    <option value="WEDDING MOMENTS">WEDDING MOMENTS</option>
+                  </select>
+                </div>
+
+                <div className="sm:col-span-2">
+                  <button
+                    type="button"
+                    onClick={handleAddSliderPhoto}
+                    disabled={!sliderImage}
+                    className={`w-full inline-flex items-center justify-center gap-1.5 text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition-all cursor-pointer ${
+                      sliderImage
+                        ? 'bg-[#c8102e] hover:bg-[#a80b24] text-white'
+                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    }`}
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Add to Slider</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Current Homepage Slider Grid */}
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center justify-between">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700">
+                  Current Slider Order ({formData.homeSliderPhotos?.length || 0} Photos)
+                </h4>
+                <span className="text-[11px] text-gray-500">Use arrow buttons to rearrange display sequence</span>
+              </div>
+
+              {(!formData.homeSliderPhotos || formData.homeSliderPhotos.length === 0) ? (
+                <div className="py-12 text-center bg-[#faf7f2] rounded-2xl border border-dashed border-[#dfc8a8] space-y-3">
+                  <Sparkles className="w-8 h-8 text-[#d99824] mx-auto" />
+                  <h4 className="text-sm font-bold text-gray-800">No Custom Slider Photos Yet</h4>
+                  <p className="text-xs text-gray-500 max-w-md mx-auto">
+                    Upload photos above, or click <strong>&quot;Import Artist Showcase&quot;</strong> to copy photos from your specialist profiles into this direct slider manager.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleImportShowcasePhotos}
+                    className="inline-flex items-center gap-1.5 bg-[#c8102e] text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-xs hover:bg-[#a80b24] cursor-pointer"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Import Showcase Photos Now</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                  {formData.homeSliderPhotos.map((item, idx) => (
+                    <div
+                      key={item.id || idx}
+                      className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-[#ecdac5] bg-gray-950 shadow-sm group hover:shadow-lg transition-all"
+                    >
+                      <Image
+                        src={item.image}
+                        alt={item.title || `Slide ${idx + 1}`}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        referrerPolicy="no-referrer"
+                      />
+
+                      {/* Top Bar: Sequence Number & Delete */}
+                      <div className="absolute top-2 inset-x-2 flex items-center justify-between z-20">
+                        <span className="bg-black/80 text-amber-300 text-[10px] font-black px-2 py-0.5 rounded-md border border-amber-400/40 shadow-xs">
+                          #{idx + 1}
+                        </span>
+
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveSliderPhoto(item.id)}
+                          className="p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-md transition-colors cursor-pointer"
+                          title="Remove from slider"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      {/* Reorder Arrows on Hover */}
+                      <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 flex items-center justify-between z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          type="button"
+                          disabled={idx === 0}
+                          onClick={() => handleMoveSliderPhoto(idx, 'left')}
+                          className={`p-1.5 rounded-full shadow-md text-white transition-colors cursor-pointer ${
+                            idx === 0
+                              ? 'bg-gray-700/50 cursor-not-allowed'
+                              : 'bg-black/80 hover:bg-[#c8102e]'
+                          }`}
+                          title="Move Left"
+                        >
+                          <ChevronLeft className="w-4 h-4" />
+                        </button>
+
+                        <button
+                          type="button"
+                          disabled={idx === (formData.homeSliderPhotos?.length || 1) - 1}
+                          onClick={() => handleMoveSliderPhoto(idx, 'right')}
+                          className={`p-1.5 rounded-full shadow-md text-white transition-colors cursor-pointer ${
+                            idx === (formData.homeSliderPhotos?.length || 1) - 1
+                              ? 'bg-gray-700/50 cursor-not-allowed'
+                              : 'bg-black/80 hover:bg-[#c8102e]'
+                          }`}
+                          title="Move Right"
+                        >
+                          <ChevronRight className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      {/* Bottom Caption */}
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent p-2.5 z-10 text-left">
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-amber-300 block">
+                          {item.category || 'VENUE DECORATION'}
+                        </span>
+                        <span className="text-xs font-semibold text-white truncate block">
+                          {item.title || 'Signature Showcase'}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}

@@ -508,7 +508,7 @@ export default function MenuPage() {
         {/* Quality & Hygiene Badges */}
         <section className="bg-[#fff7ed] py-10 border-y border-[#fed7aa]">
           <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center sm:text-left">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-center sm:text-left">
               <div className="flex items-center gap-3.5">
                 <div className="w-12 h-12 rounded-2xl bg-[#c8102e] text-white flex items-center justify-center flex-shrink-0 shadow-sm">
                   <Award className="w-6 h-6" />
@@ -524,18 +524,8 @@ export default function MenuPage() {
                   <ShieldCheck className="w-6 h-6" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm text-gray-900">FSSAI Certified Kitchens</h4>
+                  <h4 className="font-bold text-sm text-gray-900">FSSAI Certified</h4>
                   <p className="text-xs text-gray-600">Zero compromise on food hygiene &amp; safety</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3.5">
-                <div className="w-12 h-12 rounded-2xl bg-[#d97706] text-white flex items-center justify-center flex-shrink-0 shadow-sm">
-                  <Flame className="w-6 h-6" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-sm text-gray-900">Live Counters Included</h4>
-                  <p className="text-xs text-gray-600">Fresh hot fish fry, jalebi &amp; tandoor stalls</p>
                 </div>
               </div>
 

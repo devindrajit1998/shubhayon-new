@@ -199,28 +199,36 @@ export default function ArtistDetailPage() {
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3.5 sm:gap-4">
-              {artist.photos.map((photo, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => openLightbox(idx, artistPhotosList)}
-                  className="group cursor-pointer relative aspect-square bg-gray-100 rounded-xl overflow-hidden border border-[#eedfcb] shadow-2xs hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-                >
-                  <Image
-                    src={photo.image}
-                    alt={photo.title || artist.name}
-                    fill
-                    className="object-cover object-center group-hover:scale-108 transition-transform duration-500"
-                    referrerPolicy="no-referrer"
-                  />
+              {artist.photos.filter((p) => !p.hidden).map((photo, idx, visibleArr) => {
+                const visiblePhotosList = visibleArr.map((p) => ({
+                  title: p.title || artist.name,
+                  image: p.image,
+                  category: artist.category.toUpperCase(),
+                }));
 
-                  {/* Subtle Hover Overlay with Zoom Icon */}
-                  <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                    <span className="w-9 h-9 rounded-full bg-white/90 backdrop-blur-xs text-gray-900 flex items-center justify-center shadow-md transform scale-75 group-hover:scale-100 transition-transform">
-                      <Maximize2 className="w-4 h-4 text-gray-800" />
-                    </span>
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => openLightbox(idx, visiblePhotosList)}
+                    className="group cursor-pointer relative aspect-square bg-gray-100 rounded-xl overflow-hidden border border-[#eedfcb] shadow-2xs hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                  >
+                    <Image
+                      src={photo.image}
+                      alt={photo.title || artist.name}
+                      fill
+                      className="object-cover object-center group-hover:scale-108 transition-transform duration-500"
+                      referrerPolicy="no-referrer"
+                    />
+
+                    {/* Subtle Hover Overlay with Zoom Icon */}
+                    <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                      <span className="w-9 h-9 rounded-full bg-white/90 backdrop-blur-xs text-gray-900 flex items-center justify-center shadow-md transform scale-75 group-hover:scale-100 transition-transform">
+                        <Maximize2 className="w-4 h-4 text-gray-800" />
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
 

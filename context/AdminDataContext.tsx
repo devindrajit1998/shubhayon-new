@@ -87,6 +87,16 @@ export interface BannerSettings {
   snapshotLeft: string;
   snapshotMid: string;
   snapshotRight: string;
+
+  // Dedicated Homepage "Moments we create" Slider Photos
+  homeSliderPhotos?: HomeSliderItem[];
+}
+
+export interface HomeSliderItem {
+  id: string;
+  image: string;
+  title?: string;
+  category?: string;
 }
 
 export interface TestimonialItem {
@@ -243,8 +253,10 @@ interface AdminDataContextType {
   addArtist: (artist: Omit<ArtistProfile, 'id'>) => Promise<void>;
   updateArtist: (id: string, updated: Partial<ArtistProfile>) => Promise<void>;
   deleteArtist: (id: string) => Promise<void>;
-  addPhotoToArtist: (artistId: string, photo: { title: string; image: string }) => Promise<void>;
+  addPhotoToArtist: (artistId: string, photo: { title: string; image: string; hidden?: boolean; featuredOnHome?: boolean }) => Promise<void>;
   removePhotoFromArtist: (artistId: string, photoIndex: number) => Promise<void>;
+  togglePhotoVisibility: (artistId: string, photoIndex: number) => Promise<void>;
+  togglePhotoHomeFeature: (artistId: string, photoIndex: number) => Promise<void>;
 
   // Banners
   banners: BannerSettings;
@@ -597,7 +609,7 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
     await syncToCloud({ artists: updated });
   };
 
-  const addPhotoToArtist = async (artistId: string, photo: { title: string; image: string }) => {
+  const addPhotoToArtist = async (artistId: string, photo: { title: string; image: string; hidden?: boolean }) => {
     const updated = artists.map((a) =>
       a.id === artistId ? { ...a, photos: [...a.photos, photo] } : a
     );
@@ -611,6 +623,30 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
         ? { ...a, photos: a.photos.filter((_, idx) => idx !== photoIndex) }
         : a
     );
+    setArtists(updated);
+    await syncToCloud({ artists: updated });
+  };
+
+  const togglePhotoVisibility = async (artistId: string, photoIndex: number) => {
+    const updated = artists.map((a) => {
+      if (a.id !== artistId) return a;
+      const updatedPhotos = a.photos.map((p, idx) =>
+        idx === photoIndex ? { ...p, hidden: !p.hidden } : p
+      );
+      return { ...a, photos: updatedPhotos };
+    });
+    setArtists(updated);
+    await syncToCloud({ artists: updated });
+  };
+
+  const togglePhotoHomeFeature = async (artistId: string, photoIndex: number) => {
+    const updated = artists.map((a) => {
+      if (a.id !== artistId) return a;
+      const updatedPhotos = a.photos.map((p, idx) =>
+        idx === photoIndex ? { ...p, featuredOnHome: !p.featuredOnHome } : p
+      );
+      return { ...a, photos: updatedPhotos };
+    });
     setArtists(updated);
     await syncToCloud({ artists: updated });
   };
@@ -687,6 +723,8 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
         deleteArtist,
         addPhotoToArtist,
         removePhotoFromArtist,
+        togglePhotoVisibility,
+        togglePhotoHomeFeature,
         banners,
         updateBanners,
         testimonials,

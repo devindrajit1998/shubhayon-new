@@ -19,18 +19,47 @@ export interface GalleryPhoto {
 
 export default function GallerySection() {
   const { openLightbox } = useAppModals();
-  const { artists, isLoading, error } = useAdminData();
+  const { artists, banners, isLoading, error } = useAdminData();
   const swiperRef = useRef<SwiperType | null>(null);
 
-  // Extract all photos from active artists in Firebase — no fallback
-  const dynamicPhotos: GalleryPhoto[] = artists.flatMap((artist) =>
-    artist.photos.map((photo, idx) => ({
-      id: `${artist.id}-${idx}`,
-      title: photo.title || artist.name,
-      category: artist.category.toUpperCase(),
-      image: photo.image,
-    }))
+  // 1. Direct Homepage Slider Photos from dedicated Admin Slider Manager (Highest Priority)
+  const directHomeSliderPhotos: GalleryPhoto[] = (banners?.homeSliderPhotos || []).map((p, idx) => ({
+    id: p.id || `direct-slider-${idx}`,
+    title: p.title || 'Moments We Create',
+    category: (p.category || 'VENUE DECORATION').toUpperCase(),
+    image: p.image,
+  }));
+
+  // 2. Extract all active/visible photos
+  const allActivePhotos: GalleryPhoto[] = artists.flatMap((artist) =>
+    artist.photos
+      .filter((photo) => !photo.hidden)
+      .map((photo, idx) => ({
+        id: `${artist.id}-${idx}`,
+        title: photo.title || artist.name,
+        category: artist.category.toUpperCase(),
+        image: photo.image,
+      }))
   );
+
+  // 3. If specific photos are toggled for Homepage Slider from artist profiles
+  const featuredHomePhotos: GalleryPhoto[] = artists.flatMap((artist) =>
+    artist.photos
+      .filter((photo) => !photo.hidden && photo.featuredOnHome)
+      .map((photo, idx) => ({
+        id: `${artist.id}-${idx}`,
+        title: photo.title || artist.name,
+        category: artist.category.toUpperCase(),
+        image: photo.image,
+      }))
+  );
+
+  const dynamicPhotos =
+    directHomeSliderPhotos.length > 0
+      ? directHomeSliderPhotos
+      : featuredHomePhotos.length > 0
+      ? featuredHomePhotos
+      : allActivePhotos;
 
   return (
     <section id="gallery" className="py-10 lg:py-14 bg-white relative overflow-hidden">
@@ -165,24 +194,11 @@ export default function GallerySection() {
                         referrerPolicy="no-referrer"
                       />
 
-                      {/* Gradient and Hover Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-70 group-hover:opacity-90 transition-opacity" />
-
-                      {/* View Icon Overlay */}
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm text-white flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform">
+                      {/* Hover Overlay with View Icon */}
+                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <span className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm text-white flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform shadow-lg">
                           <Maximize2 className="w-5 h-5" />
                         </span>
-                      </div>
-
-                      {/* Bottom Title on card */}
-                      <div className="absolute bottom-0 left-0 right-0 p-3.5 text-white">
-                        <p className="text-[10px] sm:text-[11px] font-semibold tracking-wider uppercase text-[#f59e0b] mb-0.5">
-                          {photo.category}
-                        </p>
-                        <p className="text-xs sm:text-sm font-medium line-clamp-1 text-white/95">
-                          {photo.title}
-                        </p>
                       </div>
                     </div>
                   </SwiperSlide>

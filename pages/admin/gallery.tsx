@@ -141,6 +141,29 @@ export default function AdminGalleryPage() {
       activeNav="gallery"
     >
       <div className="space-y-8">
+        {/* Quick Direct Link to Dedicated Homepage Slider */}
+        <div className="bg-[#fff8ee] rounded-2xl p-4 sm:p-5 border border-[#f2d7b6] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-[#c8102e] text-white flex items-center justify-center flex-shrink-0 shadow-sm">
+              <Sparkles className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-gray-900">Dedicated Homepage &quot;Moments we create&quot; Slider</h3>
+              <p className="text-xs text-gray-600">
+                Want to directly upload and arrange photos specifically for the homepage slider?
+              </p>
+            </div>
+          </div>
+
+          <a
+            href="/admin/banners"
+            className="inline-flex items-center gap-1.5 bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-xs transition-colors self-start sm:self-auto cursor-pointer"
+          >
+            <span>Open Dedicated Slider Manager</span>
+            <ExternalLink className="w-3.5 h-3.5" />
+          </a>
+        </div>
+
         {/* 1. Category Tabs Management */}
         <div className="bg-white rounded-2xl p-5 border border-[#e8dfd3] shadow-xs space-y-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-gray-100 pb-3">
@@ -349,12 +372,13 @@ export default function AdminGalleryPage() {
                     >
                       <Image
                         src={photo.image}
-                        alt={photo.title}
+                        alt={photo.title || 'Photo'}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform"
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2">
+
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2 z-10">
                         <span className="text-[10px] text-white truncate">{photo.title}</span>
                       </div>
                     </div>
@@ -595,7 +619,7 @@ export default function AdminGalleryPage() {
 
             {/* Current Photos Gallery Grid */}
             <div className="space-y-3 pt-2">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between border-b border-gray-100 pb-2">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700">
                   Current Showcase Strip ({activePhotoArtist.photos.length} Photos)
                 </h4>
@@ -614,9 +638,9 @@ export default function AdminGalleryPage() {
                     >
                       <Image
                         src={p.image}
-                        alt={p.title}
+                        alt={p.title || `Photo ${idx + 1}`}
                         fill
-                        className="object-cover group-hover:scale-105 transition-transform"
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                         referrerPolicy="no-referrer"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-2">
@@ -624,15 +648,22 @@ export default function AdminGalleryPage() {
                           type="button"
                           onClick={() => {
                             removePhotoFromArtist(activePhotoArtist.id, idx);
-                            const updated = artists.find((a) => a.id === activePhotoArtist.id);
-                            if (updated) setActivePhotoArtist(updated);
+                            setActivePhotoArtist((prev) => {
+                              if (!prev) return null;
+                              return {
+                                ...prev,
+                                photos: prev.photos.filter((_, i) => i !== idx),
+                              };
+                            });
                           }}
                           className="self-end p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow cursor-pointer transition-colors"
                           title="Delete photo"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
-                        <span className="text-[10px] text-white truncate font-medium">{p.title}</span>
+                        <span className="text-[10px] text-white truncate font-medium">
+                          {p.title || `${activePhotoArtist.name} Showcase`}
+                        </span>
                       </div>
                     </div>
                   ))}

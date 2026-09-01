@@ -101,7 +101,7 @@ export default function PackagesSection() {
         {/* 4. Real Firebase Packages Grid */}
         {!isLoading && !error && packages.length > 0 && (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 pt-3 items-stretch">
               {packages.map((pkg, index) => {
                 // Alternate colors: Red (#c8102e), Yellow (#e39306)
                 const isEven = index % 2 === 0;
@@ -113,11 +113,11 @@ export default function PackagesSection() {
                   <div
                     key={pkg.id}
                     id={`package-card-${pkg.id}`}
-                    className={`relative bg-white flex flex-col justify-between rounded-xl overflow-hidden border border-t-[6px] ${themeBorderClass} p-5 sm:p-6 text-left shadow-sm hover:shadow-md transition-shadow`}
+                    className={`relative bg-white flex flex-col justify-between rounded-xl border border-t-[6px] ${themeBorderClass} p-5 sm:p-6 text-left shadow-sm hover:shadow-md transition-shadow`}
                   >
                     {/* Badge (Optional) */}
                     {pkg.badge && (
-                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#c8102e] text-white text-[10px] font-semibold px-3 py-0.5 rounded-full uppercase tracking-wider whitespace-nowrap">
+                      <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#c8102e] text-white text-[11px] font-bold px-3.5 py-0.5 rounded-full uppercase tracking-wider whitespace-nowrap shadow-sm z-10">
                         {pkg.badge}
                       </span>
                     )}
@@ -131,7 +131,11 @@ export default function PackagesSection() {
 
                       {/* Sub-header / Tagline */}
                       <p className="text-[18px] font-light text-gray-600 leading-snug mb-5">
-                        Perfect for: {pkg.tagline}
+                        {pkg.tagline
+                          ? pkg.tagline.toLowerCase().startsWith('perfect for:')
+                            ? pkg.tagline
+                            : `Perfect for: ${pkg.tagline}`
+                          : ''}
                       </p>
 
                       {/* Features List */}

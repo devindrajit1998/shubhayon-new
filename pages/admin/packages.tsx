@@ -136,6 +136,7 @@ export default function AdminPackagesPage() {
 
   // Form State
   const [formTitle, setFormTitle] = useState('');
+  const [formTagline, setFormTagline] = useState('');
   const [formBadge, setFormBadge] = useState('');
   const [formPrice, setFormPrice] = useState('');
   const [formGuests, setFormGuests] = useState('200 - 350 Guests');
@@ -146,6 +147,7 @@ export default function AdminPackagesPage() {
   const openEditModal = (pkg: PackageData) => {
     setEditingPackage(pkg);
     setFormTitle(pkg.title);
+    setFormTagline(pkg.tagline || '');
     setFormBadge(pkg.badge || '');
     setFormPrice(pkg.priceRange || '');
     setFormGuests(pkg.idealGuests || pkg.idealFor || '');
@@ -177,6 +179,7 @@ export default function AdminPackagesPage() {
 
     updatePackage(editingPackage.id, {
       title: formTitle,
+      tagline: formTagline || undefined,
       badge: formBadge || undefined,
       priceRange: formPrice,
       idealGuests: formGuests,
@@ -203,18 +206,19 @@ export default function AdminPackagesPage() {
 
     addPackage({
       title: formTitle,
+      tagline: formTagline || `Complete wedding luxury for ${formGuests || 'your celebration'}`,
       badge: formBadge || undefined,
       priceRange: formPrice || 'Contact for price',
       idealGuests: formGuests || 'Flexible Guest Count',
       description: formDesc || 'Custom wedding management package tailored to your preferences.',
       features: flatList.length > 0 ? flatList : ['Complete Wedding Coordination'],
-      tagline: `Perfect for: ${formGuests}`,
       fullFeatures: flatList.length > 0 ? flatList : ['Complete Wedding Coordination'],
       inclusionCategories: categories.length > 0 ? categories : undefined,
       exclusions: exclusionList,
     });
 
     setFormTitle('');
+    setFormTagline('');
     setFormBadge('');
     setFormPrice('');
     setFormStructuredInclusions('');
@@ -517,7 +521,21 @@ export default function AdminPackagesPage() {
                 </div>
               </div>
 
-              {/* Row 2: Summary Description */}
+              {/* Row 2: Tagline / Perfect For Subtitle */}
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Tagline / &quot;Perfect For&quot; Subtitle
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Complete royal wedding luxury for grand celebrations"
+                  value={formTagline}
+                  onChange={(e) => setFormTagline(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-[#fcfaf7] border border-[#d8c5b0] rounded-xl text-gray-900 focus:ring-2 focus:ring-[#c8102e] focus:bg-white outline-none transition-all font-medium"
+                />
+              </div>
+
+              {/* Row 3: Summary Description */}
               <div>
                 <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
                   Summary Description

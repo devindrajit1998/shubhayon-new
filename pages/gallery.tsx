@@ -6,7 +6,14 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useAppModals } from '@/context/AppModalContext';
 import { useAdminData } from '@/context/AdminDataContext';
-import { Sparkles, Camera, Award, ChevronRight, Maximize2 } from 'lucide-react';
+import { Sparkles, Camera, Award, ChevronRight, Maximize2, Plus } from 'lucide-react';
+
+export interface ArtistPhoto {
+  title: string;
+  image: string;
+  hidden?: boolean;
+  featuredOnHome?: boolean;
+}
 
 export interface ArtistProfile {
   id: string;
@@ -16,10 +23,7 @@ export interface ArtistProfile {
   category: string;
   avatar?: string;
   bio?: string;
-  photos: {
-    title: string;
-    image: string;
-  }[];
+  photos: ArtistPhoto[];
 }
 
 export default function GalleryPage() {
@@ -292,41 +296,83 @@ export default function GalleryPage() {
                           </Link>
                         </div>
 
-                        {/* Middle Column: Photo Thumbnails Grid */}
+                        {/* Middle Column: Photo Thumbnails Grid (Max 2 rows of 5 cards) */}
                         <div className="w-full flex-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-1.5 sm:gap-2.5 items-center">
-                          {artist.photos.map((photo, pIdx) => {
-                            const artistPhotosList = artist.photos.map((p) => ({
+                          {(() => {
+                            const visibleArr = artist.photos.filter((p) => !p.hidden);
+                            const fullArtistPhotosList = visibleArr.map((p) => ({
                               title: p.title || artist.name,
                               image: p.image,
                               category: artist.category.toUpperCase(),
                             }));
 
-                            return (
-                              <div
-                                key={pIdx}
-                                onClick={() => openLightbox(pIdx, artistPhotosList)}
-                                className="group relative aspect-[3/4] bg-[#241715] rounded-md overflow-hidden border border-[#eedfcb] shadow-xs hover:shadow-md transition-all duration-200 transform hover:scale-[1.03] cursor-pointer flex flex-col justify-end"
-                              >
-                                <Image
-                                  src={photo.image}
-                                  alt={photo.title || artist.name}
-                                  fill
-                                  className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
-                                  referrerPolicy="no-referrer"
-                                />
+                            const maxDisplay = 10; // Max 2 rows in 5-column layout
+                            const hasMore = visibleArr.length > maxDisplay;
+                            const displayedPhotos = hasMore ? visibleArr.slice(0, maxDisplay) : visibleArr;
+                            const moreCount = visibleArr.length - maxDisplay + 1;
 
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                  <Maximize2 className="w-4 h-4 text-amber-300 drop-shadow" />
-                                </div>
+                            return displayedPhotos.map((photo, pIdx) => {
+                              const isLastCardWithMore = hasMore && pIdx === maxDisplay - 1;
 
-                                <div className="relative z-10 p-1.5 bg-black/60 backdrop-blur-xs text-white">
-                                  <p className="text-[9px] sm:text-[10px] truncate leading-tight font-medium text-center">
-                                    {photo.title || `Work Sample #${pIdx + 1}`}
-                                  </p>
+                              if (isLastCardWithMore) {
+                                return (
+                                  <Link
+                                    key={pIdx}
+                                    href={`/gallery/artist/${artist.id}`}
+                                    className="group relative aspect-[3/4] bg-[#241715] rounded-md overflow-hidden border border-[#eedfcb] shadow-xs hover:shadow-md transition-all duration-200 transform hover:scale-[1.03] cursor-pointer flex flex-col justify-end"
+                                    title={`View all ${visibleArr.length} portfolio photos of ${artist.name}`}
+                                  >
+                                    <Image
+                                      src={photo.image}
+                                      alt={photo.title || artist.name}
+                                      fill
+                                      className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                                      referrerPolicy="no-referrer"
+                                    />
+
+                                    {/* Show More / View Details Overlay linking to details page */}
+                                    <div className="absolute inset-0 bg-black/75 backdrop-blur-[2px] flex flex-col items-center justify-center text-white text-center p-2 z-20 group-hover:bg-black/85 transition-colors">
+                                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#c8102e] text-white flex items-center justify-center mb-1 shadow-md transform group-hover:scale-110 transition-transform">
+                                        <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                                      </div>
+                                      <span className="text-xs sm:text-sm font-bold text-amber-300 leading-tight">
+                                        +{moreCount} More
+                                      </span>
+                                      <span className="text-[8px] sm:text-[9px] text-gray-300 font-medium mt-0.5 uppercase tracking-wider underline underline-offset-2">
+                                        View Details ({visibleArr.length})
+                                      </span>
+                                    </div>
+                                  </Link>
+                                );
+                              }
+
+                              return (
+                                <div
+                                  key={pIdx}
+                                  onClick={() => openLightbox(pIdx, fullArtistPhotosList)}
+                                  className="group relative aspect-[3/4] bg-[#241715] rounded-md overflow-hidden border border-[#eedfcb] shadow-xs hover:shadow-md transition-all duration-200 transform hover:scale-[1.03] cursor-pointer flex flex-col justify-end"
+                                >
+                                  <Image
+                                    src={photo.image}
+                                    alt={photo.title || artist.name}
+                                    fill
+                                    className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                                    referrerPolicy="no-referrer"
+                                  />
+
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <Maximize2 className="w-4 h-4 text-amber-300 drop-shadow" />
+                                  </div>
+
+                                  <div className="relative z-10 p-1.5 bg-black/60 backdrop-blur-xs text-white">
+                                    <p className="text-[9px] sm:text-[10px] truncate leading-tight font-medium text-center">
+                                      {photo.title || `Work Sample #${pIdx + 1}`}
+                                    </p>
+                                  </div>
                                 </div>
-                              </div>
-                            );
-                          })}
+                              );
+                            });
+                          })()}
                         </div>
                       </div>
                     </div>
