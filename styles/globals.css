@@ -97,3 +97,15 @@ summary {
   animation: loaderSlide 1.8s infinite ease-in-out;
 }
 
+/* Swiper custom pagination colors */
+.swiper-pagination-bullet-active {
+  background: #c8102e !important;
+  width: 20px !important;
+  border-radius: 6px !important;
+}
+
+.swiper-pagination-bullet {
+  background: #d4a373;
+  opacity: 0.6;
+}
+

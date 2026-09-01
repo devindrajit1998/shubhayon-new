@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Image from 'next/image';
-import { Star, MessageSquareQuote, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Star, MessageSquareQuote, Sparkles, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAdminData } from '@/context/AdminDataContext';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import type { Swiper as SwiperType } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 export default function TestimonialsSection() {
   const { testimonials, addTestimonial, isLoading, error } = useAdminData();
+  const swiperRef = useRef<SwiperType | null>(null);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewerName, setReviewerName] = useState('');
   const [reviewerEvent, setReviewerEvent] = useState('');
@@ -112,93 +118,188 @@ export default function TestimonialsSection() {
           </div>
         )}
 
-        {/* 4. Real Firebase Testimonials Grid - Luxury Modern UI */}
+        {/* 4. Real Firebase Testimonials Slider - Luxury Modern UI */}
         {!isLoading && !error && testimonials.length > 0 && (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              {testimonials.map((t, idx) => (
-                <div
-                  key={t.id || idx}
-                  className="bg-gradient-to-b from-white via-[#fffefc] to-[#faf6ef] rounded-3xl p-6 sm:p-7 border border-[#eddcc8] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(200,16,46,0.09)] hover:border-[#d99824]/60 transition-all duration-300 flex flex-col justify-between relative group transform hover:-translate-y-1.5 overflow-hidden"
-                >
-                  {/* Decorative Background Quote Watermark */}
-                  <span className="absolute -top-2 right-4 text-7xl font-serif text-[#ebd6bd]/25 select-none pointer-events-none transition-transform group-hover:scale-110">
-                    &rdquo;
-                  </span>
+          <div className="relative px-2 sm:px-10 py-3">
+            {/* Custom Navigation Prev Button */}
+            {testimonials.length > 1 && (
+              <button
+                id="testimonial-prev-btn"
+                onClick={() => swiperRef.current?.slidePrev()}
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border border-[#eddcc8] text-gray-700 hover:text-[#c8102e] hover:border-[#c8102e] shadow-md hover:shadow-lg flex items-center justify-center transition-all duration-200 -translate-x-1 sm:-translate-x-3 cursor-pointer"
+                aria-label="Previous testimonial"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+            )}
 
-                  <div className="relative z-10 space-y-4">
-                    {/* Top Row: Stars Badge & Verified Tag */}
-                    <div className="flex items-center justify-between">
-                      <div className="inline-flex items-center gap-1.5 bg-[#fff8eb] px-3 py-1 rounded-full border border-[#f3ddb6] shadow-2xs">
-                        <div className="flex items-center gap-0.5">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <Star
-                              key={star}
-                              className={`w-3.5 h-3.5 ${
-                                star <= (t.rating || 5)
-                                  ? 'text-amber-400 fill-amber-400'
-                                  : 'text-gray-200'
-                              }`}
-                            />
-                          ))}
+            {/* Custom Navigation Next Button */}
+            {testimonials.length > 1 && (
+              <button
+                id="testimonial-next-btn"
+                onClick={() => swiperRef.current?.slideNext()}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border border-[#eddcc8] text-gray-700 hover:text-[#c8102e] hover:border-[#c8102e] shadow-md hover:shadow-lg flex items-center justify-center transition-all duration-200 translate-x-1 sm:translate-x-3 cursor-pointer"
+                aria-label="Next testimonial"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            )}
+
+            <Swiper
+              modules={[Navigation, Pagination, Autoplay]}
+              onBeforeInit={(swiper) => {
+                swiperRef.current = swiper;
+              }}
+              loop={testimonials.length > 3}
+              autoplay={{
+                delay: 4500,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+              }}
+              pagination={{
+                clickable: true,
+                dynamicBullets: true,
+              }}
+              spaceBetween={24}
+              slidesPerView={1}
+              breakpoints={{
+                640: { slidesPerView: 1.5, spaceBetween: 20 },
+                768: { slidesPerView: 2, spaceBetween: 24 },
+                1024: { slidesPerView: 3, spaceBetween: 28 },
+              }}
+              className="w-full !p-3 !pb-12"
+            >
+              {testimonials.map((t, idx) => (
+                <SwiperSlide key={t.id || idx} className="!h-auto flex">
+                  <div
+                    className="w-full h-[255px] sm:h-[265px] bg-gradient-to-b from-white via-[#fffefc] to-[#faf6ef] rounded-3xl p-6 sm:p-7 border border-[#eddcc8] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(200,16,46,0.12)] hover:border-[#d99824] transition-all duration-300 flex flex-col justify-between relative group cursor-pointer"
+                  >
+                    {/* Decorative Background Quote Watermark */}
+                    <span className="absolute -top-2 right-4 text-7xl font-serif text-[#ebd6bd]/25 select-none pointer-events-none transition-transform group-hover:scale-110">
+                      &rdquo;
+                    </span>
+
+                    <div className="relative z-10 flex-1 flex flex-col min-h-0">
+                      {/* Top Row: Stars Badge & Verified Tag */}
+                      <div className="flex items-center justify-between shrink-0 mb-3">
+                        <div className="inline-flex items-center gap-1.5 bg-[#fff8eb] px-3 py-1 rounded-full border border-[#f3ddb6] shadow-2xs">
+                          <div className="flex items-center gap-0.5">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                className={`w-3.5 h-3.5 ${
+                                  star <= (t.rating || 5)
+                                    ? 'text-amber-400 fill-amber-400'
+                                    : 'text-gray-200'
+                                }`}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-[11px] font-bold text-amber-900 ml-0.5">
+                            {t.rating ? `${t.rating}.0` : '5.0'}
+                          </span>
                         </div>
-                        <span className="text-[11px] font-bold text-amber-900 ml-0.5">
-                          {t.rating ? `${t.rating}.0` : '5.0'}
+
+                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50/90 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                          <span>Verified Wedding</span>
                         </span>
                       </div>
 
-                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50/90 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                        <span>Verified Wedding</span>
-                      </span>
-                    </div>
-
-                    {/* Quote Feedback Text */}
-                    <p className="text-[13px] sm:text-[14px] text-gray-700 leading-relaxed font-normal italic relative">
-                      &ldquo;{t.quote}&rdquo;
-                    </p>
-                  </div>
-
-                  {/* Author & Couple Profile Footer */}
-                  <div className="relative z-10 pt-5 mt-5 border-t border-[#f0e3d2] flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-3.5 min-w-0">
-                      {/* Couple Avatar */}
-                      <div className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-[#d99824]/80 ring-offset-2 ring-offset-white shadow-xs bg-amber-50/80 flex-shrink-0 flex items-center justify-center">
-                        {t.avatar ? (
-                          <Image
-                            src={t.avatar}
-                            alt={t.name}
-                            fill
-                            className="object-cover"
-                            referrerPolicy="no-referrer"
-                          />
-                        ) : (
-                          <span className="font-serif-display text-base font-bold text-[#9e0a22]">
-                            {t.name ? t.name.charAt(0).toUpperCase() : 'S'}
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="min-w-0">
-                        <h4 className="font-serif-display text-sm sm:text-base font-bold text-gray-900 group-hover:text-[#c8102e] transition-colors truncate">
-                          {t.name}
-                        </h4>
-                        <p className="text-[11px] text-[#8e1c24] font-semibold truncate mt-0.5">
-                          {t.event}
+                      {/* Default Clamped Quote */}
+                      <div className="flex-1 min-h-0 flex items-center">
+                        <p className="text-[13px] sm:text-[14px] text-gray-700 leading-relaxed font-normal italic line-clamp-3">
+                          &ldquo;{t.quote}&rdquo;
                         </p>
                       </div>
                     </div>
 
-                    {t.date && (
-                      <span className="text-[10px] text-gray-400 font-medium whitespace-nowrap flex-shrink-0 bg-white/70 px-2 py-0.5 rounded-md border border-[#eee2d3]">
-                        {t.date}
-                      </span>
+                    {/* Author & Couple Profile Footer (Fixed at bottom) */}
+                    <div className="relative z-10 pt-4 mt-3 border-t border-[#f0e3d2] flex items-center justify-between gap-3 shrink-0">
+                      <div className="flex items-center gap-3 min-w-0">
+                        {/* Couple Avatar */}
+                        <div className="relative w-11 h-11 rounded-full overflow-hidden ring-2 ring-[#d99824]/80 ring-offset-2 ring-offset-white shadow-xs bg-amber-50/80 shrink-0 flex items-center justify-center">
+                          {t.avatar ? (
+                            <Image
+                              src={t.avatar}
+                              alt={t.name}
+                              fill
+                              className="object-cover"
+                              referrerPolicy="no-referrer"
+                            />
+                          ) : (
+                            <span className="font-serif-display text-base font-bold text-[#9e0a22]">
+                              {t.name ? t.name.charAt(0).toUpperCase() : 'S'}
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="min-w-0">
+                          <h4 className="font-serif-display text-sm font-bold text-gray-900 group-hover:text-[#c8102e] transition-colors truncate">
+                            {t.name}
+                          </h4>
+                          <p className="text-[11px] text-[#8e1c24] font-semibold truncate mt-0.5">
+                            {t.event}
+                          </p>
+                        </div>
+                      </div>
+
+                      {t.date && (
+                        <span className="text-[10px] text-gray-400 font-medium whitespace-nowrap shrink-0 bg-white/80 px-2 py-0.5 rounded-md border border-[#eee2d3]">
+                          {t.date}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Luxury Full Quote Hover Card overlay (stays precisely inside card border) */}
+                    {t.quote && t.quote.length > 70 && (
+                      <div className="absolute inset-0 z-30 bg-gradient-to-b from-white via-[#fffdf9] to-[#faf4eb] rounded-3xl p-6 sm:p-7 border-2 border-[#d99824] shadow-lg flex flex-col justify-between opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-200 ease-in-out">
+                        <div className="space-y-3 flex-1 min-h-0 flex flex-col">
+                          <div className="flex items-center justify-between shrink-0">
+                            <div className="flex items-center gap-1">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <Star
+                                  key={star}
+                                  className={`w-3.5 h-3.5 ${
+                                    star <= (t.rating || 5)
+                                      ? 'text-amber-400 fill-amber-400'
+                                      : 'text-gray-200'
+                                  }`}
+                                />
+                              ))}
+                              <span className="text-xs font-bold text-amber-900 ml-1">
+                                {t.rating ? `${t.rating}.0` : '5.0'}
+                              </span>
+                            </div>
+                            <span className="text-[10px] font-bold text-[#c8102e] uppercase tracking-wider">
+                              Full Review
+                            </span>
+                          </div>
+
+                          <div className="flex-1 overflow-y-auto no-scrollbar pr-1 my-1">
+                            <p className="text-[13px] sm:text-[14px] text-gray-800 leading-relaxed font-normal italic">
+                              &ldquo;{t.quote}&rdquo;
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="pt-3 border-t border-[#ebdcc8] flex items-center justify-between shrink-0">
+                          <p className="font-serif-display text-xs font-bold text-gray-900 truncate">
+                            {t.name}
+                          </p>
+                          {t.date && (
+                            <span className="text-[10px] text-gray-500 font-medium">
+                              {t.date}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     )}
                   </div>
-                </div>
+                </SwiperSlide>
               ))}
-            </div>
-          </>
+            </Swiper>
+          </div>
         )}
       </div>
 
