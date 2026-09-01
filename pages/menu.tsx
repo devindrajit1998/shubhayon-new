@@ -202,7 +202,7 @@ export default function MenuPage() {
               </p>
               <button
                 onClick={() => openQuoteModal('Catering & Plate Menu Consultation')}
-                className="bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow transition-colors"
+                className="inline-flex items-center justify-center bg-[#c8102e] hover:bg-[#a80b24] text-white font-light text-[18px] py-2 px-7 rounded-lg shadow-sm hover:shadow transition-all cursor-pointer"
               >
                 Inquire With Master Chef
               </button>
@@ -329,7 +329,7 @@ export default function MenuPage() {
                       <button
                         type="button"
                         onClick={() => openQuoteModal(`${menu.title} (${formattedPrice}/plate)`)}
-                        className="inline-flex items-center gap-1.5 bg-[#c8102e] hover:bg-[#a80b24] text-white font-bold px-4 py-2 rounded-xl text-xs shadow-xs hover:shadow-md transition-all cursor-pointer"
+                        className="inline-flex items-center gap-1.5 bg-[#c8102e] hover:bg-[#a80b24] text-white font-light text-[16px] sm:text-[17px] px-4 py-1.5 rounded-lg shadow-sm hover:shadow transition-all cursor-pointer"
                       >
                         <span>Book Plate</span>
                         <ArrowRight className="w-3.5 h-3.5" />
@@ -493,10 +493,10 @@ export default function MenuPage() {
                         setSelectedDetailMenu(null);
                         openQuoteModal(`${menuToBook.title} (${formattedPrice}/plate)`);
                       }}
-                      className="inline-flex items-center gap-1.5 bg-[#c8102e] hover:bg-[#a80b24] text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow-md transition-all cursor-pointer"
+                      className="inline-flex items-center gap-2 bg-[#c8102e] hover:bg-[#a80b24] text-white font-light text-[18px] py-2 px-7 rounded-lg shadow-sm hover:shadow transition-all cursor-pointer"
                     >
                       <span>Book This Menu</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
+                      <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>
                 </div>

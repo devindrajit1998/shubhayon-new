@@ -79,7 +79,7 @@ function ServiceCardRow({
           <div>
             <button
               onClick={() => openQuoteModal(service.title)}
-              className="bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs sm:text-sm font-semibold px-5 py-2.5 rounded-[4px] shadow-xs transition-colors cursor-pointer"
+              className="inline-flex items-center justify-center bg-[#c8102e] hover:bg-[#a80b24] text-white font-light text-[18px] py-2 px-7 rounded-lg shadow-sm hover:shadow transition-all cursor-pointer"
             >
               {service.buttonText || `Book us for ${actionTarget}`}
             </button>
@@ -361,7 +361,7 @@ export default function ServicesPage() {
               </p>
               <button
                 onClick={() => openQuoteModal('Custom Wedding Planning')}
-                className="bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow transition-colors"
+                className="inline-flex items-center justify-center bg-[#c8102e] hover:bg-[#a80b24] text-white font-light text-[18px] py-2 px-7 rounded-lg shadow-sm hover:shadow transition-all cursor-pointer"
               >
                 Inquire With Wedding Specialist
               </button>

@@ -56,7 +56,7 @@ export default function PackageDetailsPage() {
         </p>
         <Link
           href="/packages"
-          className="inline-flex items-center gap-2 bg-[#c8102e] text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow transition-colors"
+          className="inline-flex items-center gap-2 bg-[#c8102e] hover:bg-[#a80b24] text-white font-light text-[18px] py-2 px-7 rounded-lg shadow-sm hover:shadow transition-all cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Return to All Packages</span>
@@ -322,7 +322,7 @@ export default function PackageDetailsPage() {
 
                 <button
                   onClick={() => openQuoteModal(pkg.title)}
-                  className="w-full bg-[#c8102e] hover:bg-[#a80b24] text-white font-bold text-xs sm:text-sm py-3.5 px-6 rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-[#c8102e] hover:bg-[#a80b24] text-white font-light text-[18px] py-2.5 px-7 rounded-lg shadow-sm hover:shadow transition-all cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4 text-amber-300" />
                   <span>Request Custom Quotation</span>

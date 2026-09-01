@@ -221,7 +221,7 @@ export default function GalleryPage() {
               </p>
               <button
                 onClick={() => openQuoteModal('General Portfolio Inquiry')}
-                className="bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow transition-colors"
+                className="inline-flex items-center justify-center bg-[#c8102e] hover:bg-[#a80b24] text-white font-light text-[18px] py-2 px-7 rounded-lg shadow-sm hover:shadow transition-all cursor-pointer"
               >
                 Inquire With Our Team
               </button>

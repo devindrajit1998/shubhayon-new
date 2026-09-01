@@ -54,7 +54,7 @@ export default function ArtistDetailPage() {
         </p>
         <Link
           href="/gallery"
-          className="inline-flex items-center gap-2 bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow-md transition-colors"
+          className="inline-flex items-center gap-2 bg-[#c8102e] hover:bg-[#a80b24] text-white font-light text-[18px] py-2 px-7 rounded-lg shadow-sm hover:shadow transition-all cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Return to Gallery</span>
@@ -158,7 +158,7 @@ export default function ArtistDetailPage() {
               <div className="pt-2 flex flex-wrap items-center gap-3.5">
                 <a
                   href={`tel:${settings?.primaryPhone?.replace(/\s+/g, '') || '7439442349'}`}
-                  className="inline-flex items-center gap-2 bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs sm:text-sm font-bold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5 cursor-pointer"
+                  className="inline-flex items-center gap-2 bg-[#c8102e] hover:bg-[#a80b24] text-white font-light text-[18px] py-2 px-7 rounded-lg shadow-sm hover:shadow transition-all duration-200 cursor-pointer"
                 >
                   <Phone className="w-4 h-4" />
                   <span>Inquire Availability</span>

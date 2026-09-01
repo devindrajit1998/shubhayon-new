@@ -6,7 +6,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useAppModals } from '@/context/AppModalContext';
 import { useAdminData } from '@/context/AdminDataContext';
-import { HeartHandshake, Sparkles, Award, ShieldCheck, CheckCircle2, Heart } from 'lucide-react';
+import { HeartHandshake, Sparkles, ShieldCheck, CheckCircle2, Heart } from 'lucide-react';
 
 export default function AboutPage() {
   const { openQuoteModal, openLightbox } = useAppModals();
@@ -24,12 +24,6 @@ export default function AboutPage() {
       title: 'Artisanal Craftsmanship',
       description:
         'From masterfully sculpted Tatta trays and designer mukuts to bespoke royal floral mandaps, our in-house artisans bring age-old Bengali artistic heritage to life.',
-    },
-    {
-      icon: Award,
-      title: 'Culinary Grandeur',
-      description:
-        'Our heritage banquets celebrate authentic Bengali delicacies—from freshly sourced Bhetki Paturi and Kosha Mangsho to gourmet live counters and artisanal desserts.',
     },
     {
       icon: ShieldCheck,
@@ -197,7 +191,7 @@ export default function AboutPage() {
                 <div className="pt-2">
                   <button
                     onClick={() => openQuoteModal()}
-                    className="bg-[#c8102e] hover:bg-[#a80b24] text-white font-semibold text-sm px-7 py-3 rounded-md shadow-md hover:shadow-lg transition-all cursor-pointer"
+                    className="inline-flex items-center justify-center bg-[#c8102e] hover:bg-[#a80b24] text-white font-light text-[18px] py-2 px-7 rounded-lg shadow-sm hover:shadow transition-all cursor-pointer"
                   >
                     Plan Your Celebration
                   </button>
@@ -254,7 +248,7 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7">
               {values.map((v, i) => {
                 const Icon = v.icon;
                 return (

@@ -211,7 +211,7 @@ export default function GallerySection() {
               <Link
                 href="/gallery"
                 id="view-full-gallery-btn"
-                className="inline-flex items-center justify-center bg-[#c8102e] hover:bg-[#a80b24] text-white font-medium text-base sm:text-[18px] px-8 sm:px-9 py-3 sm:py-3.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+                className="inline-flex items-center justify-center bg-[#c8102e] hover:bg-[#a80b24] text-white font-light text-[18px] py-2 px-7 rounded-lg shadow-sm hover:shadow transition-all duration-200"
               >
                 View full Gallery
               </Link>

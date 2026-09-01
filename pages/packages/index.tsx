@@ -52,7 +52,7 @@ function PackageCardRow({
             <button
               type="button"
               onClick={() => openQuoteModal(pkg.title)}
-              className="w-full sm:w-auto bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs sm:text-sm font-semibold px-6 sm:px-8 py-3 rounded-xl shadow-xs transition-colors cursor-pointer flex items-center justify-center gap-2"
+              className="inline-flex items-center justify-center bg-[#c8102e] hover:bg-[#a80b24] text-white font-light text-[18px] py-2 px-7 rounded-lg shadow-sm hover:shadow transition-all cursor-pointer gap-2"
             >
               <span>Book / Inquire</span>
               <ArrowRight className="w-4 h-4" />
@@ -344,7 +344,7 @@ export default function PackagesPage() {
               </p>
               <button
                 onClick={() => openQuoteModal('Custom Wedding Planning')}
-                className="bg-[#c8102e] hover:bg-[#a80b24] text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow transition-colors cursor-pointer"
+                className="inline-flex items-center justify-center bg-[#c8102e] hover:bg-[#a80b24] text-white font-light text-[18px] py-2 px-7 rounded-lg shadow-sm hover:shadow transition-all cursor-pointer"
               >
                 Inquire With Wedding Specialist
               </button>
